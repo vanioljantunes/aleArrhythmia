@@ -22,7 +22,12 @@ New here? Read [[README]] first — it explains how notes are laid out and needs
 Every non-trivial choice the project has made, with the options that were considered, what each
 cost, and why one was chosen.
 
-_None yet._
+| Record | Decision | Status |
+|---|---|---|
+| [[ADR-0001-repository-layout]] | The project lives in its own standalone public repository | accepted |
+| [[ADR-0002-licensing]] | Apache-2.0 for code, CC-BY-4.0 for vault prose | accepted |
+| [[ADR-0003-enforcement-mechanism]] | A local pre-push hook plus a check on every push | accepted |
+| [[ADR-0004-citation-scan-scope]] | Scan all tracked text files, minus a reasoned ignore list | accepted |
 
 ## Open questions
 
@@ -46,7 +51,8 @@ _None yet._
 
 Dated records of working sessions.
 
-_None yet._
+- [[log-2026-09-20-clarification]] — the session that settled repository layout, enforcement, scan
+  scope and licensing
 
 ## Templates
 

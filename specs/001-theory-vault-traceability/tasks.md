@@ -72,7 +72,7 @@ reason — the licence files are the *action*, ADR-0002 is the *record that prec
 - [X] T010 [US1] Write `docs/vault/decisions/ADR-0002-licensing.md` from R-002: Apache-2.0 for code, CC-BY-4.0 for vault prose, with the patent-grant reasoning and the rejected single-licence options. Record that this decision forced the Principle I amendment in constitution v1.2.0, since CC-BY-4.0 is not OSI-approved
 - [X] T011 [US1] Add `LICENSE` (Apache-2.0 full text) and `LICENSE-docs` (CC-BY-4.0 full text), and replace the README licence stub with a statement of which licence covers which path, citing ADR-0002 (FR-013a)
 - [X] T012 [US1] Write `docs/vault/decisions/ADR-0003-enforcement-mechanism.md` from R-008: pre-push hook plus push workflow, with pull-request branch protection and the `pre-commit` framework as rejected options. Record that rejecting pull requests forced the Governance amendment in constitution v1.2.0, moving the ADR-citation duty onto the commit message
-- [ ] T013 [US1] Write `docs/vault/decisions/ADR-0004-citation-scan-scope.md` from R-009 and R-010: all tracked text files minus a reasoned ignore list, exact `ADR-NNNN` citation form, with vault-only and filesystem-walk as rejected options
+- [X] T013 [US1] Write `docs/vault/decisions/ADR-0004-citation-scan-scope.md` from R-009 and R-010: all tracked text files minus a reasoned ignore list, exact `ADR-NNNN` citation form, with vault-only and filesystem-walk as rejected options
 - [ ] T014 [US1] Run the reader test from the Independent Test above and record the outcome — including anything the reader could not follow — in `docs/vault/logs/`
 
 **Checkpoint**: Four decision records exist, each with two or more options, per-option trade-offs, a
