@@ -183,8 +183,10 @@ and name what evidence is still missing, using only the survey notes.
 - Prose happens to mention a decision identifier that does not exist — quoting an external project's
   record, or illustrating the format in documentation: the citation form must be exact enough, or
   the ignore list explicit enough, that this does not produce a false failure.
-- The local enforcement is not installed on a fresh clone: the first push must either install it or
-  fail loudly, never pass silently unchecked.
+- The local enforcement is not installed on a fresh clone: Git does not run hooks from a clone
+  until its owner opts in, so the push cannot be refused locally. It must never pass unchecked —
+  the repository-side check still runs and records the failure publicly — and the checker warns
+  whenever it runs in a clone without the hook installed (ADR-0003).
 - A contributor deliberately overrides the local enforcement: the override must be visible after the
   fact, and the public repository must still record the failure.
 
