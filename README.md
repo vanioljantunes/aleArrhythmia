@@ -47,4 +47,15 @@ git config core.hooksPath .githooks
 
 ## Licence
 
-_Stub: completed once the licensing decision is recorded._
+Two licences, one per kind of work. Every file in the repository is covered by exactly one of them.
+
+| Path | Licence | File |
+|---|---|---|
+| `docs/vault/` — the theory, decision records, notes and logs | Creative Commons Attribution 4.0 International (CC-BY-4.0) | [`LICENSE-docs`](LICENSE-docs) |
+| Everything else — code, tests, tooling, specifications, configuration | Apache License 2.0 | [`LICENSE`](LICENSE) |
+
+In short: reuse the code freely, including commercially, under Apache-2.0's terms and patent grant;
+quote and adapt the theory freely, with attribution.
+
+Why two licences, and why these two: ADR-0002, at
+[`docs/vault/decisions/ADR-0002-licensing.md`](docs/vault/decisions/ADR-0002-licensing.md).
