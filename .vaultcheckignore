@@ -3,6 +3,6 @@
 # Format: one fnmatch glob per line, matched against repository-relative POSIX paths.
 # Decision: ADR-0004 (citation scan scope).
 
-specs/**                      # spec prose and contracts cite example identifiers such as ADR-0042 by design
+specs/**                      # spec prose and contracts cite example identifiers by design
 docs/vault/templates/**       # templates carry placeholder identifiers that are meant to be replaced
 tests/fixtures/**             # fixture vaults contain deliberately broken citations to exercise the checker

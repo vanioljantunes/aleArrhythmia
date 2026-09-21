@@ -1,14 +1,20 @@
 <!--
 Sync Impact Report
 ==================
-Version change: 1.1.1 -> 1.2.0
-Bump rationale: MINOR. Two corrections surfaced by /speckit-analyze, both of which made a MUST
+Version change: 1.2.0 -> 1.2.1
+Bump rationale: PATCH (1.2.1). Principle VIII illustrated the citation format with a real-form
+identifier for a record that does not exist; the traceability checker flagged it as a dangling
+citation on its first run. The example now uses the placeholder form, which the checker does not
+match. No obligation changed.
+
+Prior bump, MINOR (1.2.0). Two corrections surfaced by /speckit-analyze, both of which made a MUST
 unfollowable as written. Principle I demanded an OSI-approved licence for every artifact, but OSI
 approves software licences and the vault prose is CC-BY-4.0; the principle now asks for an open
 licence appropriate to each kind. Governance bound its citation duty to pull request descriptions,
 but the project deliberately does not use pull requests (ADR-0003); the duty now binds the commit
 message. Neither change weakens an obligation — each moves it onto a surface that exists.
-(1.2.0: Principle I licence wording, Governance citation surface, 2026-09-21.
+(1.2.1: placeholder citation example in Principle VIII, 2026-09-21.
+1.2.0: Principle I licence wording, Governance citation surface, 2026-09-21.
 1.1.1: resolves TODO(LICENSE) and records the standalone-repository rule, 2026-09-20.
 1.1.0: Principle VIII and the theory vault, 2026-09-20.
 1.0.0: initial ratification, seven principles, 2026-09-20.)
@@ -177,7 +183,7 @@ is acted on, with all five fields filled:
 - **References** — DOI, URL, `file:line`, dataset id, or the transcript of the conversation where
   the call was made. A decision with no reference is not traceable and does not pass.
 
-Code, specs, plans and vault notes cite decisions by ADR id (`ADR-0007`). CI MUST fail when an
+Code, specs, plans and vault notes cite decisions by ADR id (`ADR-NNNN`, four digits). CI MUST fail when an
 ADR has an empty Options, Trade-offs or References field, when a cited ADR id does not exist,
 when two ADRs share a number, or when an ADR is superseded without the superseding id recorded.
 
@@ -269,4 +275,4 @@ embodies a decision MUST cite that decision's ADR id in its message; where the p
 requests, the same obligation applies to the pull request description. Complexity that violates
 Principle VII MUST be justified in writing in the plan's Complexity Tracking section, or removed.
 
-**Version**: 1.2.0 | **Ratified**: 2026-09-20 | **Last Amended**: 2026-09-21
+**Version**: 1.2.1 | **Ratified**: 2026-09-20 | **Last Amended**: 2026-09-21

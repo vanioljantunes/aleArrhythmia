@@ -89,6 +89,7 @@ Grouped by contract. Full condition tables live in the contracts named.
 | Questions | `Q-NO-CANDIDATES`, `Q-NO-CRITERIA`, `Q-ANSWERED-NO-TARGET` | FR-028, R-011 |
 | Index | `INDEX-INCOMPLETE` | FR-005 |
 | Ignore file | `IGNORE-NO-REASON` (error), `IGNORE-STALE` (warning) | R-010 |
+| Local enforcement | `HOOK-NOT-INSTALLED` (warning) | ADR-0003 — added during implementation |
 
 Warnings print in the same format but do not affect the exit code.
 
