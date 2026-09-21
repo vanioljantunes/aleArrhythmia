@@ -18,7 +18,7 @@ the exported data of existing electroanatomic mapping platforms. It does not com
 
 ## Status
 
-Phase 0 — groundwork. No statistics are implemented yet, and the project makes no claim about
+Phase 0, groundwork. No statistics are implemented yet, and the project makes no claim about
 cardiac results. Current work: the theory vault, the decision-record machinery, and a survey of
 candidate cardiac reference spaces.
 
@@ -51,8 +51,8 @@ Two licences, one per kind of work. Every file in the repository is covered by e
 
 | Path | Licence | File |
 |---|---|---|
-| `docs/vault/` — the theory, decision records, notes and logs | Creative Commons Attribution 4.0 International (CC-BY-4.0) | [`LICENSE-docs`](LICENSE-docs) |
-| Everything else — code, tests, tooling, specifications, configuration | Apache License 2.0 | [`LICENSE`](LICENSE) |
+| `docs/vault/`: the theory, decision records, notes and logs | Creative Commons Attribution 4.0 International (CC-BY-4.0) | [`LICENSE-docs`](LICENSE-docs) |
+| Everything else, code, tests, tooling, specifications, configuration | Apache License 2.0 | [`LICENSE`](LICENSE) |
 
 In short: reuse the code freely, including commercially, under Apache-2.0's terms and patent grant;
 quote and adapt the theory freely, with attribution.

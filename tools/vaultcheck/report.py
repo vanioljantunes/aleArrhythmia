@@ -14,7 +14,7 @@ WARNING = "warning"
 # Every rule the checker can emit. A rule missing from this table cannot be emitted, and
 # tests/test_rules.py fails if any rule here lacks a fixture (SC-004).
 RULES: dict[str, str] = {
-    # note headers — contracts/note-frontmatter.md
+    # note headers : contracts/note-frontmatter.md
     "NOTE-MISSING-FIELD": ERROR,
     "NOTE-BAD-TYPE": ERROR,
     "NOTE-BAD-STATUS": ERROR,
@@ -22,7 +22,7 @@ RULES: dict[str, str] = {
     "NOTE-DUPLICATE-BASENAME": ERROR,
     "NOTE-BAD-FRONTMATTER": ERROR,
     "NOTE-PLUGIN-SYNTAX": ERROR,
-    # decision records — contracts/decision-record.md
+    # decision records : contracts/decision-record.md
     "ADR-MISSING-SECTION": ERROR,
     "ADR-EMPTY-SECTION": ERROR,
     "ADR-TOO-FEW-OPTIONS": ERROR,
@@ -42,11 +42,16 @@ RULES: dict[str, str] = {
     "Q-NO-CRITERIA": ERROR,
     "Q-ANSWERED-NO-TARGET": ERROR,
     "INDEX-INCOMPLETE": ERROR,
-    # ignore file — ADR-0004
+    # ignore file : ADR-0004
     "IGNORE-NO-REASON": ERROR,
     "IGNORE-STALE": WARNING,
-    # local enforcement — ADR-0003
+    # local enforcement: ADR-0003
     "HOOK-NOT-INSTALLED": WARNING,
+    # writing style: ADR-0005
+    "STYLE-EM-DASH": ERROR,
+    "STYLE-CURLY-QUOTE": ERROR,
+    "STYLE-AI-ARTIFACT": ERROR,
+    "STYLE-AI-VOCABULARY": WARNING,
 }
 
 EXIT_CLEAN = 0
@@ -100,6 +105,6 @@ def emit(violations: list[Violation], counts: Counts, quiet: bool = False) -> in
         verdict = "clean" if errors == 0 else f"{errors} violation{'s' if errors != 1 else ''}"
         print(
             f"vaultcheck: {counts.notes} notes, {counts.decisions} decision records, "
-            f"{counts.links} links, {counts.citations} citations verified — {verdict}"
+            f"{counts.links} links, {counts.citations} citations verified: {verdict}"
         )
     return exit_code(ordered)

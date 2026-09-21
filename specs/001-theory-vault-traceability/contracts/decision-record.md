@@ -27,9 +27,9 @@ One or two sentences of context: what forced this decision, and when.
 
 ## Options considered
 
-- **Standalone public repository** — the project gets its own repository, with its own licences,
+- **Standalone public repository**: the project gets its own repository, with its own licences,
   issue tracker and CI.
-- **Nested in the private monorepo** — the project stays a folder inside the existing private
+- **Nested in the private monorepo**: the project stays a folder inside the existing private
   repository, exported periodically to a public snapshot.
 
 ## Trade-offs
@@ -48,14 +48,14 @@ exists to demonstrate.
 
 ## Rejected
 
-**Nested in the private monorepo** — rejected because a public snapshot loses history, which
+**Nested in the private monorepo**: rejected because a public snapshot loses history, which
 directly contradicts Principle VIII. The gain, atomic cross-project commits, is not needed: no other
 project shares code with this one.
 
 ## References
 
-- Constitution Principle I and VIII — `.specify/memory/constitution.md:75`
-- Clarification session, 2026-09-20 — [[log-2026-09-20-clarification]]
+- Constitution Principle I and VIII, `.specify/memory/constitution.md:75`
+- Clarification session, 2026-09-20, [[log-2026-09-20-clarification]]
 - https://github.com/vanioljantunes/aleArrhythmia
 ```
 
@@ -95,7 +95,7 @@ A reference is one list item under `## References`. Accepted forms:
 
 Prose alone ("see the paper", "as discussed") is not a reference and fails.
 
-Surrounding prose is allowed on the same line — a DOI followed by author, title and year is
+Surrounding prose is allowed on the same line, a DOI followed by author, title and year is
 encouraged, so the reference stays traceable if a URL dies.
 
 ---

@@ -29,7 +29,7 @@ def test_clean_vault_exits_zero_and_states_what_it_verified(tmp_path: Path) -> N
     out = cli("--root", str(root))
     assert out.returncode == 0, out.stderr
     assert out.stderr == ""
-    assert re.search(r"\d+ notes, \d+ decision records, \d+ links, \d+ citations verified .* clean", out.stdout)
+    assert re.search(r"\d+ notes, \d+ decision records, \d+ links, \d+ citations verified: clean", out.stdout)
 
 
 def test_violations_go_to_stderr_as_path_line_rule(tmp_path: Path) -> None:

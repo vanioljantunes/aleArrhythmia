@@ -6,3 +6,4 @@
 specs/**                      # spec prose and contracts cite example identifiers by design
 docs/vault/templates/**       # templates carry placeholder identifiers that are meant to be replaced
 tests/fixtures/**             # fixture vaults contain deliberately broken citations to exercise the checker
+LICENSE-docs                  # canonical Creative Commons legal text; must not be edited, and it uses curly quotes

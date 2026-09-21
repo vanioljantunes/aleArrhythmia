@@ -14,7 +14,7 @@ Which option is right?
 
 ## Candidates
 
-- [[literature-example]] — the only candidate.
+- [[literature-example]]: the only candidate.
 
 ## What would settle it
 

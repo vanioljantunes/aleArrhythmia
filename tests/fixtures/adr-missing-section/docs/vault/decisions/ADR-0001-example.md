@@ -13,8 +13,8 @@ Context for the decision.
 
 ## Options considered
 
-- **Option A** — the first option.
-- **Option B** — the second option.
+- **Option A**: the first option.
+- **Option B**: the second option.
 
 ## Trade-offs
 

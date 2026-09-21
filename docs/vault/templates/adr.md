@@ -11,33 +11,41 @@ updated: YYYY-MM-DD
 
 # ADR-NNNN: <Short name of the decision>
 
-<!-- One or two sentences of context: what forced this decision, and when. Free-form; not checked. -->
+<!-- One sentence: what forced this decision, and when. Not checked. -->
 
 ## Options considered
 
-<!-- At least two options, each named as a list item with a bold lead-in and described in a
-sentence. If a decision genuinely felt forced, name the alternative that was ruled out anyway —
-"do nothing" counts. An empty or single-option list fails the check. -->
+<!-- A table, one row per option. At least two. If the decision felt forced, name the option that
+was ruled out anyway; "do nothing" counts. -->
+
+| Option | What it means |
+|---|---|
+| A. <name> | <one sentence> |
+| B. <name> | <one sentence> |
 
 ## Trade-offs
 
-<!-- Per option, not as one summary: what it costs and what it buys. Use a bold lead-in per option
-so a reader can match each trade-off to its option. -->
+| Option | Cost | Gain |
+|---|---|---|
+| A | | |
+| B | | |
 
 ## Chosen
 
-<!-- The option taken, and the reason it beat the others. Name the option explicitly. -->
+<!-- The option taken, and why it beat the others. Two or three sentences. -->
 
 ## Rejected
 
-<!-- One entry per option not taken, each with the reason it lost. "Not chosen" is not a reason. -->
+| Option | Why it lost |
+|---|---|
+| B | |
 
 ## References
 
-<!-- At least one, one per list item, in an accepted form:
-- a DOI, e.g. 10.1002/hbm.21186 — add author, title and year so it survives link rot
-- an http(s) URL
-- a repository location, e.g. tools/vaultcheck/links.py:42
-- a dataset identifier, e.g. osf:ab12c
-- a wikilink to a note holding a recorded conversation, e.g. [[log-YYYY-MM-DD-topic]]
-Prose alone ("see the paper") is not a reference and fails the check. -->
+<!-- At least one, one per list item:
+- DOI with author, title and year, e.g. 10.1002/hbm.21186
+- URL
+- repository path, with a line number only for code
+- dataset id, e.g. osf:ab12c
+- wikilink to a log holding the conversation, e.g. [[log-YYYY-MM-DD-topic]]
+Prose alone ("see the paper") fails the check. -->

@@ -22,7 +22,7 @@
 
 ### User Story 1 - Re-open a past decision and understand it (Priority: P1)
 
-A researcher — the author a year later, or a stranger auditing the project — wants to know why the
+A researcher, the author a year later, or a stranger auditing the project, wants to know why the
 project made a particular choice. They open the decision record by its number and find, in one
 place: which options were on the table, what each one cost and bought, which was chosen and why it
 beat the others, why each rejected option lost, and the references backing all of it. They can
@@ -31,7 +31,7 @@ points to the record that replaced it, and the original text is still readable.
 
 **Why this priority**: This is the whole point of the phase. Without it the project produces
 conclusions nobody can check, which defeats both the scientific goal and the portfolio goal. It is
-also the smallest slice that is useful on its own — a single well-formed decision record already
+also the smallest slice that is useful on its own, a single well-formed decision record already
 delivers value before any vault structure or automation exists.
 
 **Independent Test**: Write one real decision record (the repository layout choice) using the
@@ -48,7 +48,7 @@ the trade-offs and the reason for the choice without asking a question.
    **Then** it is marked superseded and names the record that replaced it, and the replacement
    names what it supersedes.
 3. **Given** a decision record, **When** a reader follows any listed reference, **Then** it
-   resolves to a real source — a published work, a web page, a specific file and line, a dataset,
+   resolves to a real source, a published work, a web page, a specific file and line, a dataset,
    or a recorded conversation.
 4. **Given** a piece of work (code, specification, or note) that embodies a decision, **When** a
    reader inspects it, **Then** it names the decision record it follows by identifier.
@@ -57,8 +57,8 @@ the trade-offs and the reason for the choice without asking a question.
 
 ### User Story 2 - Read the project's theory without special tools (Priority: P2)
 
-A researcher who has never opened Obsidian wants to understand the method. They find the theory —
-derivations, method notes, literature summaries, open questions — as ordinary text files they can
+A researcher who has never opened Obsidian wants to understand the method. They find the theory -
+derivations, method notes, literature summaries, open questions, as ordinary text files they can
 read in any editor, in a browser on the code host, or printed. Notes are organised so they can
 find their way in without a guide: an entry page, clear note types, and links between related
 notes that resolve rather than dangle.
@@ -77,7 +77,7 @@ code host's file browser.
 1. **Given** the vault, **When** a reader opens any note in a plain text editor, **Then** it is
    readable as-is: no note requires an optional or proprietary plugin to be understood or rendered.
 2. **Given** the vault, **When** a reader starts at its entry page, **Then** they can reach every
-   note type — theory, decision, literature, open question, work log — within two links.
+   note type, theory, decision, literature, open question, work log, within two links.
 3. **Given** any note, **When** its machine-readable header is inspected, **Then** it declares at
    minimum a title, a note type, a status, a creation date and a last-updated date, and decision
    notes additionally declare an identifier and any supersession links.
@@ -90,7 +90,7 @@ code host's file browser.
 
 ### User Story 3 - Untraceable work is rejected automatically (Priority: P2)
 
-A contributor — including the author in a hurry — proposes a change whose decision record has an
+A contributor, including the author in a hurry, proposes a change whose decision record has an
 empty options list, no references, a number that already exists, a citation to a record that does
 not exist, a supersession with no replacement recorded, or a link to a note that is not there. The
 project's automated check refuses the change and says exactly which record and which field is at
@@ -131,15 +131,15 @@ then confirm a clean vault passes.
 
 The project must eventually commit to one canonical cardiac coordinate space, and that commitment
 decides what every future coordinate means. Before choosing, a reader can consult a written survey
-of the candidates — continuous universal coordinate systems on an open statistical heart atlas,
-discrete segment models, fixed-atlas vertex indexing, and hybrids — together with what open
+of the candidates, continuous universal coordinate systems on an open statistical heart atlas,
+discrete segment models, fixed-atlas vertex indexing, and hybrids, together with what open
 cardiac atlases actually exist and what the commercial mapping systems can export. Each surveyed
 item is a note stating what it is, what it covers, its licence and availability, and its
 consequences for coordinate-based pooling. The open question stays explicitly open and links to
 the evidence that will settle it.
 
 **Why this priority**: It is the substantive research output of the phase, but it produces no
-decision yet — the choice itself is deliberately deferred. It is last because it is the part that
+decision yet, the choice itself is deliberately deferred. It is last because it is the part that
 depends on the record format, the vault structure and the automated check already being in place
 to hold it.
 
@@ -158,7 +158,7 @@ and name what evidence is still missing, using only the survey notes.
 3. **Given** the reference-space question, **When** a reader opens it, **Then** it is marked open,
    links to every candidate note, and states what evidence would close it.
 4. **Given** the survey notes, **When** a reader looks for conclusions about cardiac results,
-   **Then** there are none — the phase makes no scientific claim.
+   **Then** there are none, the phase makes no scientific claim.
 
 ---
 
@@ -167,12 +167,12 @@ and name what evidence is still missing, using only the survey notes.
 - Two decision records are written in parallel and claim the same number: the automated check must
   fail rather than silently accept, and the fix must not require renumbering unrelated records.
 - A decision is genuinely forced with no alternative: the record must still name the alternative
-  that was ruled out — including "do nothing" — rather than leave the options field empty.
+  that was ruled out, including "do nothing", rather than leave the options field empty.
 - A referenced web page disappears: the reference must retain enough identifying detail (title,
   author, date, identifier) to remain traceable without the live link.
 - A decision is superseded by a record that is itself later superseded: the chain must remain
   followable in both directions.
-- A note is renamed or moved: links pointing at it must either be updated or fail the check — never
+- A note is renamed or moved: links pointing at it must either be updated or fail the check, never
   silently resolve to nothing.
 - A reference is a conversation rather than a document: it must be recorded in a form that can be
   re-read, not cited as an unrecoverable memory.
@@ -180,12 +180,12 @@ and name what evidence is still missing, using only the survey notes.
   rejection is recorded, and neither is deleted.
 - The check runs on a vault with no decision records yet: it passes and reports zero, rather than
   erroring.
-- Prose happens to mention a decision identifier that does not exist — quoting an external project's
+- Prose happens to mention a decision identifier that does not exist, quoting an external project's
   record, or illustrating the format in documentation: the citation form must be exact enough, or
   the ignore list explicit enough, that this does not produce a false failure.
 - The local enforcement is not installed on a fresh clone: Git does not run hooks from a clone
-  until its owner opts in, so the push cannot be refused locally. It must never pass unchecked —
-  the repository-side check still runs and records the failure publicly — and the checker warns
+  until its owner opts in, so the push cannot be refused locally. It must never pass unchecked -
+  the repository-side check still runs and records the failure publicly, and the checker warns
   whenever it runs in a clone without the hook installed (ADR-0003).
 - A contributor deliberately overrides the local enforcement: the override must be visible after the
   fact, and the public repository must still record the failure.
@@ -196,8 +196,8 @@ and name what evidence is still missing, using only the survey notes.
 
 **Vault structure and notes**
 
-- **FR-001**: The project MUST hold all theory — derivations, method notes, literature summaries,
-  open questions, decision records and work logs — as plain text notes inside a single vault folder
+- **FR-001**: The project MUST hold all theory, derivations, method notes, literature summaries,
+  open questions, decision records and work logs, as plain text notes inside a single vault folder
   versioned alongside the code.
 - **FR-002**: Every note MUST be readable and understandable without any optional or proprietary
   plugin, application or paid service.
@@ -225,7 +225,7 @@ and name what evidence is still missing, using only the survey notes.
 - **FR-011**: A decision record MUST NOT be deleted or rewritten once merged. A reversal MUST be a
   new record that names the record it supersedes, and the superseded record MUST name its
   replacement.
-- **FR-012**: Any artifact that embodies a decision — source file, specification, plan, or note —
+- **FR-012**: Any artifact that embodies a decision, source file, specification, plan, or note -
   MUST cite that decision by its identifier.
 - **FR-013**: The project MUST live in its own standalone public repository, not nested inside the
   existing monorepo, and MUST record that choice as its first decision record together with the
@@ -244,8 +244,8 @@ and name what evidence is still missing, using only the survey notes.
 - **FR-017**: The check MUST fail when any artifact cites a decision identifier that does not exist.
   Citations are recognised by an exact identifier form (`ADR-NNNN`) so that ordinary prose cannot
   trigger a false match.
-- **FR-017a**: The check MUST scan every version-controlled text file for citations — vault notes,
-  specifications, plans, source and configuration alike — excluding only paths named in an explicit
+- **FR-017a**: The check MUST scan every version-controlled text file for citations, vault notes,
+  specifications, plans, source and configuration alike, excluding only paths named in an explicit
   ignore list kept in the repository, so that the exclusions are themselves reviewable.
 - **FR-018**: The check MUST fail when a record is marked superseded without a recorded replacement,
   or when a supersession is not recorded reciprocally by both records.
@@ -286,7 +286,7 @@ and name what evidence is still missing, using only the survey notes.
 - **Decision record**: A note of type decision. Additionally has a unique sequential identifier, an
   options list, per-option trade-offs, a chosen option with rationale, rejected options with
   rationale, references, and optional supersedes / superseded-by links to other decision records.
-- **Reference**: A resolvable pointer from a note to a source — published work, web address,
+- **Reference**: A resolvable pointer from a note to a source, published work, web address,
   repository file and line, dataset, or recorded conversation.
 - **Open question**: A note of type open question. Names an unresolved choice, links to the
   candidate evidence, and states what would settle it. Closes by being linked from the decision
@@ -307,11 +307,11 @@ and name what evidence is still missing, using only the survey notes.
   record, without asking anyone.
 - **SC-002**: 100% of decision records have at least two named options, per-option trade-offs, a
   stated reason for the choice, a stated reason for each rejection, and at least one resolvable
-  reference — verified automatically on every proposed change.
+  reference, verified automatically on every proposed change.
 - **SC-003**: 100% of links between notes resolve; there are zero dangling links and zero citations
   to non-existent decision identifiers.
 - **SC-004**: Every rule the checker defines is caught by the check and demonstrated by a
-  deliberately broken example — one fixture per rule id, with no rule id lacking a fixture. The
+  deliberately broken example, one fixture per rule id, with no rule id lacking a fixture. The
   rule list is the contract's, not a frozen count.
 - **SC-005**: A reader without the note-taking application installed can locate the project's open
   questions and any named method note using only a plain text editor or the code host's file
@@ -322,10 +322,10 @@ and name what evidence is still missing, using only the survey notes.
 - **SC-007**: No unknown is left implicit: every item the survey could not establish appears as an
   explicitly recorded unknown.
 - **SC-008**: The check completes fast enough to run on every proposed change without contributors
-  working around it — under one minute on the full vault.
+  working around it, under one minute on the full vault.
 - **SC-009**: Zero scientific claims about cardiac results are published in this phase.
-- **SC-010**: Every file in the public repository is covered by exactly one stated licence — the
-  software licence or the prose licence — with zero files whose licence a reader would have to
+- **SC-010**: Every file in the public repository is covered by exactly one stated licence, the
+  software licence or the prose licence, with zero files whose licence a reader would have to
   guess.
 - **SC-011**: On a fresh clone, a contributor can install the local enforcement in one documented
   step, and an attempt to push a defective vault is refused without them needing to read anything
@@ -340,7 +340,7 @@ and name what evidence is still missing, using only the survey notes.
 - The audience is researchers and engineers, not the general public. Notes may assume familiarity
   with meta-analysis and cardiac electrophysiology, but not with the note-taking application.
 - "Non-trivial decision" means any choice that a future reader could reasonably question and that
-  would cost real work to reverse. Mechanical choices — formatting, naming a local variable — do
+  would cost real work to reverse. Mechanical choices, formatting, naming a local variable, do
   not require a record. The boundary is judged by the author and enforced at review, not
   automatically.
 - Decision numbers are assigned sequentially at the time of writing; collisions from parallel work

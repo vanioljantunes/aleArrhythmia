@@ -8,73 +8,62 @@ updated: 2026-09-21
 
 # Reading this vault
 
-This folder is the theory behind aleArrhythmia: derivations, method notes, literature summaries,
-open questions, decision records and work logs. It is written to be read by anyone, with any
-text editor or directly on the code host. You do not need Obsidian, or any other application.
+The theory behind aleArrhythmia, as plain Markdown. Any text editor works, and so does GitHub's
+file view. No Obsidian needed.
 
-**Start at [index.md](index.md).** Every note is reachable from there in two links or fewer.
+Start at [index.md](index.md). Every note is two links or fewer from there.
 
-## What a note looks like
+## A note, top to bottom
 
-Every note is a plain Markdown file that opens with a short header between two `---` lines:
-
-```yaml
----
-title: Universal Ventricular Coordinates
-type: literature
-status: active
-created: 2026-09-20
-updated: 2026-09-20
----
+```mermaid
+flowchart TD
+  H[header between two --- lines: title, type, status, dates] --> B[body: ordinary prose, tables, diagrams]
+  B --> L[links to other notes written as double square brackets]
 ```
 
-That header is for machines — the checker and, later, the website. Everything below it is ordinary
-prose for people. You can ignore the header entirely and read the note.
+The header is for the checker and, later, the website. Readers can skip it.
 
 | Field | Meaning |
 |---|---|
-| `title` | What the note is about |
-| `type` | One of the five note types below |
-| `status` | Where the note is in its life — see below |
-| `created` / `updated` | Dates, always written year-month-day |
+| title | What the note is about |
+| type | One of the five types below |
+| status | Where the note is in its life |
+| created, updated | Dates, year-month-day |
 
-## The five note types
+## Note types
 
-| Type | Folder | What it holds |
+| Type | Folder | Holds |
 |---|---|---|
-| `adr` | `decisions/` | A **decision record**. One decision, the options that were on the table, what each cost, which was chosen and why, why the others lost, and the evidence. Numbered `ADR-0001`, `ADR-0002`, and so on |
-| `theory` | `theory/` | Derivations and method notes — how the method works and why |
-| `literature` | `literature/` | One note per source surveyed: a paper, an atlas, a file format |
-| `question` | `questions/` | An open question the project has not yet answered, what the candidate answers are, and what evidence would settle it |
-| `log` | `logs/` | A dated record of a working session — what was asked, what was decided, what was tried |
+| adr | decisions/ | A decision record: options, cost and gain of each, the choice, why the others lost, evidence. Numbered ADR-0001, ADR-0002, and so on. |
+| theory | theory/ | Derivations and method notes |
+| literature | literature/ | One note per source surveyed: a paper, an atlas, a file format |
+| question | questions/ | An open question, its candidate answers, and what would settle it |
+| log | logs/ | A dated record of a working session |
 
 ## Status values
 
-| Type | Possible status |
+| Type | Status |
 |---|---|
-| `theory`, `literature`, `log` | `draft`, `active`, `archived` |
-| `adr` | `proposed`, `accepted`, `superseded` |
-| `question` | `open`, `answered` |
+| theory, literature, log | draft, active, archived |
+| adr | proposed, accepted, superseded |
+| question | open, answered |
 
-A superseded decision record is never deleted. It stays readable, and it names the record that
-replaced it. Reversals are part of the history, not erased from it.
+A superseded record is never deleted. It names the record that replaced it.
 
-## Links
+## Links and citations
 
-Notes link to each other with double square brackets: `[[canonical-reference-space]]` means "the
-note whose file is named `canonical-reference-space.md`", wherever in the vault it lives. On the
-code host these appear as literal text; open the named file to follow them. Every such link is
-checked automatically — a link to a note that does not exist fails the check.
+| Written as | Means | Checked |
+|---|---|---|
+| `[[canonical-reference-space]]` | The note in the file canonical-reference-space.md, in any folder | Yes: a link to a missing note fails the check |
+| `ADR-0003` | Decision record number 3, cited from any file | Yes: a citation of a missing record fails the check |
 
-Decision records are cited by number anywhere in the project — in code, specifications and notes —
-as `ADR-0003`. Those citations are checked too.
+On GitHub, double-bracket links show as plain text. Open the named file to follow one.
 
 ## Templates
 
-`templates/` holds one starting file per note type. Copy the one you need; its header and section
-headings are already in place.
+templates/ holds one starting file per note type, with header and headings in place.
 
 ## Licence
 
-The prose in this folder is licensed under CC-BY-4.0: you may quote and reuse it with attribution.
-The code elsewhere in the repository is under a different licence. See the root `README.md`.
+Prose in this folder: CC-BY-4.0, reuse with attribution. Code elsewhere uses another licence; see
+the root README.

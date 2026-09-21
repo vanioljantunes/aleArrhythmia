@@ -6,23 +6,20 @@ created: YYYY-MM-DD
 updated: YYYY-MM-DD
 ---
 
-# <What the session was about> — YYYY-MM-DD
+# <What the session was about>, YYYY-MM-DD
 
-<!-- Who took part and what the session set out to do. If it was run with an AI assistant, say
-which, and which command or workflow it ran. -->
+<!-- One sentence: who took part and the goal. If an AI assistant was used, name it and the command
+it ran. -->
 
-## What was asked
+## Questions and answers
 
-<!-- Each question or problem raised, with the options that were put on the table. Record the
-options even when one was obviously right — the record is for someone who was not there. -->
+| # | Question | Options offered | Answer | Record |
+|---|---|---|---|---|
+| 1 | | | | |
 
-## What was decided
+## Tried and did not work
 
-<!-- Each answer, as given, and the decision record it became, linked by id. -->
-
-## What was tried and did not work
-
-<!-- Dead ends are evidence. A future reader should not have to rediscover them. -->
+<!-- Table: attempt, why it failed. Dead ends are evidence. -->
 
 ## Follow-ups
 

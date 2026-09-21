@@ -8,71 +8,55 @@ updated: 2026-09-21
 
 # aleArrhythmia theory vault
 
-The theory, decisions and evidence behind aleArrhythmia: Activation Likelihood Estimation adapted
-from brain imaging to cardiac electrophysiology, so that arrhythmia origins reported in individual
-studies can be pooled into a map.
+Activation Likelihood Estimation adapted from brain imaging to cardiac electrophysiology, so that
+arrhythmia origins reported in separate studies can be pooled into one map.
 
-New here? Read [[README]] first — it explains how notes are laid out and needs no special software.
+New here: read [[README]] first.
 
-> **Research use only.** Not a medical device. Nothing in this vault is a clinical recommendation,
-> and in the current phase nothing in it is a claim about cardiac results.
+> Research use only. Not a medical device. Nothing here is a clinical recommendation, and in the
+> current phase nothing here is a claim about cardiac results.
 
 ## Decision records
 
-Every non-trivial choice the project has made, with the options that were considered, what each
-cost, and why one was chosen.
-
 | Record | Decision | Status |
 |---|---|---|
-| [[ADR-0001-repository-layout]] | The project lives in its own standalone public repository | accepted |
-| [[ADR-0002-licensing]] | Apache-2.0 for code, CC-BY-4.0 for vault prose | accepted |
-| [[ADR-0003-enforcement-mechanism]] | A local pre-push hook plus a check on every push | accepted |
+| [[ADR-0001-repository-layout]] | Own standalone public repository | accepted |
+| [[ADR-0002-licensing]] | Apache-2.0 for code, CC-BY-4.0 for prose | accepted |
+| [[ADR-0003-enforcement-mechanism]] | Pre-push hook plus a check on every push | accepted |
 | [[ADR-0004-citation-scan-scope]] | Scan all tracked text files, minus a reasoned ignore list | accepted |
+| [[ADR-0005-writing-style]] | Writing rules; mechanical tells blocked, AI vocabulary warned | accepted |
 
 ## Open questions
 
-Choices the project has deliberately not made yet, and what evidence would settle them.
-
-_None yet._
+None yet.
 
 ## Theory
 
-How the method works and why.
-
-_None yet._
+None yet.
 
 ## Literature
 
-One note per source surveyed.
-
-_None yet._
+None yet.
 
 ## Work logs
 
-Dated records of working sessions.
-
-- [[log-2026-09-20-clarification]] — the session that settled repository layout, enforcement, scan
-  scope and licensing
-- [[log-2026-09-21-enforcement-verification]] — evidence that the pre-push hook and the repository
-  workflow each refuse a broken decision record
+| Log | Content |
+|---|---|
+| [[log-2026-09-20-clarification]] | Session that settled layout, enforcement, scan scope and licence |
+| [[log-2026-09-21-enforcement-verification]] | Proof that hook and workflow each refuse a broken record |
+| [[log-2026-09-21-reader-trial-adr-0001]] | Author reading of ADR-0001; led to ADR-0005 |
 
 ## Templates
 
-Starting points for each note type live in `templates/`. Copy one, rename it, and fill it in; the
-header fields and section headings are already there.
-
 | Template | For |
 |---|---|
-| `templates/adr.md` | A decision record — options, trade-offs, choice, rejections, references |
-| `templates/theory.md` | A derivation or method note |
-| `templates/literature.md` | One surveyed source, atlas, file format or system |
-| `templates/question.md` | An open question, its candidate answers, and what would settle it |
-| `templates/log.md` | A dated working session |
+| templates/adr.md | A decision record |
+| templates/theory.md | A derivation or method note |
+| templates/literature.md | One surveyed source, atlas, file format or system |
+| templates/question.md | An open question |
+| templates/log.md | A dated working session |
 
-Templates are not notes: they are excluded from the checks, so their placeholder values do not
-fail anything.
+Templates are excluded from the checks, so their placeholders fail nothing.
 
-## Keeping this page complete
-
-Every decision record and every open question must appear on this page. The checker verifies it
-and fails when one is missing, so this page cannot silently fall out of date.
+Every decision record and open question must appear on this page. The checker fails when one is
+missing.

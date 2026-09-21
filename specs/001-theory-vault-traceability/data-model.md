@@ -15,16 +15,16 @@ The base entity. Every file under `docs/vault/` is a Note.
 |---|---|---|---|
 | `title` | string | yes | Human-readable; need not match the filename |
 | `type` | enum | yes | `theory`, `adr`, `literature`, `question`, `log` |
-| `status` | enum | yes | Vocabulary depends on `type` — see below |
+| `status` | enum | yes | Vocabulary depends on `type`: see below |
 | `created` | date | yes | ISO `YYYY-MM-DD` |
 | `updated` | date | yes | ISO `YYYY-MM-DD`; must be >= `created` |
 | `tags` | list of string | no | Free-form; not validated |
 
 Non-frontmatter attributes, derived by the checker:
 
-- **basename** — filename without `.md`. Unique across the entire vault (R-004).
-- **body** — everything after the closing `---`.
-- **outbound links** — every `[[...]]` occurrence in the body.
+- **basename**: filename without `.md`. Unique across the entire vault (R-004).
+- **body**: everything after the closing `---`.
+- **outbound links**: every `[[...]]` occurrence in the body.
 
 **Status vocabulary by type**
 
@@ -57,7 +57,7 @@ structure.
 | `supersedes` | list of ADR id | no | Records this one replaces |
 | `superseded_by` | ADR id | conditional | Required when `status: superseded` |
 
-**Required body sections** — level-two headings, exact wording (R-005):
+**Required body sections**: level-two headings, exact wording (R-005):
 
 | Heading | Content requirement |
 |---|---|
@@ -75,7 +75,7 @@ structure.
 - V-D3 (FR-010, FR-016): `id` is unique across all decision records.
 - V-D4 (R-006): the `ADR-NNNN` prefix of the filename equals `id`.
 - V-D5 (FR-018): `status: superseded` requires `superseded_by`, pointing at an existing record.
-- V-D6 (FR-018): supersession is reciprocal — if A declares `superseded_by: B`, then B must declare
+- V-D6 (FR-018): supersession is reciprocal, if A declares `superseded_by: B`, then B must declare
   A in its `supersedes`. A one-sided declaration is a violation, named on both files.
 - V-D7 (FR-008, FR-015): `## References` yields at least one Reference passing V-R1.
 - V-D8 (FR-011): a record's `id` never disappears between commits. Enforced by review, not by the
@@ -96,7 +96,7 @@ superseded and later revived is a new record superseding the superseding one.
 
 ## Reference
 
-Not a file — a line or inline item inside a decision record's `## References` section.
+Not a file, a line or inline item inside a decision record's `## References` section.
 
 | Kind | Accepted form | Local check |
 |---|---|---|
@@ -108,7 +108,7 @@ Not a file — a line or inline item inside a decision record's `## References` 
 
 **Validation rules**
 
-- V-R1 (FR-009): each reference matches exactly one accepted kind. Bare prose — "see the paper" —
+- V-R1 (FR-009): each reference matches exactly one accepted kind. Bare prose, "see the paper" -
   fails.
 - V-R2 (FR-009, R-007): repository references resolve against the working tree; a missing file or an
   out-of-range line is a violation.
@@ -171,14 +171,14 @@ A line in `.vaultcheckignore`.
 **Validation rules**
 
 - V-I1 (R-010): every non-blank, non-comment line carries a trailing reason comment.
-- V-I2 (R-010): a rule matching nothing is reported as a warning, not a failure — stale exclusions
+- V-I2 (R-010): a rule matching nothing is reported as a warning, not a failure, stale exclusions
   should be visible without blocking work.
 
 ---
 
 ## VaultIndex
 
-`docs/vault/index.md` — a Note of type `theory`, status `active`, serving as the entry page.
+`docs/vault/index.md`: a Note of type `theory`, status `active`, serving as the entry page.
 
 **Validation rules**
 

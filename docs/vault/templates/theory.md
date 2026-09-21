@@ -8,27 +8,25 @@ updated: YYYY-MM-DD
 
 # <What this note explains>
 
-<!-- One paragraph: what question this note answers, and why the project needs the answer. -->
+<!-- One sentence: the question this note answers. -->
 
 ## Setting
 
-<!-- The situation the method applies to, and the assumptions it makes. State assumptions
-explicitly — an unstated assumption is the most common way a derivation goes wrong. -->
+<!-- Assumptions, as a table: assumption, why it holds, what breaks if it does not. -->
 
 ## Derivation
 
-<!-- The argument, step by step. Equations in plain LaTeX between $ signs are fine; they read as
-text where they do not render. Cite every result you did not derive yourself. -->
+<!-- Numbered steps. LaTeX between $ signs reads as text where it does not render. Cite every
+result you did not derive. A flowchart if the steps branch. -->
 
 ## What changes for the heart
 
-<!-- Where the fMRI version of this step does not transfer directly to cardiac geometry, say so
-here and say what replaces it. Omit this section only if the note has nothing to do with ALE. -->
+<!-- Table: fMRI step, cardiac replacement, reason. Omit if the note is unrelated to ALE. -->
 
 ## Open points
 
-<!-- What this note does not yet settle. Link to an open question note where one exists. -->
+<!-- Links to open question notes. -->
 
 ## References
 
-<!-- DOIs with author, title and year; links to decision records by id, such as ADR-0001. -->
+<!-- DOIs with author, title and year; decision records by id, e.g. ADR-0001. -->

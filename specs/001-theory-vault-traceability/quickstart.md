@@ -25,7 +25,7 @@ cd aleArrhythmia
 # the check runs before anything is installed
 python -m tools.vaultcheck
 
-# install the tool and the local enforcement — the one documented step (FR-023a)
+# install the tool and the local enforcement, the one documented step (FR-023a)
 pip install -e ".[dev]"
 git config core.hooksPath .githooks
 ```
@@ -35,7 +35,7 @@ repository is clean, it says so before you have installed a thing.
 
 ---
 
-## Scenario 1 — A clean vault passes
+## Scenario 1, A clean vault passes
 
 Validates FR-022, SC-003.
 
@@ -47,7 +47,7 @@ echo "exit: $?"
 **Expected**
 
 ```text
-vaultcheck: N notes, M decision records, L links, C citations verified — clean
+vaultcheck: N notes, M decision records, L links, C citations verified: clean
 exit: 0
 ```
 
@@ -56,7 +56,7 @@ state what it looked at.
 
 ---
 
-## Scenario 2 — Each defect kind is caught
+## Scenario 2, Each defect kind is caught
 
 Validates FR-015 through FR-021, SC-004. Run against the fixture vaults, which exist precisely so
 these failures are reproducible:
@@ -78,7 +78,7 @@ pytest tests/ -v
 | `unresolved-link/` | `LINK-UNRESOLVED` |
 | `missing-field/` | `NOTE-MISSING-FIELD` |
 | `duplicate-basename/` | `NOTE-DUPLICATE-BASENAME` |
-| `prose-mentions-adr/` | passes — proves the exact-form rule avoids false positives |
+| `prose-mentions-adr/` | passes, proves the exact-form rule avoids false positives |
 | `empty-vault/` | passes, reports zero |
 
 To see a failure by hand rather than through pytest:
@@ -99,7 +99,7 @@ Every line names a file and a line number, so an editor can jump straight to it 
 
 ---
 
-## Scenario 3 — A broken push is refused locally
+## Scenario 3, A broken push is refused locally
 
 Validates FR-023, FR-023a, SC-011. This edits a tracked file and then reverts; run it on a clean
 working tree so the reset destroys nothing you wanted.
@@ -121,7 +121,7 @@ git push
 
 ```text
 docs/vault/decisions/ADR-0001-repository-layout.md:NN: ADR-NO-REFERENCE: no reference in an accepted form
-vaultcheck failed — push refused. Fix the violations, or use --no-verify to override deliberately.
+vaultcheck failed, push refused. Fix the violations, or use --no-verify to override deliberately.
 ```
 
 Then undo:
@@ -132,7 +132,7 @@ git reset --hard HEAD~1
 
 ---
 
-## Scenario 4 — The public repository catches what the hook missed
+## Scenario 4, The public repository catches what the hook missed
 
 Validates the second half of FR-023.
 
@@ -142,11 +142,11 @@ gh run list --limit 1
 ```
 
 **Expected**: the push succeeds locally, and the traceability workflow on the repository reports a
-failure for that commit. The override is possible and visible — which is the design, not a gap.
+failure for that commit. The override is possible and visible, which is the design, not a gap.
 
 ---
 
-## Scenario 5 — The vault reads without Obsidian
+## Scenario 5, The vault reads without Obsidian
 
 Validates FR-002, FR-005, SC-005.
 
@@ -164,7 +164,7 @@ questions and one method note. They should succeed on the first attempt, without
 
 ---
 
-## Scenario 6 — The survey is present and honest
+## Scenario 6, The survey is present and honest
 
 Validates FR-024 through FR-029, SC-006, SC-007.
 
@@ -185,17 +185,17 @@ grep -rl "unknown" docs/vault/literature/
 ```
 
 **Expected**: every item the survey could not establish appears as an explicitly recorded unknown
-stating what was tried — not as an absence, and not as a guess.
+stating what was tried, not as an absence, and not as a guess.
 
 And confirm the phase claims nothing:
 
 ```bash
-grep -ri "we find\|we show\|results indicate" docs/vault/ || echo "no claims — correct"
+grep -ri "we find\|we show\|results indicate" docs/vault/ || echo "no claims, correct"
 ```
 
 ---
 
-## Scenario 7 — Timing
+## Scenario 7, Timing
 
 Validates SC-008.
 

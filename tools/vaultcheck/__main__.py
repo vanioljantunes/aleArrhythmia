@@ -16,6 +16,7 @@ from .decisions import check_decisions
 from .discovery import discover, git_toplevel
 from .frontmatter import check_basenames, check_note, parse
 from .links import check_citations, check_index, check_links, check_questions
+from .style import check_style
 from .report import EXIT_CHECKER_ERROR, CheckerError, Counts, Violation, emit
 
 HOOKS_DIR = ".githooks"
@@ -68,6 +69,7 @@ def check(root: Path, vault: Path, ignore_file: Path, check_hook: bool = True) -
     violations += cite_violations
     violations += check_questions(notes, ids)
     violations += check_index(vault_rel, notes)
+    violations += check_style(root, found.files)
     if check_hook:
         violations += hook_warning(root)
 

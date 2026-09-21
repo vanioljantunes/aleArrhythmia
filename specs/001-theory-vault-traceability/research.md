@@ -22,8 +22,8 @@ that drifts. A standalone repository also lets the project carry its own licence
 tracker and its own CI, which is what a portfolio artifact needs.
 
 **Alternatives considered**: (a) Nested folder in the monorepo with periodic export to a public
-snapshot — rejected: snapshots drift, and history is lost, which contradicts Principle VIII;
-(b) Git submodule inside the monorepo — rejected: adds a moving part for no gain now, and can be
+snapshot, rejected: snapshots drift, and history is lost, which contradicts Principle VIII;
+(b) Git submodule inside the monorepo, rejected: adds a moving part for no gain now, and can be
 added later without cost.
 
 **Note for ADR-0001**: the repository was created before this record existed. That sequencing is
@@ -37,14 +37,14 @@ recorded honestly rather than back-dated.
 `docs/vault/`. The README states which licence covers which path.
 
 **Rationale**: Apache-2.0 carries an explicit patent grant, which matters in a field where device
-vendors hold patents on mapping and ablation technique — a permissive licence without one leaves
+vendors hold patents on mapping and ablation technique, a permissive licence without one leaves
 downstream users exposed. CC-BY-4.0 on the prose lets the theory be quoted and reused with
 attribution, which is the mechanism by which academic credit reaches the author.
 
-**Alternatives considered**: (a) MIT everywhere — rejected: no patent grant, and its text speaks of
-"the Software", which fits prose badly; (b) Apache-2.0 everywhere — rejected: workable, but gives
+**Alternatives considered**: (a) MIT everywhere, rejected: no patent grant, and its text speaks of
+"the Software", which fits prose badly; (b) Apache-2.0 everywhere, rejected: workable, but gives
 no citation-style attribution requirement for the theory, which is the portfolio's whole point;
-(c) CC-BY-SA for prose — rejected: copyleft on notes would complicate quoting them in a journal
+(c) CC-BY-SA for prose, rejected: copyleft on notes would complicate quoting them in a journal
 article.
 
 ---
@@ -59,9 +59,9 @@ Decision notes add `id`, and optionally `supersedes` / `superseded_by`.
 already understand, so the Phase 2 renderer needs no custom parsing. `safe_load` refuses arbitrary
 object construction, so a malformed or hostile note cannot execute anything.
 
-**Alternatives considered**: (a) TOML frontmatter — rejected: Obsidian does not read it, which
-breaks the operator's own editing workflow; (b) JSON sidecar files — rejected: doubles the file
-count and separates metadata from the note it describes; (c) Inferring metadata from file paths —
+**Alternatives considered**: (a) TOML frontmatter, rejected: Obsidian does not read it, which
+breaks the operator's own editing workflow; (b) JSON sidecar files, rejected: doubles the file
+count and separates metadata from the note it describes; (c) Inferring metadata from file paths -
 rejected: silent and unverifiable.
 
 ---
@@ -74,14 +74,14 @@ searched across the whole vault. Basenames must be unique vault-wide, and that u
 checked rule.
 
 **Rationale**: Basename resolution is Obsidian's default and keeps links stable when a note moves
-between folders — which will happen as the vault grows. The uniqueness rule is what makes it
+between folders, which will happen as the vault grows. The uniqueness rule is what makes it
 unambiguous; without it, resolution silently picks one of two candidates. Making uniqueness a
 checked rule converts a latent ambiguity into a loud failure.
 
-**Alternatives considered**: (a) Relative-path links — rejected: every folder move rewrites links,
+**Alternatives considered**: (a) Relative-path links, rejected: every folder move rewrites links,
 and merge conflicts follow; (b) Obsidian's "shortest path when possible" with duplicate basenames
-allowed — rejected: resolution becomes editor-dependent, and a file-based checker cannot reproduce
-the editor's choice; (c) Standard Markdown links only — rejected: loses the backlink and graph
+allowed, rejected: resolution becomes editor-dependent, and a file-based checker cannot reproduce
+the editor's choice; (c) Standard Markdown links only, rejected: loses the backlink and graph
 affordances the vault is for.
 
 ---
@@ -95,14 +95,14 @@ field is empty if it contains no non-whitespace content other than the template'
 comments.
 
 **Rationale**: Headings are readable prose to a human and a reliable anchor to a parser, so one
-artifact serves both audiences — no separate machine format to keep in sync. Fixed wording is what
+artifact serves both audiences, no separate machine format to keep in sync. Fixed wording is what
 makes the check possible; the cost is that the headings cannot be renamed casually, which is
 acceptable for five strings.
 
-**Alternatives considered**: (a) Put the five fields in frontmatter — rejected: multi-paragraph
+**Alternatives considered**: (a) Put the five fields in frontmatter, rejected: multi-paragraph
 prose in YAML is miserable to write and read; (b) A separate structured file per ADR alongside the
-prose — rejected: two sources of truth, guaranteed to diverge; (c) Free-form prose with a language
-model judging completeness — rejected: non-deterministic, unreviewable, and needs network access.
+prose, rejected: two sources of truth, guaranteed to diverge; (c) Free-form prose with a language
+model judging completeness, rejected: non-deterministic, unreviewable, and needs network access.
 
 ---
 
@@ -116,13 +116,13 @@ and the frontmatter `id` agree, and that no two records share a number.
 readable. Requiring both to agree removes the class of error where a file is copied and its id is
 not updated.
 
-**Alternatives considered**: (a) Numeric id only, slug in frontmatter — rejected: unreadable
-directory listing; (b) Date-based ids — rejected: not sequential, awkward to cite, and collides when
-two decisions land the same day; (c) Hash or UUID ids — rejected: uncitable in conversation.
+**Alternatives considered**: (a) Numeric id only, slug in frontmatter, rejected: unreadable
+directory listing; (b) Date-based ids, rejected: not sequential, awkward to cite, and collides when
+two decisions land the same day; (c) Hash or UUID ids, rejected: uncitable in conversation.
 
 ---
 
-## R-007: Reference resolvability — what a checker can actually verify
+## R-007: Reference resolvability, what a checker can actually verify
 
 **Decision**: The checker verifies the *shape* and *local* resolvability of references, never their
 liveness. It accepts: a DOI matching the standard pattern, an http(s) URL, a repository path with
@@ -132,16 +132,16 @@ the file has that many lines. It makes no network request.
 
 **Rationale**: Constitution VI and the offline constraint forbid the checker phoning out, and link
 liveness is not a property the project controls anyway. Verifying shape catches the real failure mode
-— a reference field filled with "see the paper" — while file-and-line verification catches the
+- a reference field filled with "see the paper", while file-and-line verification catches the
 common case of a citation that has drifted as code moved.
 
-**Alternatives considered**: (a) Resolve URLs over the network — rejected: makes the check slow,
+**Alternatives considered**: (a) Resolve URLs over the network, rejected: makes the check slow,
 flaky, and dependent on connectivity, and would fail on every offline push; (b) Accept any non-empty
-string — rejected: FR-009 requires resolvable, and "see the paper" is not; (c) Require DOIs only —
+string, rejected: FR-009 requires resolvable, and "see the paper" is not; (c) Require DOIs only -
 rejected: excludes repository files and conversations, both of which are legitimate evidence here.
 
 **Consequence recorded in the spec**: link rot is handled by requiring enough identifying detail
-(title, author, date, identifier) that a dead URL remains traceable — a human-review rule, not a
+(title, author, date, identifier) that a dead URL remains traceable, a human-review rule, not a
 machine one.
 
 ---
@@ -149,7 +149,7 @@ machine one.
 ## R-008: Enforcement mechanism
 
 **Decision**: Two points. Locally, a tracked `.githooks/pre-push` script, activated by
-`git config core.hooksPath .githooks` — one documented command, no framework. On the server, a
+`git config core.hooksPath .githooks`: one documented command, no framework. On the server, a
 workflow that runs the same checker on every push to the public repository.
 
 **Rationale**: The local hook gives failure in under a second, before anything is public. The
@@ -158,10 +158,10 @@ installed or was bypassed. Tracking the hook in the repository means it is revie
 like everything else. `--no-verify` remains possible, which is intentional: a bypass should be
 available and visible, not impossible.
 
-**Alternatives considered**: (a) Pull requests with required status checks — rejected: forces the
+**Alternatives considered**: (a) Pull requests with required status checks, rejected: forces the
 solo author to open a pull request against themselves for every note, and the operator explicitly
-chose against it; (b) The `pre-commit` framework — rejected: a dependency and a config file to
-replace four lines of shell; (c) Server-side check only — rejected: broken records become public
+chose against it; (b) The `pre-commit` framework, rejected: a dependency and a config file to
+replace four lines of shell; (c) Server-side check only, rejected: broken records become public
 before anyone learns of them.
 
 ---
@@ -175,13 +175,13 @@ exact pattern `ADR-` followed by exactly four digits, on a word boundary.
 
 **Rationale**: `git ls-files` is the definition of "version-controlled" and avoids walking
 `node_modules` or build output by construction. The exact four-digit form makes false positives rare;
-the ignore list handles the rest and, being a tracked file, is itself reviewable — which is the
+the ignore list handles the rest and, being a tracked file, is itself reviewable, which is the
 property the operator asked for.
 
-**Alternatives considered**: (a) Walk the filesystem directly — rejected: picks up untracked scratch
-files and build output, and needs its own ignore logic; (b) Scan only the vault — rejected: leaves
+**Alternatives considered**: (a) Walk the filesystem directly, rejected: picks up untracked scratch
+files and build output, and needs its own ignore logic; (b) Scan only the vault, rejected: leaves
 FR-012 unenforced exactly where drift does damage, in code; (c) Loose citation pattern such as
-`ADR-\d+` — rejected: matches prose like "ADR-1" and version strings.
+`ADR-\d+`: rejected: matches prose like "ADR-1" and version strings.
 
 ---
 
@@ -193,13 +193,13 @@ must carry a trailing `#` comment explaining why it is excluded, and the checker
 lacks one.
 
 **Rationale**: Reusing gitignore's full semantics would mean either a dependency or reimplementing
-negation and directory-anchoring rules — too much machinery for a short exclusion list. Requiring a
+negation and directory-anchoring rules, too much machinery for a short exclusion list. Requiring a
 reason per line is what stops the ignore list from quietly becoming the place inconvenient files go.
 
-**Alternatives considered**: (a) Full gitignore semantics via the `pathspec` package — rejected: a
+**Alternatives considered**: (a) Full gitignore semantics via the `pathspec` package, rejected: a
 third dependency for a file expected to hold single-digit entries; (b) Ignore patterns in
-`pyproject.toml` — rejected: buries a reviewable policy inside build configuration; (c) No ignore
-list at all — rejected: this document and the templates legitimately contain example identifiers.
+`pyproject.toml`: rejected: buries a reviewable policy inside build configuration; (c) No ignore
+list at all, rejected: this document and the templates legitimately contain example identifiers.
 
 ---
 
@@ -213,8 +213,8 @@ record must carry `superseded_by`; an `answered` question must link to the recor
 month, at which point no index can be generated from them. Tying `superseded` and `answered` to the
 presence of their link is what makes FR-018 checkable rather than aspirational.
 
-**Alternatives considered**: (a) Free-text status — rejected above; (b) A single shared vocabulary
-across all note types — rejected: "accepted" is meaningless for a work log, "answered" for a
+**Alternatives considered**: (a) Free-text status, rejected above; (b) A single shared vocabulary
+across all note types, rejected: "accepted" is meaningless for a work log, "answered" for a
 derivation.
 
 ---
@@ -229,9 +229,9 @@ without installing. Dependencies: PyYAML at runtime, pytest under a `dev` extra.
 fresh clone can run the check before installing anything, which matters for the fresh-clone edge case
 in the spec.
 
-**Alternatives considered**: (a) A loose script in `scripts/` — rejected: no test story, no
+**Alternatives considered**: (a) A loose script in `scripts/`: rejected: no test story, no
 dependency declaration, and Principle VII's "installable" is a requirement not a preference;
-(b) Publishing to PyPI — rejected: premature for a tool with one user and one repository.
+(b) Publishing to PyPI, rejected: premature for a tool with one user and one repository.
 
 ---
 
@@ -245,26 +245,26 @@ checker's own error (unreadable file, malformed YAML it cannot attribute).
 failures become clickable with no extra work. Separating the checker's own failure (2) from a vault
 violation (1) means a crash never reads as a clean vault.
 
-**Alternatives considered**: (a) JSON output — rejected: nothing consumes it yet; can be added
-behind a flag when something does; (b) Everything on stdout — rejected: makes the summary and the
+**Alternatives considered**: (a) JSON output, rejected: nothing consumes it yet; can be added
+behind a flag when something does; (b) Everything on stdout, rejected: makes the summary and the
 failures indistinguishable when piped.
 
 ---
 
 ## R-014: Survey scope and method
 
-**Decision**: One literature note per surveyed item, in three groups — candidate reference spaces,
+**Decision**: One literature note per surveyed item, in three groups, candidate reference spaces,
 open cardiac atlases, commercial export formats. Each note records what the thing is, its anatomical
 coverage, its licence and availability, and its consequences for pooling coordinates. Sources are
 published documentation and openly available datasets only. Anything not establishable becomes an
 explicit unknown note stating what was tried.
 
-**Rationale**: One note per item is what makes the backlink graph useful — the open question links to
+**Rationale**: One note per item is what makes the backlink graph useful, the open question links to
 candidates, candidates link to the atlases they need. Recording unknowns as first-class notes is
 FR-027, and it is also how the survey stays honest: a gap is visible rather than absent.
 
-**Alternatives considered**: (a) A single survey document — rejected: no backlinks, no per-item
-status, and it cannot be superseded piecewise; (b) Contacting vendors for documentation — rejected
+**Alternatives considered**: (a) A single survey document, rejected: no backlinks, no per-item
+status, and it cannot be superseded piecewise; (b) Contacting vendors for documentation, rejected
 for this phase: unbounded latency, and Principle V means the project must work from public material
 anyway.
 

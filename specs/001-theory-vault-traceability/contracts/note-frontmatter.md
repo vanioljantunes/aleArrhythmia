@@ -11,7 +11,7 @@ narrowing a vocabulary is breaking and requires a decision record.
 
 A note is a UTF-8 text file ending in `.md`. It opens with a YAML frontmatter block: a line
 containing exactly `---`, the YAML body, and a closing line containing exactly `---`. The first line
-of the file is the opening delimiter — no blank line, no byte-order mark before it.
+of the file is the opening delimiter, no blank line, no byte-order mark before it.
 
 ```markdown
 ---
@@ -75,7 +75,7 @@ a crash.
 | `adr` | `proposed`, `accepted`, `superseded` |
 | `question` | `open`, `answered` |
 
-Any other value is a violation. The vocabularies are closed deliberately — see R-011.
+Any other value is a violation. The vocabularies are closed deliberately, see R-011.
 
 ---
 

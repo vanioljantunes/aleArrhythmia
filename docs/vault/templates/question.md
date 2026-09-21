@@ -11,21 +11,18 @@ updated: YYYY-MM-DD
 
 ## The question
 
-<!-- State the question in one or two sentences, precisely enough that it is clear what would
-count as an answer. -->
+<!-- One or two sentences, precise enough that an answer is recognisable. -->
 
 ## Candidates
 
-<!-- Each candidate answer as a list item linking to the note that describes it:
-- [[candidate-note-name]] — one line on what it is
-An open question with no linked candidates fails the check. -->
+<!-- One list item per candidate, each linking to its note:
+- [[candidate-note-name]]: one line
+An open question with no linked candidate fails the check. -->
 
 ## What would settle it
 
-<!-- The evidence or criterion that would let the project choose. If the answer is "a decision
-between trade-offs", name the trade-offs. This section may not be empty. -->
+<!-- The evidence or criterion that decides it. Must not be empty. -->
 
 ## Current leaning
 
-<!-- Optional. If there is a provisional favourite, say which and why — clearly marked as not
-yet decided. Remove the section if there is none. -->
+<!-- Optional. A provisional favourite, marked as undecided. Delete if none. -->

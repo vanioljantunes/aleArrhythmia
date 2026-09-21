@@ -47,9 +47,18 @@ def _items(content: str) -> list[tuple[int, str]]:
     return items
 
 
+_TABLE_ROW = re.compile(r"^\s*\|.*\|\s*$")
+_TABLE_RULE = re.compile(r"^\s*\|[\s:|-]+\|\s*$")
+
+
 def _count_options(content: str) -> int:
-    """Options are named as top-level list items, or failing that as bold-led paragraphs."""
+    """Options are named as table rows, top-level list items, or bold-led paragraphs (ADR-0005)."""
     lines = strip_comments(content).split("\n")
+    rows = [line for line in lines if _TABLE_ROW.match(line)]
+    if rows:
+        separators = sum(1 for line in rows if _TABLE_RULE.match(line))
+        # every table has one header row and one separator row; the rest are options
+        return len(rows) - 2 * separators
     listed = sum(1 for line in lines if _ITEM.match(line))
     if listed:
         return listed

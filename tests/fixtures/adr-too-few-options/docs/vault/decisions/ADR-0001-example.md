@@ -13,7 +13,7 @@ Context for the decision.
 
 ## Options considered
 
-- **Option A** — the first option.
+- **Option A**: the first option.
 
 ## Trade-offs
 
@@ -27,7 +27,7 @@ Context for the decision.
 
 ## Rejected
 
-**Option B** — rejected because it costs more.
+**Option B**: rejected because it costs more.
 
 ## References
 

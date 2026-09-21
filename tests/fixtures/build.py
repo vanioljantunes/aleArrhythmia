@@ -51,8 +51,8 @@ Context for the decision.
 
 ## Options considered
 
-- **Option A** — the first option.
-- **Option B** — the second option.
+- **Option A**: the first option.
+- **Option B**: the second option.
 
 ## Trade-offs
 
@@ -66,7 +66,7 @@ Context for the decision.
 
 ## Rejected
 
-**Option B** — rejected because it costs more.
+**Option B**: rejected because it costs more.
 
 ## References
 
@@ -90,7 +90,7 @@ Which option is right?
 
 ## Candidates
 
-- [[literature-example]] — the only candidate.
+- [[literature-example]]: the only candidate.
 
 ## What would settle it
 
@@ -202,11 +202,11 @@ FIXTURES: dict[str, tuple[str | None, int, Callable[[Files], Files]]] = {
                            _edit(THEORY, "## Setting\n", "## Setting\n\n> [!note]\n> A callout.\n")),
     # decision records
     "adr-missing-section": ("ADR-MISSING-SECTION", 1,
-                            _edit(ADR, "## Rejected\n\n**Option B** — rejected because it costs more.\n\n", "")),
+                            _edit(ADR, "## Rejected\n\n**Option B**: rejected because it costs more.\n\n", "")),
     "adr-empty-section": ("ADR-EMPTY-SECTION", 1, _edit(
         ADR, "**Option A**: costs little, buys little.\n\n**Option B**: costs more, buys more.\n",
         "<!-- to be written -->\n")),
-    "adr-too-few-options": ("ADR-TOO-FEW-OPTIONS", 1, _edit(ADR, "- **Option B** — the second option.\n", "")),
+    "adr-too-few-options": ("ADR-TOO-FEW-OPTIONS", 1, _edit(ADR, "- **Option B**: the second option.\n", "")),
     "adr-no-reference": ("ADR-NO-REFERENCE", 1, _edit(
         ADR, "- https://example.org/evidence\n- [[log-example]]\n- `docs/vault/logs/log-example.md:1`\n",
         "<!-- emptied on purpose -->\n")),
@@ -229,7 +229,7 @@ FIXTURES: dict[str, tuple[str | None, int, Callable[[Files], Files]]] = {
     "link-bad-anchor": ("LINK-BAD-ANCHOR", 1, _edit(THEORY, "#Coverage]]", "#No Such Heading]]")),
     # questions
     "q-no-candidates": ("Q-NO-CANDIDATES", 1,
-                        _edit(QUESTION, "- [[literature-example]] — the only candidate.", "None identified yet.")),
+                        _edit(QUESTION, "- [[literature-example]]: the only candidate.", "None identified yet.")),
     "q-no-criteria": ("Q-NO-CRITERIA", 1, _edit(QUESTION, "A comparison of costs.", "<!-- unknown -->")),
     "q-answered-no-target": ("Q-ANSWERED-NO-TARGET", 1, _edit(QUESTION, "status: open", "status: answered")),
     # index
@@ -237,6 +237,17 @@ FIXTURES: dict[str, tuple[str | None, int, Callable[[Files], Files]]] = {
     # ignore file
     "ignore-no-reason": ("IGNORE-NO-REASON", 1, _add(".vaultcheckignore", "notes/**\n")),
     "ignore-stale": ("IGNORE-STALE", 0, _add(".vaultcheckignore", "nothing-here/**   # stale on purpose\n")),
+    # writing style: ADR-0005
+    "style-em-dash": ("STYLE-EM-DASH", 1,
+                      _edit(THEORY, "## Setting\n", "## Setting\n\nA clause" + chr(0x2014) + "then another.\n")),
+    "style-curly-quote": ("STYLE-CURLY-QUOTE", 1,
+                          _edit(THEORY, "## Setting\n", "## Setting\n\n" + chr(0x201C) + "Quoted" + chr(0x201D) + " text.\n")),
+    "style-ai-artifact": ("STYLE-AI-ARTIFACT", 1, _edit(THEORY, "## Setting\n", "## Setting\n\nA claim turn0search0.\n")),
+    "style-ai-vocabulary": ("STYLE-AI-VOCABULARY", 0, _edit(THEORY, "## Setting\n", "## Setting\n\nA pivotal result.\n")),
+    # options written as a table must count as options (ADR-0005 prefers tables)
+    "adr-options-as-table": (None, 0, _edit(
+        ADR, "- **Option A**: the first option.\n- **Option B**: the second option.\n",
+        "| Option | What it means |\n|---|---|\n| A | The first option. |\n| B | The second option. |\n")),
 }
 
 # Rules that depend on repository state rather than vault content, tested separately.

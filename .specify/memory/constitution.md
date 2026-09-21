@@ -1,8 +1,11 @@
 <!--
 Sync Impact Report
 ==================
-Version change: 1.2.0 -> 1.2.1
-Bump rationale: PATCH (1.2.1). Principle VIII illustrated the citation format with a real-form
+Version change: 1.2.1 -> 1.2.2
+Bump rationale: PATCH (1.2.2). Punctuation only, per ADR-0005: every em dash replaced, and one
+word on the AI-vocabulary list reworded in Governance. No obligation changed.
+
+Prior bump, PATCH (1.2.1). Principle VIII illustrated the citation format with a real-form
 identifier for a record that does not exist; the traceability checker flagged it as a dangling
 citation on its first run. The example now uses the placeholder form, which the checker does not
 match. No obligation changed.
@@ -12,8 +15,9 @@ unfollowable as written. Principle I demanded an OSI-approved licence for every 
 approves software licences and the vault prose is CC-BY-4.0; the principle now asks for an open
 licence appropriate to each kind. Governance bound its citation duty to pull request descriptions,
 but the project deliberately does not use pull requests (ADR-0003); the duty now binds the commit
-message. Neither change weakens an obligation — each moves it onto a surface that exists.
-(1.2.1: placeholder citation example in Principle VIII, 2026-09-21.
+message. Neither change weakens an obligation, each moves it onto a surface that exists.
+(1.2.2: punctuation per ADR-0005, 2026-09-21.
+1.2.1: placeholder citation example in Principle VIII, 2026-09-21.
 1.2.0: Principle I licence wording, Governance citation surface, 2026-09-21.
 1.1.1: resolves TODO(LICENSE) and records the standalone-repository rule, 2026-09-20.
 1.1.0: Principle VIII and the theory vault, 2026-09-20.
@@ -61,8 +65,8 @@ Deferred TODOs:
 
 # aleArrhythmia Constitution
 
-aleArrhythmia brings Activation Likelihood Estimation (ALE) — the coordinate-based meta-analysis
-method developed for functional MRI (Turkeltaub 2002; Eickhoff et al. 2009, 2012) — to cardiac
+aleArrhythmia brings Activation Likelihood Estimation (ALE), the coordinate-based meta-analysis
+method developed for functional MRI (Turkeltaub 2002; Eickhoff et al. 2009, 2012), to cardiac
 electrophysiology. The goal is to make it possible for individual ablation studies to report
 arrhythmia origins as coordinates in a shared cardiac space, and then to pool those coordinates
 across studies into a statistically thresholded likelihood map of where a given arrhythmia
@@ -70,7 +74,7 @@ arises. The intended clinical payoff is shorter mapping time, higher first-pass 
 efficacy, and fewer lesions delivered off target.
 
 aleArrhythmia is not a competitor to EnSite X EP, Rhythmia HDx or KODEX-EPD. It is an open,
-add-on layer that those systems — and the literature around them — can feed and consume. Its
+add-on layer that those systems, and the literature around them, can feed and consume. Its
 viewer takes its shape from Mango (mangoviewer.com): a small, focused, free tool that displays a
 statistical map on a reference anatomy and nothing more.
 
@@ -81,8 +85,8 @@ correctness, its documentation and its engineering can be inspected by anyone.
 
 ### I. Open by Default
 
-Every artifact of this project — source, reference atlas, statistical method, example data,
-documentation — MUST be public and developed in a public repository, under an open licence
+Every artifact of this project, source, reference atlas, statistical method, example data,
+documentation, MUST be public and developed in a public repository, under an open licence
 appropriate to its kind: an OSI-approved licence for software, and an open content licence
 permitting reuse with attribution for prose, notes and data. No component may depend on a
 proprietary SDK, a paid dataset or a closed binary as a requirement to build, test or run the
@@ -100,7 +104,7 @@ can transform their own coordinates into it. Any change to the space MUST bump i
 every stored coordinate MUST record which space version it was expressed in. Results computed in
 different space versions MUST NOT be pooled.
 
-The choice of that space is an open research question at ratification time — see
+The choice of that space is an open research question at ratification time, see
 TODO(REFERENCE_SPACE). Exploration of candidates is expected and encouraged; publishing a
 statistical result before the choice is recorded in an ADR is not.
 
@@ -152,7 +156,7 @@ clinical decisions in an individual patient. The project MUST NOT ingest, store 
 identifiable patient data; all inputs are either published aggregate coordinates or
 user-supplied, locally-held, de-identified geometry. No telemetry.
 
-Rationale: the whole point is to influence ablation practice — which is exactly why the boundary
+Rationale: the whole point is to influence ablation practice, which is exactly why the boundary
 between "evidence synthesis" and "device" has to be drawn explicitly and defended.
 
 ### VII. Small, Legible, Installable
@@ -160,7 +164,7 @@ between "evidence synthesis" and "device" has to be drawn explicitly and defende
 Python is the language of the statistical core; it ships as a pip-installable package exposing
 both a library API and a CLI, with text/JSON in and out. The viewer is a browser application
 (TypeScript, WebGL) that runs client-side with zero install and can be embedded as a panel
-alongside other tools. Core and viewer communicate only through documented file formats — the
+alongside other tools. Core and viewer communicate only through documented file formats, the
 viewer MUST remain optional, and the core MUST remain usable headless.
 
 Prefer the smallest thing that works: a readable 200-line module beats a framework. Dependencies
@@ -171,23 +175,23 @@ headless core is what makes the method usable inside other people's pipelines.
 
 ### VIII. Traceable by Construction
 
-Every non-trivial decision — statistical, anatomical, architectural, or product — MUST be
+Every non-trivial decision, statistical, anatomical, architectural, or product, MUST be
 recorded as a numbered Architecture Decision Record note in the theory vault before the decision
 is acted on, with all five fields filled:
 
-- **Options considered** — at least two, each named and described, including the option of doing
+- **Options considered**: at least two, each named and described, including the option of doing
   nothing where that is real.
-- **Trade-offs** — what each option costs and buys, stated per option, not as a single summary.
-- **Chosen** — the option taken and the reason it beat the others.
-- **Rejected** — why each other option lost. "Not chosen" alone is not an answer.
-- **References** — DOI, URL, `file:line`, dataset id, or the transcript of the conversation where
+- **Trade-offs**: what each option costs and buys, stated per option, not as a single summary.
+- **Chosen**: the option taken and the reason it beat the others.
+- **Rejected**: why each other option lost. "Not chosen" alone is not an answer.
+- **References**: DOI, URL, `file:line`, dataset id, or the transcript of the conversation where
   the call was made. A decision with no reference is not traceable and does not pass.
 
 Code, specs, plans and vault notes cite decisions by ADR id (`ADR-NNNN`, four digits). CI MUST fail when an
 ADR has an empty Options, Trade-offs or References field, when a cited ADR id does not exist,
 when two ADRs share a number, or when an ADR is superseded without the superseding id recorded.
 
-Rationale: the point is that any step can be re-opened a year later and understood — what was on
+Rationale: the point is that any step can be re-opened a year later and understood, what was on
 the table, what it cost, why this one. Convention alone erodes exactly when a session is rushed,
 so the check is mechanical.
 
@@ -195,7 +199,7 @@ so the check is mechanical.
 
 - **The vault is the theory**: all derivations, method notes, literature summaries, open
   questions and ADRs live in an Obsidian vault at `docs/vault/` inside the public repository.
-  Plain Markdown with `[[wikilinks]]` and YAML frontmatter only — no note may depend on a
+  Plain Markdown with `[[wikilinks]]` and YAML frontmatter only, no note may depend on a
   proprietary or optional Obsidian plugin to be readable or renderable.
 - **Vault-first**: a method that exists in code but not in the vault is undocumented and
   incomplete. Any change to the statistical method, the reference space or the file formats MUST
@@ -203,7 +207,7 @@ so the check is mechanical.
 - **Frontmatter is machine-readable**: every note carries at minimum `title`, `type`
   (`theory` | `adr` | `literature` | `question` | `log`), `status`, `created`, `updated`, and for
   ADRs the `id` and any `supersedes` / `superseded_by`.
-- **Rendered, not exported**: the site build reads `docs/vault/` directly and emits static HTML —
+- **Rendered, not exported**: the site build reads `docs/vault/` directly and emits static HTML -
   wikilinks resolved to links, backlinks listed per note, a graph view over the whole vault, and
   full-text search. No Obsidian Publish, no second copy to keep in sync, no build-time network
   call. A broken wikilink fails the build.
@@ -211,7 +215,7 @@ so the check is mechanical.
   a fourth homepage section, "My projects in 3D reconstruction", reusing that site's existing
   static-HTML stack, styling and hosting rather than introducing a framework.
 - **Reader-facing**: the rendered vault MUST be navigable by someone who has never opened
-  Obsidian — index page, per-note breadcrumbs, and an ADR list ordered by number and status.
+  Obsidian, index page, per-note breadcrumbs, and an ADR list ordered by number and status.
 
 ## Scientific and Clinical Constraints
 
@@ -234,24 +238,24 @@ so the check is mechanical.
 
 ## Delivery Phases
 
-- **Phase 0 — Groundwork (current)**: the vault skeleton and the ADR template come first, since
+- **Phase 0, Groundwork (current)**: the vault skeleton and the ADR template come first, since
   everything after is recorded in them. Then: survey of candidate reference spaces, of open
   cardiac atlases, and of vendor export formats; reproduction of a published fMRI-ALE result with
   the Python core. Output: vault notes and ADRs, no public claims.
-- **Phase 1 — Core**: Python package implementing cardiac ALE end to end on synthetic and
+- **Phase 1, Core**: Python package implementing cardiac ALE end to end on synthetic and
   literature-derived coordinates, with the canonical space fixed and versioned. Output: public
   repo, tests, CLI, documented file formats.
-- **Phase 2 — Viewer and public surface**: browser viewer rendering the likelihood map on the
+- **Phase 2, Viewer and public surface**: browser viewer rendering the likelihood map on the
   reference anatomy, with cluster inspection and provenance display, running client-side; plus
   the static vault renderer. Both published under the "My projects in 3D reconstruction" section
   of vanioantunes.com.
-- **Phase 3 — Interoperability**: import of exported geometry/point data from at least one
+- **Phase 3, Interoperability**: import of exported geometry/point data from at least one
   commercial mapping system, and export of maps in a format such a system's users can load.
-- **Phase 4 — Corpus and guideline**: a curated, citable set of extracted arrhythmia coordinates
+- **Phase 4, Corpus and guideline**: a curated, citable set of extracted arrhythmia coordinates
   plus the published reporting guideline.
 
 A phase is complete only when its output is public, tested and documented. Phases MAY overlap;
-they MUST NOT be skipped — in particular no viewer work may substitute for Phase 0 reproduction.
+they MUST NOT be skipped, in particular no viewer work may substitute for Phase 0 reproduction.
 
 ## Governance
 
@@ -260,7 +264,7 @@ conflicts with it, the constitution wins and the conflicting artifact is amended
 
 **Amendment procedure**: amendments are made by editing this file, with a Sync Impact Report at
 its top recording the version change, the rationale, and the status of every dependent artifact.
-Any change to Principles II, III, V or VI additionally requires an ADR in
+Any change to Principles II, III, V or VI also requires an ADR in
 `docs/vault/decisions/` explaining the trade-off, because those four define what the project
 scientifically and legally is. ADRs are never deleted or rewritten: a reversed decision gets a
 new ADR that supersedes the old one, and both stay readable.
@@ -275,4 +279,4 @@ embodies a decision MUST cite that decision's ADR id in its message; where the p
 requests, the same obligation applies to the pull request description. Complexity that violates
 Principle VII MUST be justified in writing in the plan's Complexity Tracking section, or removed.
 
-**Version**: 1.2.1 | **Ratified**: 2026-09-20 | **Last Amended**: 2026-09-21
+**Version**: 1.2.2 | **Ratified**: 2026-09-20 | **Last Amended**: 2026-09-21

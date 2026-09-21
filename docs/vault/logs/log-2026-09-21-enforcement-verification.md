@@ -6,52 +6,58 @@ created: 2026-09-21
 updated: 2026-09-21
 ---
 
-# Verification of both enforcement points — 2026-09-21
+# Verification of both enforcement points, 2026-09-21
 
-Evidence that the two halves of the enforcement mechanism in [[ADR-0003-enforcement-mechanism]]
-each refuse a broken decision record. Task T037 of spec 001.
+Evidence that each half of [[ADR-0003-enforcement-mechanism]] refuses a broken decision record.
+Task T037 of spec 001.
 
-## Local half: the pre-push hook
+## Local half: pre-push hook
 
-With the hook installed (`git config core.hooksPath .githooks`), the hook script was run three
-times against the working tree:
+Hook installed with `git config core.hooksPath .githooks`, then run three times:
 
-| Run | State of ADR-0001 | Hook exit | Output |
+| Run | ADR-0001 state | Hook exit | Output |
 |---|---|---|---|
 | 1 | Unchanged | 0 | clean |
-| 2 | `## References` emptied on disk | 1 | `ADR-0001-repository-layout.md:64: ADR-NO-REFERENCE`, push refused |
+| 2 | References section emptied on disk | 1 | ADR-0001-repository-layout.md line 64, ADR-NO-REFERENCE, push refused |
 | 3 | Restored | 0 | clean |
 
-The hook then ran on every real push that followed; its summary line appears before Git transmits
-anything.
+Every real push afterwards also ran the hook; its summary line prints before Git sends anything.
 
-## Repository half: the workflow
+## Repository half: workflow
 
-This half exists for the case the hook cannot cover: a clone where the hook was never installed.
-That case was reproduced exactly, on a throwaway branch so that `main` was never touched:
+Tests the case the hook cannot cover, a clone with no hook installed. Done on a throwaway branch, so
+main was never touched.
 
-1. Branch `verify/server-check` created from `main` at 99d6bb3.
-2. ADR-0001's `## References` emptied and committed as 32410a7.
-3. `core.hooksPath` unset, simulating a fresh clone. The push produced no hook output — the hook
-   did not run, as expected.
-4. `core.hooksPath` restored immediately after the single push.
+```mermaid
+flowchart TD
+  A[branch verify/server-check from main at 99d6bb3] --> B[empty ADR-0001 references, commit 32410a7]
+  B --> C[unset core.hooksPath]
+  C --> D[push: no hook output, as expected]
+  D --> E[restore core.hooksPath]
+  E --> F[workflow fails with ADR-NO-REFERENCE]
+  F --> G[delete branch]
+```
 
-The workflow ran on the push and failed with the same violation the hook reports:
+Workflow output, as recorded at the time:
 
 ```text
 docs/vault/decisions/ADR-0001-repository-layout.md:64: ADR-NO-REFERENCE: '## References' has no content
-vaultcheck: 7 notes, 4 decision records, 13 links, 36 citations verified — 1 violation
+vaultcheck: 7 notes, 4 decision records, 13 links, 36 citations verified: 1 violation
 Process completed with exit code 1.
 ```
 
-- Failing run: https://github.com/vanioljantunes/aleArrhythmia/actions/runs/35625031339
-- Passing run on `main` at 99d6bb3: https://github.com/vanioljantunes/aleArrhythmia/actions/runs/35624850054
+| Run | Result | Link |
+|---|---|---|
+| Throwaway branch, 32410a7 | failure | https://github.com/vanioljantunes/aleArrhythmia/actions/runs/35625031339 |
+| main, 99d6bb3 | success | https://github.com/vanioljantunes/aleArrhythmia/actions/runs/35624850054 |
 
-The branch was then deleted. The failed run stays in the repository's Actions history on purpose:
-it is the public record that the backstop works.
+The failed run stays in the Actions history on purpose, as the public record that the backstop
+works.
 
-## What was not done
+## Not done
 
-The documented override flag was not used to push a broken commit. The author's standing rules
-forbid bypassing hooks, and a local guard blocks it. The uninstalled-clone path exercises the same
-server-side check, which is what the override would ultimately rely on.
+The documented override flag was not used. The author's standing rules forbid bypassing hooks, and
+a local guard blocks it. The uninstalled-clone path exercises the same server-side check.
+
+Reformatted on 2026-09-21 per [[ADR-0005-writing-style]]; content unchanged. The quoted summary
+line shows the checker's current punctuation; the run log itself is linked above.

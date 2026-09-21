@@ -12,28 +12,26 @@ updated: YYYY-MM-DD
 
 ## What it is
 
-<!-- A plain description. Who produced it, when, and for what purpose. -->
+<!-- Table: producer, year, purpose, version. -->
 
 ## Coverage
 
-<!-- What anatomy, data or cases it covers — and, just as important, what it does not. For a
-reference space: which chambers and structures. For a format: which fields it carries. -->
+<!-- Table: covered, not covered. For a reference space: chambers and structures. For a format:
+fields carried. -->
 
 ## Licence and availability
 
-<!-- Who may use it, under what terms, and whether it can actually be obtained. If the terms
-could not be established, say so here and record what was tried. Do not guess. -->
+<!-- Table: licence, where to obtain, restrictions. If not established, say so and list what was
+tried. -->
 
 ## Consequences for pooling
 
-<!-- What adopting or relying on this would mean for combining coordinates across studies: what it
-makes possible, what it rules out, what it would cost. This is the section a decision will cite. -->
+<!-- Table: what adopting it enables, rules out, costs. A decision will cite this section. -->
 
 ## Unknowns
 
-<!-- Everything that could not be established, each with what was tried. An empty section means
-nothing is unknown — not that nothing was checked. -->
+<!-- Table: unknown, what was tried. Empty means nothing is unknown, not that nothing was checked. -->
 
 ## References
 
-<!-- DOIs with author, title and year; URLs with access date; dataset identifiers. -->
+<!-- DOIs with author, title and year; URLs; dataset ids. -->
