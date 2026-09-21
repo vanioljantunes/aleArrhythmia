@@ -124,7 +124,7 @@ file and field. A clean vault passes.
 - [X] T033 [P] [US3] Write `tests/test_rules.py` (one parametrised test per fixture asserting the specific rule id and exit code, a meta-test that every registered rule has a fixture, and a drift test that committed trees match the generator) and `tests/test_cli.py` (output format, exit codes 0/1/2, `--quiet`, hook warning). Consolidated from four per-module files: the fixture table is the single source of truth, so splitting it by module would duplicate it
 - [X] T034 [P] [US3] Write `tests/test_performance.py` asserting a full run on a generated 1000-note vault completes within the 60-second budget (SC-008)
 - [X] T035 [US3] Add `.githooks/pre-push` running the checker and refusing the push on non-zero exit, with a message naming the override; document `git config core.hooksPath .githooks` as the single install step in the README (FR-023a)
-- [ ] T036 [US3] Add `.github/workflows/traceability.yml` running the checker on every push. Push this file in its own commit: if the credential lacks the `workflow` scope the push is rejected, and that error must be surfaced and fixed, never worked around by dropping the file (see plan.md Risks)
+- [X] T036 [US3] Add `.github/workflows/traceability.yml` running the checker on every push. Push this file in its own commit: if the credential lacks the `workflow` scope the push is rejected, and that error must be surfaced and fixed, never worked around by dropping the file (see plan.md Risks)
 - [ ] T037 [US3] Verify both enforcement points by hand per quickstart Scenarios 3 and 4: a broken record is refused locally, and a `--no-verify` override still fails on the repository
 
 **Checkpoint**: Every defect kind is caught with a named rule, a clean vault passes, and neither

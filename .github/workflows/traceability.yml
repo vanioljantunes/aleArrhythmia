@@ -1,0 +1,29 @@
+# The repository-side half of ADR-0003: every push is checked here, whether or not the
+# pushing clone had the local pre-push hook installed. A failure is recorded publicly.
+name: traceability
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  vaultcheck:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install
+        run: python -m pip install -e ".[dev]"
+
+      - name: Traceability check
+        run: python -m tools.vaultcheck
+
+      - name: Tests
+        run: python -m pytest -q
