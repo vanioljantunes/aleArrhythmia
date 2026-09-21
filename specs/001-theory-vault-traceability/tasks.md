@@ -125,7 +125,7 @@ file and field. A clean vault passes.
 - [X] T034 [P] [US3] Write `tests/test_performance.py` asserting a full run on a generated 1000-note vault completes within the 60-second budget (SC-008)
 - [X] T035 [US3] Add `.githooks/pre-push` running the checker and refusing the push on non-zero exit, with a message naming the override; document `git config core.hooksPath .githooks` as the single install step in the README (FR-023a)
 - [X] T036 [US3] Add `.github/workflows/traceability.yml` running the checker on every push. Push this file in its own commit: if the credential lacks the `workflow` scope the push is rejected, and that error must be surfaced and fixed, never worked around by dropping the file (see plan.md Risks)
-- [ ] T037 [US3] Verify both enforcement points by hand per quickstart Scenarios 3 and 4: a broken record is refused locally, and a `--no-verify` override still fails on the repository
+- [X] T037 [US3] Verify both enforcement points by hand per quickstart Scenarios 3 and 4: a broken record is refused locally, and a `--no-verify` override still fails on the repository
 
 **Checkpoint**: Every defect kind is caught with a named rule, a clean vault passes, and neither
 enforcement point can be skipped by accident.

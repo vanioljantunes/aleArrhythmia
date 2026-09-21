@@ -53,6 +53,8 @@ Dated records of working sessions.
 
 - [[log-2026-09-20-clarification]] — the session that settled repository layout, enforcement, scan
   scope and licensing
+- [[log-2026-09-21-enforcement-verification]] — evidence that the pre-push hook and the repository
+  workflow each refuse a broken decision record
 
 ## Templates
 
