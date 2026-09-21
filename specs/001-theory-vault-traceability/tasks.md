@@ -32,10 +32,10 @@ Single project, repository root. Vault at `docs/vault/`, checker at `tools/vault
 
 **Purpose**: Skeleton and packaging, so every later task has somewhere to land.
 
-- [ ] T001 Create the directory skeleton with `.gitkeep` placeholders: `docs/vault/decisions/`, `docs/vault/theory/`, `docs/vault/literature/`, `docs/vault/questions/`, `docs/vault/logs/`, `docs/vault/templates/`, `tools/vaultcheck/`, `tests/fixtures/`
-- [ ] T002 Create `pyproject.toml` declaring the `vaultcheck` package: `requires-python = ">=3.11"`, runtime dependency PyYAML, `dev` extra with pytest, console script `vaultcheck = "tools.vaultcheck.__main__:main"` per [research.md](./research.md) R-012
-- [ ] T003 [P] Create `.vaultcheckignore` with the initial reasoned exclusions (`specs/**` — spec prose cites example identifiers; `docs/vault/templates/**` — templates carry placeholder ids by design), format per [contracts/vaultcheck-cli.md](./contracts/vaultcheck-cli.md)
-- [ ] T004 [P] Create root `README.md`: what the project is, the research-use and not-a-medical-device disclaimer required by Constitution Principle VI, how to run the checker, and a licence section left as a stub until T011
+- [X] T001 Create the directory skeleton with `.gitkeep` placeholders: `docs/vault/decisions/`, `docs/vault/theory/`, `docs/vault/literature/`, `docs/vault/questions/`, `docs/vault/logs/`, `docs/vault/templates/`, `tools/vaultcheck/`, `tests/fixtures/`
+- [X] T002 Create `pyproject.toml` declaring the `vaultcheck` package: `requires-python = ">=3.11"`, runtime dependency PyYAML, `dev` extra with pytest, console script `vaultcheck = "tools.vaultcheck.__main__:main"` per [research.md](./research.md) R-012
+- [X] T003 [P] Create `.vaultcheckignore` with the initial reasoned exclusions (`specs/**` — spec prose cites example identifiers; `docs/vault/templates/**` — templates carry placeholder ids by design), format per [contracts/vaultcheck-cli.md](./contracts/vaultcheck-cli.md)
+- [X] T004 [P] Create root `README.md`: what the project is, the research-use and not-a-medical-device disclaimer required by Constitution Principle VI, how to run the checker, and a licence section left as a stub until T011
 
 **Checkpoint**: `pip install -e ".[dev]"` succeeds; directories exist; nothing checks anything yet.
 
@@ -47,8 +47,8 @@ Single project, repository root. Vault at `docs/vault/`, checker at `tools/vault
 
 **CRITICAL**: No user story work begins until this phase is complete.
 
-- [ ] T005 Write `docs/vault/README.md` — how to read the vault without Obsidian: what the note types are, what frontmatter means, how `[[wikilinks]]` work, where to start (FR-002)
-- [ ] T006 Create `docs/vault/index.md` as a valid note (frontmatter `type: theory`, `status: active`) with an empty section per note type, ready to be filled by T019 (FR-005)
+- [X] T005 Write `docs/vault/README.md` — how to read the vault without Obsidian: what the note types are, what frontmatter means, how `[[wikilinks]]` work, where to start (FR-002)
+- [X] T006 Create `docs/vault/index.md` as a valid note (frontmatter `type: theory`, `status: active`) with an empty section per note type, ready to be filled by T019 (FR-005)
 
 **Checkpoint**: A stranger opening `docs/vault/` finds an entry page and an explanation, even though it is nearly empty.
 
@@ -118,7 +118,7 @@ file and field. A clean vault passes.
 - [ ] T027 [US3] Implement `tools/vaultcheck/discovery.py` — enumerate via `git ls-files -z`, drop binaries by null-byte sniff of the first 8 KiB, apply `.vaultcheckignore` with `fnmatch`, and emit `IGNORE-NO-REASON` (error) and `IGNORE-STALE` (warning)
 - [ ] T028 [US3] Implement `tools/vaultcheck/frontmatter.py` — parse with `yaml.safe_load`, enforce required fields, per-type status vocabularies, ISO dates with `updated >= created`, and vault-wide basename uniqueness; emits the `NOTE-*` rules in [contracts/note-frontmatter.md](./contracts/note-frontmatter.md)
 - [ ] T029 [US3] Implement `tools/vaultcheck/decisions.py` — locate the five fixed headings, detect empty sections (ignoring unmodified template placeholders), count named options, validate reference forms including local file-and-line resolution, check id uniqueness and id/filename agreement, and verify reciprocal supersession; emits the `ADR-*` rules
-- [ ] T030 [US3] Implement `tools/vaultcheck/links.py` — resolve `[[target]]`, `[[target|alias]]` and `[[target#heading]]` against unique basenames, match `ADR-NNNN` citations on a word boundary against existing records, and validate open-question structure; emits `LINK-*`, `CITE-DANGLING` and `Q-*`
+- [ ] T030 [US3] Implement `tools/vaultcheck/links.py` — resolve `[[target]]`, `[[target|alias]]` and `[[target#heading]]` against unique basenames, match `ADR-NNNN` citations on a word boundary against existing records, and validate open-question structure; emits `LINK-*`, `CITE-DANGLING` and `Q-*`. Wikilinks inside inline code spans and fenced code blocks are examples, not links, and MUST be skipped (the vault README shows `[[...]]` syntax inside backticks)
 - [ ] T031 [US3] Implement the index completeness rule `INDEX-INCOMPLETE` in `tools/vaultcheck/links.py` — every decision record and open question found on disk appears in `docs/vault/index.md` (FR-005, V-X2)
 - [ ] T032 [US3] Implement `tools/vaultcheck/__main__.py` and `tools/vaultcheck/__init__.py` — argument parsing (`--root`, `--vault`, `--ignore-file`, `--quiet`, `--version`), orchestration of the rule modules, and the summary line; both `vaultcheck` and `python -m tools.vaultcheck` must work
 - [ ] T033 [P] [US3] Write `tests/test_notes.py`, `tests/test_decisions.py`, `tests/test_links.py`, `tests/test_discovery.py` — one test per fixture, asserting both the exit code and the specific rule id, never merely "it failed"

@@ -15,3 +15,8 @@ venv/
 
 # node
 node_modules/
+
+# test / build output
+.pytest_cache/
+dist/
+build/
