@@ -47,11 +47,11 @@ checker, one hook, one workflow.
 
 *GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
 
-Checked against constitution v1.1.1.
+Checked against constitution v1.2.0.
 
 | Principle | Gate | Status |
 |---|---|---|
-| I. Open by Default | Public repo, OSI licence, no proprietary dependency to build or run | PASS — repo is public; Apache-2.0 + CC-BY-4.0 land in this phase; PyYAML is MIT |
+| I. Open by Default | Public repo, open licence appropriate to each artifact kind, no proprietary dependency to build or run | PASS — repo is public; Apache-2.0 (OSI-approved) covers code and CC-BY-4.0 covers vault prose, matching the v1.2.0 wording; PyYAML is MIT |
 | II. One Canonical Reference Space | No coordinate work may assume a space before the ADR exists | PASS — this phase writes the survey and keeps the question open; it stores no coordinates |
 | III. Statistical Validity | Statistical routines need numerical tests | NOT APPLICABLE — no statistics in this phase; recorded so the gate is seen to have been considered |
 | IV. Provenance on Every Number | Emitted results carry provenance | NOT APPLICABLE — this phase emits no results. The checker's own output names every file it verified, which is the same discipline applied to itself |
@@ -147,7 +147,7 @@ can be laid out as real directory trees.
 
 ## Constitution Re-Check (post-design)
 
-Re-run after Phase 1, against the same constitution v1.1.1.
+Re-run after Phase 1, then again after the v1.2.0 amendment.
 
 - **Principle VII (small, legible, installable)** — the design added no dependency beyond the two
   already declared. The checker is six modules of pure functions; no service layer, no plugin
@@ -162,6 +162,23 @@ Re-run after Phase 1, against the same constitution v1.1.1.
   recorded above.
 
 No new violations. Complexity Tracking remains empty.
+
+### Re-check after constitution v1.2.0 (2026-09-21)
+
+`/speckit-analyze` found two MUST statements that no artifact could satisfy as written, and the
+constitution was amended rather than the plan:
+
+- **Principle I** previously demanded an OSI-approved licence for *every* artifact. OSI approves
+  software licences; the vault prose is CC-BY-4.0, which is not among them. The principle now
+  distinguishes software from prose, and the licence decision (FR-013a, ADR-0002) satisfies it
+  without change.
+- **Governance** previously bound the ADR-citation duty to pull request descriptions, which this
+  project does not use (R-008, ADR-0003). The duty now binds the commit message. Consequence for
+  this plan: every commit implementing a task that embodies a decision cites that decision's ADR
+  id — starting with the commits for T009 through T013.
+
+Neither amendment changed the plan's design, its structure, or any task. Gate still PASS, no
+violations, Complexity Tracking still empty.
 
 ## Complexity Tracking
 

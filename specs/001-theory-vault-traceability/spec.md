@@ -100,9 +100,9 @@ fault, so the gap is fixed before it leaves the machine rather than discovered a
 the record matters most. This is what turns the traceability promise from an intention into a
 guarantee. It depends on the record format existing first, hence P2.
 
-**Independent Test**: Deliberately introduce each of the six defect kinds, one at a time, and
-confirm the check fails each time with a message naming the offending file and field; then confirm
-a clean vault passes.
+**Independent Test**: Deliberately introduce each defect kind the checker claims to catch, one at a
+time, and confirm the check fails each time with a message naming the offending file and field;
+then confirm a clean vault passes.
 
 **Acceptance Scenarios**:
 
@@ -308,9 +308,9 @@ and name what evidence is still missing, using only the survey notes.
   reference — verified automatically on every proposed change.
 - **SC-003**: 100% of links between notes resolve; there are zero dangling links and zero citations
   to non-existent decision identifiers.
-- **SC-004**: Each of the six defect kinds (empty required field, duplicate number, dangling
-  citation, unrecorded or one-sided supersession, unresolved link, missing header field) is caught
-  by the check, demonstrated by a deliberately broken example per kind.
+- **SC-004**: Every rule the checker defines is caught by the check and demonstrated by a
+  deliberately broken example — one fixture per rule id, with no rule id lacking a fixture. The
+  rule list is the contract's, not a frozen count.
 - **SC-005**: A reader without the note-taking application installed can locate the project's open
   questions and any named method note using only a plain text editor or the code host's file
   browser, on the first attempt.

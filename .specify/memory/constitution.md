@@ -1,19 +1,25 @@
 <!--
 Sync Impact Report
 ==================
-Version change: 1.1.0 -> 1.1.1
-Bump rationale: PATCH. Resolves two deferred TODOs without changing any principle: the licence
-(Apache-2.0 for code, CC-BY-4.0 for vault prose) and the repository layout (own standalone public
-repository, not nested in a larger repository). Both are recorded as resolved rather than
-deleted so the deferral and its resolution stay readable.
-(1.1.1: resolves TODO(LICENSE) and records the standalone-repository rule, 2026-09-20.
+Version change: 1.1.1 -> 1.2.0
+Bump rationale: MINOR. Two corrections surfaced by /speckit-analyze, both of which made a MUST
+unfollowable as written. Principle I demanded an OSI-approved licence for every artifact, but OSI
+approves software licences and the vault prose is CC-BY-4.0; the principle now asks for an open
+licence appropriate to each kind. Governance bound its citation duty to pull request descriptions,
+but the project deliberately does not use pull requests (ADR-0003); the duty now binds the commit
+message. Neither change weakens an obligation — each moves it onto a surface that exists.
+(1.2.0: Principle I licence wording, Governance citation surface, 2026-09-21.
+1.1.1: resolves TODO(LICENSE) and records the standalone-repository rule, 2026-09-20.
 1.1.0: Principle VIII and the theory vault, 2026-09-20.
 1.0.0: initial ratification, seven principles, 2026-09-20.)
 
-Modified principles: none
+Modified principles:
+  - I. Open by Default (licence requirement split: OSI-approved for software, open content licence
+    for prose, notes and data)
 
 Modified sections:
-  - Deferred TODOs (TODO(LICENSE) and repository layout resolved)
+  - Governance / Compliance review (citation duty moved from pull request description to commit
+    message, with the PR case retained conditionally)
 
 Added sections: none
 
@@ -70,10 +76,12 @@ correctness, its documentation and its engineering can be inspected by anyone.
 ### I. Open by Default
 
 Every artifact of this project — source, reference atlas, statistical method, example data,
-documentation — MUST be public under an OSI-approved licence and developed in a public
-repository. No component may depend on a proprietary SDK, a paid dataset or a closed binary as a
-requirement to build, test or run the core. Vendor interoperability is achieved by reading
-exported files, never by embedding vendor code.
+documentation — MUST be public and developed in a public repository, under an open licence
+appropriate to its kind: an OSI-approved licence for software, and an open content licence
+permitting reuse with attribution for prose, notes and data. No component may depend on a
+proprietary SDK, a paid dataset or a closed binary as a requirement to build, test or run the
+core. Vendor interoperability is achieved by reading exported files, never by embedding vendor
+code.
 
 Rationale: an unopenable meta-analysis map cannot be checked, and a method nobody can run does
 not change practice. The project's credibility and its portfolio value both rest on this.
@@ -256,9 +264,9 @@ principle in a backward-incompatible way; MINOR for adding a principle or sectio
 expanding guidance; PATCH for clarification and wording.
 
 **Compliance review**: every plan produced by `/speckit-plan` MUST pass an explicit Constitution
-Check before tasks are generated, and MUST re-run that check after design. Every pull request
-description MUST state which principles it touches and cite the ADR ids behind any decision it
-embodies. Complexity that violates Principle VII MUST
-be justified in writing in the plan's Complexity Tracking section, or removed.
+Check before tasks are generated, and MUST re-run that check after design. Every commit that
+embodies a decision MUST cite that decision's ADR id in its message; where the project uses pull
+requests, the same obligation applies to the pull request description. Complexity that violates
+Principle VII MUST be justified in writing in the plan's Complexity Tracking section, or removed.
 
-**Version**: 1.1.1 | **Ratified**: 2026-09-20 | **Last Amended**: 2026-09-20
+**Version**: 1.2.0 | **Ratified**: 2026-09-20 | **Last Amended**: 2026-09-21
