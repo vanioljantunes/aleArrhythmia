@@ -89,11 +89,11 @@ everything within two links.
 **Independent test**: Someone without Obsidian is asked to find the project's open questions and one
 method note. They succeed using only a plain text editor or the code host's file browser.
 
-- [ ] T015 [P] [US2] Write `docs/vault/templates/theory.md` — frontmatter stub plus the conventional headings for a derivation or method note
-- [ ] T016 [P] [US2] Write `docs/vault/templates/literature.md` — frontmatter stub plus `## What it is`, `## Coverage`, `## Licence and availability`, `## Consequences for pooling` (the fields FR-024 requires of every surveyed item)
-- [ ] T017 [P] [US2] Write `docs/vault/templates/question.md` — frontmatter stub plus `## The question`, `## Candidates`, `## What would settle it` per [data-model.md](./data-model.md) OpenQuestion
-- [ ] T018 [P] [US2] Write `docs/vault/templates/log.md` — frontmatter stub for a dated work log
-- [ ] T019 [US2] Fill `docs/vault/index.md`: a section per note type, the list of decision records with their status, and the list of open questions, so every note is two links from the entry page (FR-005)
+- [X] T015 [P] [US2] Write `docs/vault/templates/theory.md` — frontmatter stub plus the conventional headings for a derivation or method note
+- [X] T016 [P] [US2] Write `docs/vault/templates/literature.md` — frontmatter stub plus `## What it is`, `## Coverage`, `## Licence and availability`, `## Consequences for pooling` (the fields FR-024 requires of every surveyed item)
+- [X] T017 [P] [US2] Write `docs/vault/templates/question.md` — frontmatter stub plus `## The question`, `## Candidates`, `## What would settle it` per [data-model.md](./data-model.md) OpenQuestion
+- [X] T018 [P] [US2] Write `docs/vault/templates/log.md` — frontmatter stub for a dated work log
+- [X] T019 [US2] Fill `docs/vault/index.md`: a section per note type, the list of decision records with their status, and the list of open questions, so every note is two links from the entry page (FR-005)
 - [ ] T020 [US2] Run the non-Obsidian reader trial from the Independent Test and record the result in `docs/vault/logs/`; fix whatever the reader could not find rather than explaining it to them
 
 **Checkpoint**: Five templates, a populated index, and evidence that a stranger can navigate it.

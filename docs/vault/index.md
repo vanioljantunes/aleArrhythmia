@@ -56,4 +56,21 @@ Dated records of working sessions.
 
 ## Templates
 
-Starting points for each note type live in `templates/`.
+Starting points for each note type live in `templates/`. Copy one, rename it, and fill it in; the
+header fields and section headings are already there.
+
+| Template | For |
+|---|---|
+| `templates/adr.md` | A decision record — options, trade-offs, choice, rejections, references |
+| `templates/theory.md` | A derivation or method note |
+| `templates/literature.md` | One surveyed source, atlas, file format or system |
+| `templates/question.md` | An open question, its candidate answers, and what would settle it |
+| `templates/log.md` | A dated working session |
+
+Templates are not notes: they are excluded from the checks, so their placeholder values do not
+fail anything.
+
+## Keeping this page complete
+
+Every decision record and every open question must appear on this page. The checker verifies it
+and fails when one is missing, so this page cannot silently fall out of date.
