@@ -1,0 +1,41 @@
+#!/bin/sh
+# Refuse a push when the traceability check fails.
+#
+# Decision: ADR-0003 (enforcement mechanism).
+# Install once per clone:  git config core.hooksPath .githooks
+#
+# Git does not run hooks from a fresh clone until its owner opts in, so the repository-side
+# workflow runs the same check on every push regardless. This hook is the fast, private half.
+
+cd "$(git rev-parse --show-toplevel)" || exit 1
+
+# Pick the first interpreter that actually runs and is 3.11 or newer. A name that merely exists
+# is not enough: on Windows, python3 can resolve to a Store stub that does nothing.
+PY=""
+for candidate in python3 python py; do
+    if command -v "$candidate" >/dev/null 2>&1 &&
+       "$candidate" -c "import sys; sys.exit(sys.version_info < (3, 11))" >/dev/null 2>&1; then
+        PY="$candidate"
+        break
+    fi
+done
+if [ -z "$PY" ]; then
+    echo "pre-push: no Python 3.11+ interpreter found; cannot run vaultcheck. Push refused." >&2
+    exit 1
+fi
+
+"$PY" -m tools.vaultcheck
+status=$?
+
+if [ "$status" -ne 0 ]; then
+    echo "" >&2
+    if [ "$status" -eq 2 ]; then
+        echo "pre-push: vaultcheck could not run (exit 2). Push refused; investigate the tool, not the vault." >&2
+    else
+        echo "pre-push: vaultcheck found violations. Push refused." >&2
+    fi
+    echo "Fix what is listed above, or override deliberately with: git push --no-verify" >&2
+    echo "An override is still checked on the repository and recorded there as a failure." >&2
+    exit 1
+fi
+exit 0
