@@ -1,8 +1,11 @@
 <!--
 Sync Impact Report
 ==================
-Version change: 1.2.1 -> 1.2.2
-Bump rationale: PATCH (1.2.2). Punctuation only, per ADR-0005: every em dash replaced, and one
+Version change: 1.2.2 -> 1.2.3
+Bump rationale: PATCH (1.2.3). Removes a reference to an unrelated local folder from the
+resolved-TODO list. No obligation changed.
+
+Prior bump, PATCH (1.2.2). Punctuation only, per ADR-0005: every em dash replaced, and one
 word on the AI-vocabulary list reworded in Governance. No obligation changed.
 
 Prior bump, PATCH (1.2.1). Principle VIII illustrated the citation format with a real-form
@@ -16,7 +19,8 @@ approves software licences and the vault prose is CC-BY-4.0; the principle now a
 licence appropriate to each kind. Governance bound its citation duty to pull request descriptions,
 but the project deliberately does not use pull requests (ADR-0003); the duty now binds the commit
 message. Neither change weakens an obligation, each moves it onto a surface that exists.
-(1.2.2: punctuation per ADR-0005, 2026-09-21.
+(1.2.3: unrelated folder reference removed, 2026-09-21.
+1.2.2: punctuation per ADR-0005, 2026-09-21.
 1.2.1: placeholder citation example in Principle VIII, 2026-09-21.
 1.2.0: Principle I licence wording, Governance citation surface, 2026-09-21.
 1.1.1: resolves TODO(LICENSE) and records the standalone-repository rule, 2026-09-20.
@@ -58,8 +62,7 @@ Deferred TODOs:
     prose. Apache-2.0 for its explicit patent grant, which matters in a field where device vendors
     hold patents; CC-BY-4.0 so the theory can be quoted and reused with attribution. Both licences
     and their scopes ship at the repository root. To be recorded as an ADR on first push.
-  - RESOLVED 2026-09-20: the project lives in its own standalone public repository, not nested
-    inside a larger repository. Standing rule for every project under that monorepo. To be
+  - RESOLVED 2026-09-20: the project lives in its own standalone public repository. To be
     recorded as ADR-0001.
 -->
 
@@ -279,4 +282,4 @@ embodies a decision MUST cite that decision's ADR id in its message; where the p
 requests, the same obligation applies to the pull request description. Complexity that violates
 Principle VII MUST be justified in writing in the plan's Complexity Tracking section, or removed.
 
-**Version**: 1.2.2 | **Ratified**: 2026-09-20 | **Last Amended**: 2026-09-21
+**Version**: 1.2.3 | **Ratified**: 2026-09-20 | **Last Amended**: 2026-09-21

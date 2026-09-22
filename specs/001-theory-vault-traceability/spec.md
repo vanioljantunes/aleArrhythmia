@@ -6,14 +6,14 @@
 
 **Status**: Draft
 
-**Input**: User description: "Phase 0 foundation: the theory vault, the ADR traceability machinery, and the reference-space survey. Deliverables: (1) an Obsidian vault at docs/vault/ with plain-Markdown notes, wikilinks and machine-readable frontmatter, plus its folder structure and note templates (theory, adr, literature, question, log); (2) an ADR template enforcing Options considered / Trade-offs per option / Chosen and why / Rejected and why / References, with sequential ids and supersedes links; (3) a CI traceability check that fails on empty Options, Trade-offs or References fields, dangling cited ADR ids, duplicate ADR numbers, supersession without the superseding id recorded, and broken wikilinks; (4) a written survey of candidate canonical cardiac reference spaces (Universal Ventricular/Atrial Coordinates on an open statistical heart atlas, AHA 17-segment and atrial-segment models, fixed-atlas vertex space, hybrids), of available open cardiac atlases, and of the exported file formats of EnSite X EP, Rhythmia HDx and KODEX-EPD, each written as vault literature notes and feeding ADRs; (5) ADR-0001 recording the repository layout decision (standalone public repo versus nested inside a larger repository). Out of scope for this phase: the ALE statistics implementation itself, the 3D viewer, the vault-to-HTML renderer, and any public claim about cardiac results. The audience for the vault is a researcher who has never opened Obsidian."
+**Input**: User description: "Phase 0 foundation: the theory vault, the ADR traceability machinery, and the reference-space survey. Deliverables: (1) an Obsidian vault at docs/vault/ with plain-Markdown notes, wikilinks and machine-readable frontmatter, plus its folder structure and note templates (theory, adr, literature, question, log); (2) an ADR template enforcing Options considered / Trade-offs per option / Chosen and why / Rejected and why / References, with sequential ids and supersedes links; (3) a CI traceability check that fails on empty Options, Trade-offs or References fields, dangling cited ADR ids, duplicate ADR numbers, supersession without the superseding id recorded, and broken wikilinks; (4) a written survey of candidate canonical cardiac reference spaces (Universal Ventricular/Atrial Coordinates on an open statistical heart atlas, AHA 17-segment and atrial-segment models, fixed-atlas vertex space, hybrids), of available open cardiac atlases, and of the exported file formats of EnSite X EP, Rhythmia HDx and KODEX-EPD, each written as vault literature notes and feeding ADRs; (5) ADR-0001 recording the repository layout decision (standalone public repo versus a folder inside a larger repository). Out of scope for this phase: the ALE statistics implementation itself, the 3D viewer, the vault-to-HTML renderer, and any public claim about cardiac results. The audience for the vault is a researcher who has never opened Obsidian."
 
 
 ## Clarifications
 
 ### Session 2026-09-20
 
-- Q: Should the project live in its own repository or nested inside the existing monorepo? → A: Its own standalone public repository. This is now the standing rule for every project under the monorepo, not a one-off.
+- Q: Should the project live in its own repository or as a folder inside a larger repository? → A: Its own standalone public repository.
 - Q: What actually blocks untraceable work from landing (FR-023)? → A: A local pre-push hook plus the check running on every push to the public repository. Not pull-request branch protection.
 - Q: Which files does the check scan for ADR citations (FR-012 / FR-017)? → A: All version-controlled text files, minus an explicit, reviewable ignore list. Citations must use the exact `ADR-NNNN` form.
 - Q: Which licence for the public repository? → A: Apache-2.0 for the software, CC-BY-4.0 for the vault prose.
@@ -227,8 +227,8 @@ and name what evidence is still missing, using only the survey notes.
   replacement.
 - **FR-012**: Any artifact that embodies a decision, source file, specification, plan, or note -
   MUST cite that decision by its identifier.
-- **FR-013**: The project MUST live in its own standalone public repository, not nested inside the
-  existing monorepo, and MUST record that choice as its first decision record together with the
+- **FR-013**: The project MUST live in its own standalone public repository, not as a folder inside
+  a larger repository, and MUST record that choice as its first decision record together with the
   trade-offs of both options.
 - **FR-013a**: The repository MUST carry two licences: a permissive software licence granting
   patent rights (Apache-2.0) covering the code, and an attribution licence (CC-BY-4.0) covering the
@@ -335,8 +335,7 @@ and name what evidence is still missing, using only the survey notes.
 
 - The project lives in its own standalone public repository, and the vault lives inside it rather
   than in a separate one, so that a method change and the note describing it land in the same
-  commit. The repository is not nested inside the existing monorepo; the monorepo keeps at most a
-  pointer to it. The same rule now applies to every project under that monorepo.
+  commit.
 - The audience is researchers and engineers, not the general public. Notes may assume familiarity
   with meta-analysis and cardiac electrophysiology, but not with the note-taking application.
 - "Non-trivial decision" means any choice that a future reader could reasonably question and that

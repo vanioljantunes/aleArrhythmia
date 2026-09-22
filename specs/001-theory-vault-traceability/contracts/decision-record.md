@@ -29,26 +29,26 @@ One or two sentences of context: what forced this decision, and when.
 
 - **Standalone public repository**: the project gets its own repository, with its own licences,
   issue tracker and CI.
-- **Nested in the private monorepo**: the project stays a folder inside the existing private
-  repository, exported periodically to a public snapshot.
+- **Folder in a larger private repository**: the project stays a folder inside a repository that
+  holds other work, exported periodically to a public snapshot.
 
 ## Trade-offs
 
 **Standalone public repository**: costs one more repository to maintain and a clone to keep in
 sync locally; buys a public history, independent licensing, and CI that an outside reader can see.
 
-**Nested in the private monorepo**: costs a drifting snapshot and a lost history, since exports
+**Folder in a larger private repository**: costs a drifting snapshot and a lost history, since exports
 carry no commits; buys one fewer repository and atomic commits across sibling projects.
 
 ## Chosen
 
-Standalone public repository. Constitution Principle I requires the work to be public, and the
-monorepo is private and must stay so. A snapshot export would break the traceability this project
+Standalone public repository. Constitution Principle I requires the work to be public, and a
+repository holding other private work cannot be published. A snapshot export would break the traceability this project
 exists to demonstrate.
 
 ## Rejected
 
-**Nested in the private monorepo**: rejected because a public snapshot loses history, which
+**Folder in a larger private repository**: rejected because a public snapshot loses history, which
 directly contradicts Principle VIII. The gain, atomic cross-project commits, is not needed: no other
 project shares code with this one.
 

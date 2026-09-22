@@ -13,17 +13,16 @@ research note.
 ## R-001: Repository layout
 
 **Decision**: The project lives in its own standalone public repository,
-`github.com/vanioljantunes/aleArrhythmia`, not nested inside a larger repository. The monorepo
-keeps at most a pointer.
+`github.com/vanioljantunes/aleArrhythmia`.
 
-**Rationale**: Constitution Principle I requires a public repository, and the monorepo is private and
-must stay private. Nesting would mean either publishing the monorepo or maintaining a snapshot copy
-that drifts. A standalone repository also lets the project carry its own licences, its own issue
+**Rationale**: Constitution Principle I requires a public repository. Living as a folder inside a
+larger private repository would mean either publishing unrelated private work or maintaining a
+snapshot copy that drifts. A standalone repository also lets the project carry its own licences, its own issue
 tracker and its own CI, which is what a portfolio artifact needs.
 
-**Alternatives considered**: (a) Nested folder in the monorepo with periodic export to a public
-snapshot, rejected: snapshots drift, and history is lost, which contradicts Principle VIII;
-(b) Git submodule inside the monorepo, rejected: adds a moving part for no gain now, and can be
+**Alternatives considered**: (a) Folder in a larger private repository with periodic export to a
+public snapshot, rejected: snapshots drift, and history is lost, which contradicts Principle VIII;
+(b) Git submodule inside a larger repository, rejected: adds a moving part for no gain now, and can be
 added later without cost.
 
 **Note for ADR-0001**: the repository was created before this record existed. That sequencing is
