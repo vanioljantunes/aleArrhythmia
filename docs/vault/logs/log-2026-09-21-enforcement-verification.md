@@ -30,7 +30,7 @@ main was never touched.
 
 ```mermaid
 flowchart TD
-  A[branch verify/server-check from main at 99d6bb3] --> B[empty ADR-0001 references, commit 32410a7]
+  A[branch verify/server-check from main at f235a06] --> B[empty ADR-0001 references, commit 32410a7]
   B --> C[unset core.hooksPath]
   C --> D[push: no hook output, as expected]
   D --> E[restore core.hooksPath]
@@ -49,10 +49,14 @@ Process completed with exit code 1.
 | Run | Result | Link |
 |---|---|---|
 | Throwaway branch, 32410a7 | failure | https://github.com/vanioljantunes/aleArrhythmia/actions/runs/35625031339 |
-| main, 99d6bb3 | success | https://github.com/vanioljantunes/aleArrhythmia/actions/runs/35624850054 |
+| main, f235a06 | success | https://github.com/vanioljantunes/aleArrhythmia/actions/runs/35624850054 |
 
 The failed run stays in the Actions history on purpose, as the public record that the backstop
 works.
+
+History was rewritten on 2026-09-21 to remove references to an unrelated local folder. Commit
+hashes in this log now point at the rewritten history. Both Actions runs executed before the
+rewrite, on hash 99d6bb3 (now f235a06) and on the throwaway commit 32410a7, which was never on main.
 
 ## Not done
 

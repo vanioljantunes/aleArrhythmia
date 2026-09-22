@@ -25,7 +25,7 @@ flowchart LR
 | Ignore format | One glob per line, each with a trailing "# reason". No reason: error. Glob matching nothing: warning. |
 
 Reformatted on 2026-09-21 per [[ADR-0005-writing-style]]. Options, trade-offs, choice and reasons
-are unchanged. The original wording is in commit 7eade79.
+are unchanged. The original wording is in commit ca73975.
 
 ## Options considered
 

@@ -16,7 +16,7 @@ Licences for the two kinds of work in the repository: software and prose.
 | Constitution amended | Principle I first required an OSI-approved licence for every artifact. OSI approves software licences only, and CC-BY-4.0 is not one of them. `/speckit-analyze` caught this on 2026-09-21. Constitution v1.2.0 now asks for an OSI licence for software and an open content licence for prose. The decision stood. |
 
 Reformatted on 2026-09-21 per [[ADR-0005-writing-style]]. Options, trade-offs, choice and reasons
-are unchanged. The original wording is in commit 0501fa2.
+are unchanged. The original wording is in commit 1b32954.
 
 ## Options considered
 

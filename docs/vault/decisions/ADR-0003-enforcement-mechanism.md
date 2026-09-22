@@ -31,7 +31,7 @@ flowchart LR
 | Verified | Both paths tested: [[log-2026-09-21-enforcement-verification]] |
 
 Reformatted on 2026-09-21 per [[ADR-0005-writing-style]]. Options, trade-offs, choice and reasons
-are unchanged. The original wording is in commit de7fd46.
+are unchanged. The original wording is in commit 485b906.
 
 ## Options considered
 
