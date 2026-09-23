@@ -18,6 +18,13 @@
 - Q: Which files does the check scan for ADR citations (FR-012 / FR-017)? → A: All version-controlled text files, minus an explicit, reviewable ignore list. Citations must use the exact `ADR-NNNN` form.
 - Q: Which licence for the public repository? → A: Apache-2.0 for the software, CC-BY-4.0 for the vault prose.
 
+### Session 2026-09-23
+
+- Q: When a user switches between the CARTO and Affera versions of the map, what changes? → A: All
+  three parts: the importer, the exporter and the display mode. The statistics never change.
+- Q: Do CARTO and Affera replace the three systems already named, or join them? → A: They join, as
+  the two first-class versions. The other three stay in the survey with no build commitment.
+
 ## User Scenarios & Testing *(mandatory)*
 
 ### User Story 1 - Re-open a past decision and understand it (Priority: P1)
@@ -271,7 +278,10 @@ and name what evidence is still missing, using only the survey notes.
 - **FR-025**: The project MUST record, as literature notes, the open cardiac atlases available as
   reference anatomy, with their licences and coverage.
 - **FR-026**: The project MUST record, as literature notes, what each named commercial mapping
-  system can export, and under what licence terms that export may be read.
+  system can export, and under what licence terms that export may be read. The named systems are
+  CARTO 3 (Biosense Webster), the Affera mapping system (Medtronic), EnSite X EP (Abbott),
+  Rhythmia HDx (Boston Scientific) and KODEX-EPD (Philips). For CARTO 3 and Affera the note MUST
+  also record the system's display conventions, since ADR-0006 gives those two a viewer mode.
 - **FR-027**: Anything that could not be established MUST be recorded explicitly as an unknown,
   with what was tried; it MUST NOT be guessed or silently omitted.
 - **FR-028**: The reference-space choice MUST remain an open question in this phase, linked to

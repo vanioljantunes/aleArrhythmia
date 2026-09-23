@@ -25,6 +25,7 @@ New here: read [[README]] first.
 | [[ADR-0003-enforcement-mechanism]] | Pre-push hook plus a check on every push | accepted |
 | [[ADR-0004-citation-scan-scope]] | Scan all tracked text files, minus a reasoned ignore list | accepted |
 | [[ADR-0005-writing-style]] | Writing rules; mechanical tells blocked, AI vocabulary warned | accepted |
+| [[ADR-0006-viewer-versions]] | CARTO and Affera viewer versions, switchable, adapter plus display mode | accepted |
 
 ## Open questions
 
@@ -45,6 +46,7 @@ None yet.
 | [[log-2026-09-20-clarification]] | Session that settled layout, enforcement, scan scope and licence |
 | [[log-2026-09-21-enforcement-verification]] | Proof that hook and workflow each refuse a broken record |
 | [[log-2026-09-21-reader-trial-adr-0001]] | Author reading of ADR-0001; led to ADR-0005 |
+| [[log-2026-09-23-viewer-versions]] | Session that asked for CARTO and Affera versions of the map |
 
 ## Templates
 

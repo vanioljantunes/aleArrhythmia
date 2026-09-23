@@ -1,8 +1,12 @@
 <!--
 Sync Impact Report
 ==================
-Version change: 1.2.2 -> 1.2.3
-Bump rationale: PATCH (1.2.3). Removes a reference to an unrelated local folder from the
+Version change: 1.2.3 -> 1.3.0
+Bump rationale: MINOR (1.3.0). Principle V now names CARTO 3 and the Affera mapping system
+among the systems this project interoperates with, and states that per-system viewer modes may
+follow display conventions but never branding or interface. Recorded as ADR-0006.
+
+Prior bump, PATCH (1.2.3). Removes a reference to an unrelated local folder from the
 resolved-TODO list. No obligation changed.
 
 Prior bump, PATCH (1.2.2). Punctuation only, per ADR-0005: every em dash replaced, and one
@@ -19,7 +23,8 @@ approves software licences and the vault prose is CC-BY-4.0; the principle now a
 licence appropriate to each kind. Governance bound its citation duty to pull request descriptions,
 but the project deliberately does not use pull requests (ADR-0003); the duty now binds the commit
 message. Neither change weakens an obligation, each moves it onto a surface that exists.
-(1.2.3: unrelated folder reference removed, 2026-09-21.
+(1.3.0: Principle V names CARTO 3 and Affera, viewer modes bounded, 2026-09-23.
+1.2.3: unrelated folder reference removed, 2026-09-21.
 1.2.2: punctuation per ADR-0005, 2026-09-21.
 1.2.1: placeholder citation example in Principle VIII, 2026-09-21.
 1.2.0: Principle I licence wording, Governance citation surface, 2026-09-21.
@@ -28,6 +33,8 @@ message. Neither change weakens an obligation, each moves it onto a surface that
 1.0.0: initial ratification, seven principles, 2026-09-20.)
 
 Modified principles:
+  - V. Add-On, Not Replacement (CARTO 3 and Affera named as interoperability targets; per-system
+    viewer modes allowed for display conventions only, never branding or interface)
   - I. Open by Default (licence requirement split: OSI-approved for software, open content licence
     for prose, notes and data)
 
@@ -55,9 +62,11 @@ Deferred TODOs:
     a hybrid. Principle II binds the project to choosing exactly one canonical, versioned space
     and recording the choice in an ADR before any statistical result is published. Until then all
     space-dependent work is exploratory and MUST be labelled as such.
-  - TODO(VENDOR_INTEROP): which export formats of EnSite X EP (Abbott), Rhythmia HDx (Boston
-    Scientific) and KODEX-EPD (Philips) can actually be read, and under what licence terms,
-    is unresearched. Principle V holds regardless of the answer.
+  - TODO(VENDOR_INTEROP): which export formats of CARTO 3 (Biosense Webster), the Affera mapping
+    system (Medtronic), EnSite X EP (Abbott), Rhythmia HDx (Boston Scientific) and KODEX-EPD
+    (Philips) can actually be read, and under what licence terms, is unresearched. ADR-0006 makes
+    the first two the systems that get a viewer version, so their answers block Phase 2 work.
+    Principle V holds regardless of the answer.
   - RESOLVED 2026-09-20 (was TODO(LICENSE)): Apache-2.0 for the software, CC-BY-4.0 for the vault
     prose. Apache-2.0 for its explicit patent grant, which matters in a field where device vendors
     hold patents; CC-BY-4.0 so the theory can be quoted and reused with attribution. Both licences
@@ -76,8 +85,8 @@ across studies into a statistically thresholded likelihood map of where a given 
 arises. The intended clinical payoff is shorter mapping time, higher first-pass ablation
 efficacy, and fewer lesions delivered off target.
 
-aleArrhythmia is not a competitor to EnSite X EP, Rhythmia HDx or KODEX-EPD. It is an open,
-add-on layer that those systems, and the literature around them, can feed and consume. Its
+aleArrhythmia is not a competitor to CARTO 3, Affera, EnSite X EP, Rhythmia HDx or KODEX-EPD. It
+is an open, add-on layer that those systems, and the literature around them, can feed and consume. Its
 viewer takes its shape from Mango (mangoviewer.com): a small, focused, free tool that displays a
 statistical map on a reference anatomy and nothing more.
 
@@ -144,9 +153,12 @@ Rationale: meta-analysis is only as trustworthy as its audit trail, and reviewer
 The system MUST NOT position itself as, or attempt to become, a real-time electroanatomic
 mapping system. It MUST NOT be placed in the intraprocedural control loop, MUST NOT drive or
 annotate ablation hardware, and MUST NOT be required for any procedural step. Its integration
-surface with EnSite X EP, Rhythmia HDx, KODEX-EPD and any successor is limited to importing
-exported geometry and point data, and to exporting maps in documented open formats those systems
-or their users can read.
+surface with CARTO 3 (Biosense Webster), the Affera mapping system (Medtronic), EnSite X EP
+(Abbott), Rhythmia HDx (Boston Scientific), KODEX-EPD (Philips) and any successor is limited to
+importing exported geometry and point data, and to exporting maps in documented open formats those
+systems or their users can read. The viewer MAY offer per-system modes that follow a system's
+display conventions, and MUST NOT copy its branding, logos or interface, or suggest that the
+project is endorsed by its maker.
 
 Rationale: real-time mapping is a regulated-device problem with a multi-year approval path.
 Staying an offline research add-on keeps the project shippable, safe and legal.
@@ -282,4 +294,4 @@ embodies a decision MUST cite that decision's ADR id in its message; where the p
 requests, the same obligation applies to the pull request description. Complexity that violates
 Principle VII MUST be justified in writing in the plan's Complexity Tracking section, or removed.
 
-**Version**: 1.2.3 | **Ratified**: 2026-09-20 | **Last Amended**: 2026-09-21
+**Version**: 1.3.0 | **Ratified**: 2026-09-20 | **Last Amended**: 2026-09-21
