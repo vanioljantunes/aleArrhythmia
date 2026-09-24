@@ -16,8 +16,9 @@ visible. Each row also lives in the note it belongs to. Required by FR-027.
 
 | Unknown | Blocks | What was tried |
 |---|---|---|
-| Licence of the Cardiac Atlas Project biventricular files | Redistributing a reference anatomy, which Principle I requires to be openly licensed | Read the download page. It states no licence |
-| Whether Affera exports geometry and points at all | The Affera importer and exporter in [[ADR-0006-viewer-versions]] | Searched vendor pages, the FDA approval announcement, trial protocols. Nothing found |
+| No licence stated for the Cardiac Atlas Project biventricular files | Bundling a reference anatomy, which Principle I requires to be openly licensed. Use and citation are unaffected, and a fetch at setup avoids the problem | Read the download page and the project distribution policy on 2026-09-24. The page states no licence. The policy forbids transferring data or derivatives, but is written for data released under a signed agreement and may not reach an open download |
+| What UK Biobank terms apply to a model derived from its images | The same bundling question, one layer down | Not checked |
+| Whether Affera exports geometry and points at all | The Affera importer and exporter in [[ADR-0006-viewer-versions]], and with them the whole Affera control under [[ADR-0007-unavailable-capability]] | Searched vendor pages, the FDA approval announcement, trial protocols. Nothing found |
 | Whether an open atrial reference anatomy exists | Any atrial arrhythmia work, since the surveyed atlas covers ventricles only | Not searched yet |
 
 ## Not blocking yet

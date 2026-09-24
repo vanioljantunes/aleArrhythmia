@@ -26,6 +26,7 @@ New here: read [[README]] first.
 | [[ADR-0004-citation-scan-scope]] | Scan all tracked text files, minus a reasoned ignore list | accepted |
 | [[ADR-0005-writing-style]] | Writing rules; mechanical tells blocked, AI vocabulary warned | accepted |
 | [[ADR-0006-viewer-versions]] | CARTO and Affera viewer versions, switchable, adapter plus display mode | accepted |
+| [[ADR-0007-unavailable-capability]] | A committed but blocked capability shows as a disabled control naming the gap | accepted |
 
 ## Open questions
 
@@ -83,6 +84,7 @@ Gaps:
 | [[log-2026-09-21-enforcement-verification]] | Proof that hook and workflow each refuse a broken record |
 | [[log-2026-09-21-reader-trial-adr-0001]] | Author reading of ADR-0001; led to ADR-0005 |
 | [[log-2026-09-23-viewer-versions]] | Session that asked for CARTO and Affera versions of the map |
+| [[log-2026-09-24-survey-and-gaps]] | Survey landed; atlas licence read, Affera control settled |
 
 ## Templates
 

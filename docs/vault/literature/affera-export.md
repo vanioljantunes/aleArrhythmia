@@ -37,8 +37,8 @@ least public information.
 
 | Point | Effect |
 |---|---|
-| Blocks the Affera importer and exporter | Without a readable export there is no adapter, and the version reduces to a display mode |
-| Does not block the display mode | Colour scales and views could still be matched from published figures and manuals |
+| Blocks the Affera importer and exporter | Without a readable export there is no adapter |
+| Blocks the whole Affera version in the viewer | Under [[ADR-0007-unavailable-capability]] the Affera control stays disabled, carrying this note as its reason, rather than offering a display mode with nothing behind it |
 | Names the next step | Ask Medtronic, or find a site willing to share an anonymised export, before Phase 2 planning |
 
 ## Unknowns
