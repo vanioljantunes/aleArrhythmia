@@ -29,15 +29,51 @@ New here: read [[README]] first.
 
 ## Open questions
 
-None yet.
+| Question | Status |
+|---|---|
+| [[canonical-reference-space]] | open |
 
 ## Theory
 
-None yet.
+| Note | Content |
+|---|---|
+| [[ale-method]] | What ALE does, and which steps change for the heart |
 
 ## Literature
 
-None yet.
+Candidate reference spaces:
+
+| Note | What it is |
+|---|---|
+| [[universal-ventricular-coordinates]] | Continuous ventricular coordinates |
+| [[cobiveco-biventricular-coordinates]] | Later biventricular coordinates, open code |
+| [[universal-atrial-coordinates]] | Atrial coordinates, open access |
+| [[aha-17-segment-model]] | Discrete clinical segments |
+| [[fixed-atlas-vertex-space]] | Vertex indices on one template |
+| [[hybrid-coordinate-and-segment]] | Continuous storage, segment labels |
+
+Reference anatomy and tooling:
+
+| Note | What it is |
+|---|---|
+| [[cardiac-atlas-project-biventricular-modes]] | Open statistical shape model of the ventricles |
+| [[openep-and-pulse-ep]] | Open parsers for commercial mapping exports |
+
+Mapping system exports:
+
+| Note | Status |
+|---|---|
+| [[carto3-export]] | First-class version, open parser exists |
+| [[affera-export]] | First-class version, no public format found |
+| [[ensite-x-export]] | Surveyed, open parser exists |
+| [[rhythmia-hdx-export]] | Surveyed, export exists, format unknown |
+| [[kodex-epd-export]] | Surveyed, parser reported |
+
+Gaps:
+
+| Note | What it is |
+|---|---|
+| [[survey-unknowns-2026-09-24]] | Everything the first survey pass could not establish |
 
 ## Work logs
 
