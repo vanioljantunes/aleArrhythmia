@@ -40,6 +40,23 @@ run with an AI coding assistant (Claude).
 
 | Item | Where |
 |---|---|
-| Ask the Cardiac Atlas Project to state a licence on the download page | Not yet sent |
+| Ask the Cardiac Atlas Project to state a licence on the download page | Deferred, see below |
 | Check UK Biobank terms on derived data, which sit underneath the atlas | Not yet done |
 | Build the disabled-control pattern | Phase 2, viewer |
+
+## The licence request is deferred on purpose
+
+Author's decision, 2026-09-24: hold the request until the project has a working approach to show.
+
+| Reason | Detail |
+|---|---|
+| First contact happens once | A request that describes a working tool and a named use reads differently from one describing an intention |
+| The ask is not yet specific | Until the canonical space is chosen it is unclear which file, in what form, and for what distribution the project needs |
+| Nothing is blocked meanwhile | Use and citation are already permitted, and fetching at setup carries the dependency without redistribution |
+
+| Send when | Signal |
+|---|---|
+| The canonical reference space is chosen | [[canonical-reference-space]] is answered, so the request can name the exact file and the use |
+| A runnable pipeline exists | The request can point at a public repository that does something |
+
+Until then the gap stands, and the viewer shows it under [[ADR-0007-unavailable-capability]].
