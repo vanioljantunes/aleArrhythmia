@@ -85,6 +85,7 @@ Gaps:
 | [[log-2026-09-21-reader-trial-adr-0001]] | Author reading of ADR-0001; led to ADR-0005 |
 | [[log-2026-09-23-viewer-versions]] | Session that asked for CARTO and Affera versions of the map |
 | [[log-2026-09-24-survey-and-gaps]] | Survey landed; atlas licence read, Affera control settled |
+| [[log-2026-09-24-quickstart-walk]] | Fresh-clone walk of the quickstart; six guide defects fixed |
 
 ## Templates
 

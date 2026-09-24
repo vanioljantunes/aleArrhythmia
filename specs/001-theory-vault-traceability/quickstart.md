@@ -30,8 +30,16 @@ pip install -e ".[dev]"
 git config core.hooksPath .githooks
 ```
 
-Expected after the bare `python -m tools.vaultcheck`: a summary line and exit code `0`. If the
-repository is clean, it says so before you have installed a thing.
+Expected after the bare `python -m tools.vaultcheck`: one warning, a summary line, and exit code
+`0`. If the repository is clean, it says so before you have installed a thing.
+
+```text
+.githooks/pre-push:1: HOOK-NOT-INSTALLED: warning: the local pre-push check is not active; run: git config core.hooksPath .githooks
+vaultcheck: N notes, M decision records, L links, C citations verified: clean
+```
+
+The warning is correct and expected on a fresh clone: you have not run the `git config` line yet. It
+is a warning, not an error, so the exit code stays `0`. It disappears once the hook is active.
 
 ---
 
@@ -67,31 +75,35 @@ pytest tests/ -v
 
 **Expected**: one passing test per defect kind, each asserting both the exit code and the rule id.
 
-| Fixture | Rule expected |
+Every registered rule has a fixture, and a meta-test fails the suite if a rule is ever added
+without one, so this table is not maintained by hand. Each fixture is named after the rule it
+provokes: `tests/fixtures/adr-empty-section/` triggers `ADR-EMPTY-SECTION`.
+
+```bash
+ls tests/fixtures/
+```
+
+Four fixtures are named for what they prove rather than for a rule:
+
+| Fixture | Proves |
 |---|---|
-| `empty-section/` | `ADR-EMPTY-SECTION` |
-| `one-option/` | `ADR-TOO-FEW-OPTIONS` |
-| `no-reference/` | `ADR-NO-REFERENCE` |
-| `duplicate-id/` | `ADR-DUPLICATE-ID`, naming both files |
-| `dangling-citation/` | `CITE-DANGLING` |
-| `one-sided-supersession/` | `ADR-SUPERSESSION-ONE-SIDED` |
-| `unresolved-link/` | `LINK-UNRESOLVED` |
-| `missing-field/` | `NOTE-MISSING-FIELD` |
-| `duplicate-basename/` | `NOTE-DUPLICATE-BASENAME` |
-| `prose-mentions-adr/` | passes, proves the exact-form rule avoids false positives |
-| `empty-vault/` | passes, reports zero |
+| `clean/` | A correct vault passes |
+| `empty-vault/` | Zero notes is not an error, and the counts say zero |
+| `prose-mentions-adr/` | Prose naming a record in passing is not a citation, so the exact-form rule raises no false positive |
+| `adr-options-as-table/` | Options are counted from a Markdown table, not only from a list (ADR-0005) |
 
 To see a failure by hand rather than through pytest:
 
 ```bash
-vaultcheck --root tests/fixtures/empty-section
+vaultcheck --root tests/fixtures/adr-empty-section
 echo "exit: $?"
 ```
 
 **Expected**
 
 ```text
-docs/vault/decisions/ADR-0001-example.md:12: ADR-EMPTY-SECTION: '## Trade-offs' has no content
+docs/vault/decisions/ADR-0001-example.md:19: ADR-EMPTY-SECTION: '## Trade-offs' has no content
+vaultcheck: 6 notes, 1 decision records, 8 links, 4 citations verified: 1 violation
 exit: 1
 ```
 
@@ -105,23 +117,32 @@ Validates FR-023, FR-023a, SC-011. This edits a tracked file and then reverts; r
 working tree so the reset destroys nothing you wanted.
 
 ```bash
-# break a record on purpose
+# break a record on purpose: empty the References section
 python - <<'PY'
 import pathlib
 p = pathlib.Path("docs/vault/decisions/ADR-0001-repository-layout.md")
 t = p.read_text(encoding="utf-8")
-p.write_text(t.replace("## References", "## References\n<!-- emptied on purpose -->"), encoding="utf-8")
+head, _, _ = t.partition("## References")
+p.write_text(head + "## References\n\n<!-- emptied on purpose -->\n", encoding="utf-8")
 PY
 
 git add -A && git commit -m "temp: deliberately break a record"
 git push
 ```
 
+The break has to remove the section's contents, not merely add a line to it. Inserting a comment
+after the heading leaves the references below it intact, so the record stays valid and the push
+succeeds. That looks like the hook failing when in fact nothing was broken.
+
 **Expected**: the push never reaches the network.
 
 ```text
-docs/vault/decisions/ADR-0001-repository-layout.md:NN: ADR-NO-REFERENCE: no reference in an accepted form
-vaultcheck failed, push refused. Fix the violations, or use --no-verify to override deliberately.
+docs/vault/decisions/ADR-0001-repository-layout.md:56: ADR-NO-REFERENCE: '## References' has no content
+vaultcheck: N notes, M decision records, L links, C citations verified: 1 violation
+
+pre-push: vaultcheck found violations. Push refused.
+Fix what is listed above, or override deliberately with: git push --no-verify
+An override is still checked on the repository and recorded there as a failure.
 ```
 
 Then undo:
@@ -181,8 +202,11 @@ would close it.
 Then confirm nothing was invented:
 
 ```bash
-grep -rl "unknown" docs/vault/literature/
+grep -ril "unknown" docs/vault/literature/
 ```
+
+Case-insensitive on purpose: the notes carry an `## Unknowns` heading, which a case-sensitive grep
+misses. Every literature note should appear.
 
 **Expected**: every item the survey could not establish appears as an explicitly recorded unknown
 stating what was tried, not as an absence, and not as a guess.

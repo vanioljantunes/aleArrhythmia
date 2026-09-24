@@ -1,8 +1,14 @@
 <!--
 Sync Impact Report
 ==================
-Version change: 1.2.3 -> 1.3.0
-Bump rationale: MINOR (1.3.0). Principle V now names CARTO 3 and the Affera mapping system
+Version change: 1.3.0 -> 1.4.0
+Bump rationale: MINOR (1.4.0). TODO(VENDOR_INTEROP) is answered in part and restated with what
+the Phase 0 survey established, and a second deferred TODO is added for the reference anatomy,
+whose publisher states no licence. The survey found no public export format for Affera, so the
+obligation ADR-0006 took on cannot be met yet; the restated TODO names that as the blocker rather
+than leaving the question open. No principle changed.
+
+Prior bump, MINOR (1.3.0). Principle V now names CARTO 3 and the Affera mapping system
 among the systems this project interoperates with, and states that per-system viewer modes may
 follow display conventions but never branding or interface. Recorded as ADR-0006.
 
@@ -23,7 +29,8 @@ approves software licences and the vault prose is CC-BY-4.0; the principle now a
 licence appropriate to each kind. Governance bound its citation duty to pull request descriptions,
 but the project deliberately does not use pull requests (ADR-0003); the duty now binds the commit
 message. Neither change weakens an obligation, each moves it onto a surface that exists.
-(1.3.0: Principle V names CARTO 3 and Affera, viewer modes bounded, 2026-09-23.
+(1.4.0: TODO(VENDOR_INTEROP) restated from the survey, TODO(REFERENCE_ANATOMY) added, 2026-09-24.
+1.3.0: Principle V names CARTO 3 and Affera, viewer modes bounded, 2026-09-23.
 1.2.3: unrelated folder reference removed, 2026-09-21.
 1.2.2: punctuation per ADR-0005, 2026-09-21.
 1.2.1: placeholder citation example in Principle VIII, 2026-09-21.
@@ -33,12 +40,14 @@ message. Neither change weakens an obligation, each moves it onto a surface that
 1.0.0: initial ratification, seven principles, 2026-09-20.)
 
 Modified principles:
-  - V. Add-On, Not Replacement (CARTO 3 and Affera named as interoperability targets; per-system
+  - none in 1.4.0
+  - V. Add-On, Not Replacement, in 1.3.0 (CARTO 3 and Affera named as interoperability targets; per-system
     viewer modes allowed for display conventions only, never branding or interface)
   - I. Open by Default (licence requirement split: OSI-approved for software, open content licence
     for prose, notes and data)
 
 Modified sections:
+  - Deferred TODOs (VENDOR_INTEROP restated from survey evidence; REFERENCE_ANATOMY added)
   - Governance / Compliance review (citation duty moved from pull request description to commit
     message, with the PR case retained conditionally)
 
@@ -62,11 +71,18 @@ Deferred TODOs:
     a hybrid. Principle II binds the project to choosing exactly one canonical, versioned space
     and recording the choice in an ADR before any statistical result is published. Until then all
     space-dependent work is exploratory and MUST be labelled as such.
-  - TODO(VENDOR_INTEROP): which export formats of CARTO 3 (Biosense Webster), the Affera mapping
-    system (Medtronic), EnSite X EP (Abbott), Rhythmia HDx (Boston Scientific) and KODEX-EPD
-    (Philips) can actually be read, and under what licence terms, is unresearched. ADR-0006 makes
-    the first two the systems that get a viewer version, so their answers block Phase 2 work.
-    Principle V holds regardless of the answer.
+  - TODO(VENDOR_INTEROP): partly answered by the Phase 0 survey, 2026-09-24. Open parsers were
+    found for CARTO 3, EnSite X EP and KODEX-EPD, one of them under Apache-2.0, so those formats
+    are readable in practice. Rhythmia HDx has an export whose contents are undocumented. No
+    public export format was found for Affera, which blocks the importer ADR-0006 committed to;
+    the Affera control stays disabled under ADR-0007 until that changes. Still unresearched: the
+    field-level contents of every format, and the display conventions CARTO 3 and Affera use.
+    Principle V holds regardless of the answer. Evidence: `docs/vault/literature/`.
+  - TODO(REFERENCE_ANATOMY): the project needs a reference anatomy to render and to place
+    coordinates on. The surveyed candidate, the Cardiac Atlas Project biventricular modes, states
+    no licence, so Principle I forbids shipping it inside this repository. Use and citation are
+    unaffected, and the dependency can be carried by fetching the file at setup. No open atrial
+    reference anatomy has been found at all. Blocks any bundled anatomy, not the choice of space.
   - RESOLVED 2026-09-20 (was TODO(LICENSE)): Apache-2.0 for the software, CC-BY-4.0 for the vault
     prose. Apache-2.0 for its explicit patent grant, which matters in a field where device vendors
     hold patents; CC-BY-4.0 so the theory can be quoted and reused with attribution. Both licences
@@ -294,4 +310,4 @@ embodies a decision MUST cite that decision's ADR id in its message; where the p
 requests, the same obligation applies to the pull request description. Complexity that violates
 Principle VII MUST be justified in writing in the plan's Complexity Tracking section, or removed.
 
-**Version**: 1.3.0 | **Ratified**: 2026-09-20 | **Last Amended**: 2026-09-21
+**Version**: 1.4.0 | **Ratified**: 2026-09-20 | **Last Amended**: 2026-09-24

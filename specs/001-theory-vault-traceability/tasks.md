@@ -146,7 +146,7 @@ and name what evidence is still missing, using only the survey notes.
 - [X] T041 [US4] Write an explicit unknown note in `docs/vault/literature/` for every item the survey could not establish, stating what was tried. Absence is not an acceptable answer (FR-027)
 - [X] T042 [US4] Write `docs/vault/questions/canonical-reference-space.md` with `status: open`, linking every candidate note under `## Candidates` and stating under `## What would settle it` what evidence would close it (FR-028)
 - [X] T043 [US4] Write `docs/vault/theory/ale-method.md`: what Activation Likelihood Estimation is and what changes when it moves from brain to heart, citing Turkeltaub 2002 and Eickhoff 2009/2012 by DOI
-- [ ] T044 [US4] Update `docs/vault/index.md` with the new notes, and confirm no scientific claim about cardiac results appears anywhere in the vault (FR-029, quickstart Scenario 6)
+- [X] T044 [US4] Update `docs/vault/index.md` with the new notes, and confirm no scientific claim about cardiac results appears anywhere in the vault (FR-029, quickstart Scenario 6)
 
 **Checkpoint**: The survey is complete and honest, the question is open and linked, and the phase
 has claimed nothing.
@@ -155,10 +155,10 @@ has claimed nothing.
 
 ## Phase 7: Polish & Cross-Cutting Concerns
 
-- [ ] T045 Walk every quickstart scenario on a fresh clone in a clean directory, exactly as written in [quickstart.md](./quickstart.md); fix the guide wherever reality and text disagree
-- [ ] T046 Update `.specify/memory/constitution.md`: mark `TODO(VENDOR_INTEROP)` resolved or restate it with what the survey established, and bump the constitution version with a Sync Impact Report
-- [ ] T047 [P] Add `CONTRIBUTING.md`: how to add a note, when a decision needs a record, how to run the checker before pushing
-- [ ] T048 Final clean run of `vaultcheck`, full `pytest` pass, then commit and push
+- [X] T045 (Done 2026-09-24, six defects found and fixed; see docs/vault/logs/log-2026-09-24-quickstart-walk.md.) Walk every quickstart scenario on a fresh clone in a clean directory, exactly as written in [quickstart.md](./quickstart.md); fix the guide wherever reality and text disagree
+- [X] T046 (Done 2026-09-24: VENDOR_INTEROP restated from survey evidence, REFERENCE_ANATOMY added, constitution 1.4.0.) Update `.specify/memory/constitution.md`: mark `TODO(VENDOR_INTEROP)` resolved or restate it with what the survey established, and bump the constitution version with a Sync Impact Report
+- [X] T047 [P] Add `CONTRIBUTING.md`: how to add a note, when a decision needs a record, how to run the checker before pushing
+- [X] T048 Final clean run of `vaultcheck`, full `pytest` pass, then commit and push
 
 ---
 
