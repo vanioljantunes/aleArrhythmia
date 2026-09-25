@@ -76,7 +76,8 @@ on derived data. Not checked, recorded below.
 | A mean shape exists | Gives the project a concrete reference anatomy without building one |
 | Population based | The atlas represents a UK Biobank population, which may not match an arrhythmia population. Any map inherits that mismatch |
 | No atria | An atrial reference anatomy is still missing |
-| No stated licence | Blocks redistribution inside this repository, since Principle I requires a positive open licence for data. Does not block use, so the dependency is carried by fetching at setup. The viewer shows the gap under [[ADR-0007-unavailable-capability]] |
+| No stated licence | Blocks redistribution inside this repository, since Principle I requires a positive open licence for data. Does not block use, so the dependency could be carried by fetching at setup |
+| Superseded in practice, 2026-09-25 | The project no longer needs this file. [[ADR-0008-reference-anatomy]] adopts an Attribution-licensed four-chamber mesh instead, and [[nagel-biatrial-shape-model]] covers the atria. This note stays because the reasoning that led here is worth keeping |
 
 ## Unknowns
 

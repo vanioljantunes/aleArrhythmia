@@ -27,6 +27,7 @@ New here: read [[README]] first.
 | [[ADR-0005-writing-style]] | Writing rules; mechanical tells blocked, AI vocabulary warned | accepted |
 | [[ADR-0006-viewer-versions]] | CARTO and Affera viewer versions, switchable, adapter plus display mode | accepted |
 | [[ADR-0007-unavailable-capability]] | A committed but blocked capability shows as a disabled control naming the gap | accepted |
+| [[ADR-0008-reference-anatomy]] | The viewer draws the Rodero average four-chamber mesh, CC-BY-4.0 | accepted |
 
 ## Open questions
 
@@ -57,7 +58,10 @@ Reference anatomy and tooling:
 
 | Note | What it is |
 |---|---|
-| [[cardiac-atlas-project-biventricular-modes]] | Open statistical shape model of the ventricles |
+| [[cardiac-atlas-project-biventricular-modes]] | Ventricular shape model with no stated licence, superseded |
+| [[rodero-four-chamber-meshes]] | Four-chamber mesh under CC-BY-4.0, the project's reference anatomy |
+| [[nagel-biatrial-shape-model]] | Bi-atrial shape model under CC-BY-4.0, closes the atrial gap |
+| [[other-open-cardiac-meshes]] | Everything else surveyed, and what is confirmed unusable |
 | [[openep-and-pulse-ep]] | Open parsers for commercial mapping exports |
 
 Mapping system exports:
@@ -86,6 +90,7 @@ Gaps:
 | [[log-2026-09-23-viewer-versions]] | Session that asked for CARTO and Affera versions of the map |
 | [[log-2026-09-24-survey-and-gaps]] | Survey landed; atlas licence read, Affera control settled |
 | [[log-2026-09-24-quickstart-walk]] | Fresh-clone walk of the quickstart; six guide defects fixed |
+| [[log-2026-09-25-anatomy-licensing]] | An anatomy the project may ship, and the atrial gap closed |
 
 ## Templates
 

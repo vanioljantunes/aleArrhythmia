@@ -1,8 +1,12 @@
 <!--
 Sync Impact Report
 ==================
-Version change: 1.3.0 -> 1.4.0
-Bump rationale: MINOR (1.4.0). TODO(VENDOR_INTEROP) is answered in part and restated with what
+Version change: 1.4.0 -> 1.5.0
+Bump rationale: MINOR (1.5.0). TODO(REFERENCE_ANATOMY) is resolved. An openly licensed reference
+anatomy exists for both the ventricles and the atria, so nothing in the project is blocked on
+anatomy any more. The entry is answered in place, not deleted. No principle changed.
+
+Prior bump, MINOR (1.4.0). TODO(VENDOR_INTEROP) is answered in part and restated with what
 the Phase 0 survey established, and a second deferred TODO is added for the reference anatomy,
 whose publisher states no licence. The survey found no public export format for Affera, so the
 obligation ADR-0006 took on cannot be met yet; the restated TODO names that as the blocker rather
@@ -29,7 +33,8 @@ approves software licences and the vault prose is CC-BY-4.0; the principle now a
 licence appropriate to each kind. Governance bound its citation duty to pull request descriptions,
 but the project deliberately does not use pull requests (ADR-0003); the duty now binds the commit
 message. Neither change weakens an obligation, each moves it onto a surface that exists.
-(1.4.0: TODO(VENDOR_INTEROP) restated from the survey, TODO(REFERENCE_ANATOMY) added, 2026-09-24.
+(1.5.0: TODO(REFERENCE_ANATOMY) resolved, licensed anatomy found for both chambers, 2026-09-25.
+1.4.0: TODO(VENDOR_INTEROP) restated from the survey, TODO(REFERENCE_ANATOMY) added, 2026-09-24.
 1.3.0: Principle V names CARTO 3 and Affera, viewer modes bounded, 2026-09-23.
 1.2.3: unrelated folder reference removed, 2026-09-21.
 1.2.2: punctuation per ADR-0005, 2026-09-21.
@@ -47,6 +52,7 @@ Modified principles:
     for prose, notes and data)
 
 Modified sections:
+  - Deferred TODOs (REFERENCE_ANATOMY resolved 2026-09-25)
   - Deferred TODOs (VENDOR_INTEROP restated from survey evidence; REFERENCE_ANATOMY added)
   - Governance / Compliance review (citation duty moved from pull request description to commit
     message, with the PR case retained conditionally)
@@ -78,11 +84,12 @@ Deferred TODOs:
     the Affera control stays disabled under ADR-0007 until that changes. Still unresearched: the
     field-level contents of every format, and the display conventions CARTO 3 and Affera use.
     Principle V holds regardless of the answer. Evidence: `docs/vault/literature/`.
-  - TODO(REFERENCE_ANATOMY): the project needs a reference anatomy to render and to place
-    coordinates on. The surveyed candidate, the Cardiac Atlas Project biventricular modes, states
-    no licence, so Principle I forbids shipping it inside this repository. Use and citation are
-    unaffected, and the dependency can be carried by fetching the file at setup. No open atrial
-    reference anatomy has been found at all. Blocks any bundled anatomy, not the choice of space.
+  - RESOLVED 2026-09-25 (was TODO(REFERENCE_ANATOMY)): the Rodero average four-chamber mesh,
+    Zenodo 4593739, states Creative Commons Attribution 4.0 International on its record, read
+    directly. It may be bundled with attribution, so Principle I is satisfied. The atrial gap is
+    closed too: the Nagel and Loewe bi-atrial shape model, Zenodo 5095379, carries the same
+    licence. The earlier candidate, which states no licence, is superseded rather than removed.
+    Recorded as ADR-0008.
   - RESOLVED 2026-09-20 (was TODO(LICENSE)): Apache-2.0 for the software, CC-BY-4.0 for the vault
     prose. Apache-2.0 for its explicit patent grant, which matters in a field where device vendors
     hold patents; CC-BY-4.0 so the theory can be quoted and reused with attribution. Both licences
@@ -310,4 +317,4 @@ embodies a decision MUST cite that decision's ADR id in its message; where the p
 requests, the same obligation applies to the pull request description. Complexity that violates
 Principle VII MUST be justified in writing in the plan's Complexity Tracking section, or removed.
 
-**Version**: 1.4.0 | **Ratified**: 2026-09-20 | **Last Amended**: 2026-09-24
+**Version**: 1.5.0 | **Ratified**: 2026-09-20 | **Last Amended**: 2026-09-25
