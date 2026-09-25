@@ -49,6 +49,24 @@
 | SC-002 says "smooth enough to feel continuous" rather than naming a frame rate | A frame rate is an implementation measure. The user-facing property is whether rotation feels continuous. The plan should turn this into a measurable threshold on named hardware |
 | SC-001 and SC-003 say "a normal laptop" and "a normal connection" | Deliberately loose at specification level. The plan must fix what these mean before they can be tested |
 
+### Iteration 2, 2026-09-25, after clarification
+
+Three questions asked and answered. All 16 checkbox items still pass, 16/16 before and after, with
+no regressions. What improved was the quality of items that already passed:
+
+| Item | Change |
+|---|---|
+| Success criteria are measurable | Strengthened. SC-001 to SC-003 previously said "a normal laptop" and "smooth enough". They now state 2 MB, 60,000 triangles, 30 frames per second on integrated graphics, and 2 seconds on a 20 Mbps connection. The caveat recorded in iteration 1 is resolved |
+| Requirements are testable, FR-005 | Strengthened. It previously said the viewer must name "whichever" structures it makes separately visible, which dodged the question. It now requires each structure to be independently toggleable |
+| Requirements are testable, FR-020 | Strengthened. It previously deferred to "a criterion the documentation states". It now names byte-identical checksum comparison with pinned tool versions |
+
+Two answers introduce a cost the specification now carries openly rather than hiding:
+
+| Cost | Where it is recorded |
+|---|---|
+| Byte-identical matching fails on any dependency change, and an outside reader years from now is likely to hit that | Clarifications, the assumptions table, FR-020b, and an edge case. FR-020b requires geometry counts beside the hash so the failure is diagnosable |
+| The triangle budget and the full structure list may not both be satisfiable | SC-003a and an edge case require the conflict to be recorded rather than resolved silently |
+
 ### Open risk carried into planning
 
 The feature depends on a 58 MB research-grade volume mesh that nobody on this project has yet
