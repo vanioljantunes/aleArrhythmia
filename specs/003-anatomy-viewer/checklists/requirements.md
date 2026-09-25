@@ -67,6 +67,38 @@ Two answers introduce a cost the specification now carries openly rather than hi
 | Byte-identical matching fails on any dependency change, and an outside reader years from now is likely to hit that | Clarifications, the assumptions table, FR-020b, and an edge case. FR-020b requires geometry counts beside the hash so the failure is diagnosable |
 | The triangle budget and the full structure list may not both be satisfiable | SC-003a and an edge case require the conflict to be recorded rather than resolved silently |
 
+### Iteration 3, 2026-09-25, second clarification session
+
+Four more questions asked and answered. The feature grew: 40 functional requirements to 58, 12
+success criteria to 17, four user stories to five. All 16 checkbox items still pass, 16/16 before
+and after, no regressions.
+
+The scope changed materially, so two statements that had been true became false and were replaced
+rather than left standing:
+
+| Obsolete text | Replaced with |
+|---|---|
+| Title and input line saying "anatomy only, no statistics" | A description naming both modes |
+| "This feature draws that heart and nothing else" | A statement that it adds a second mode and computes nothing |
+| FR-013, which forbade any coordinate readout | A rule that every coordinate is stated as belonging to the displayed geometry's own frame |
+
+FR-013 is worth noting as a genuine conflict rather than a tidy-up. The earlier version forbade
+showing coordinates at all, on the grounds that doing so would imply a settled reference space. The
+author then asked for coordinate entry. Both concerns are satisfied by scoping every coordinate to
+the frame of whatever is on screen, which is why the requirement was rewritten instead of deleted.
+
+### Safety requirements added this session
+
+The feature now touches clinical data, which it did not before. These were not requested and are not
+negotiable:
+
+| Requirement | Why |
+|---|---|
+| FR-013j, nothing transmitted | A personal static site must not become a processor of clinical data |
+| FR-013k, nothing persisted | Clinical data at rest on a possibly shared machine |
+| FR-013m, no study file in the repository | The obvious failure mode for a public project |
+| FR-013n, de-identification verified by inspection | Mapping exports routinely carry identifiers in metadata. Being told a file is anonymised is a claim, not a guarantee |
+
 ### Open risk carried into planning
 
 The feature depends on a 58 MB research-grade volume mesh that nobody on this project has yet
@@ -80,6 +112,18 @@ opened. Three things are unknown and cannot be settled by specification:
 
 These are correctly left to planning, where the mesh can actually be inspected. The specification is
 written so that the honest answer to each is acceptable.
+
+Added 2026-09-25, from the second clarification session:
+
+| Unknown | Effect if it goes badly |
+|---|---|
+| Whether a study export actually contains chamber geometry as well as points | Patient mode depends on it. If an export carries only points, there is nothing to draw them on, and patient mode has no self-consistent frame after all |
+| When an anonymised verified export will exist | The importer cannot be written or tested until then. FR-013p keeps the control disabled meanwhile, so the feature still ships without it |
+| Whether a real export's point count fits the performance budget | A study with thousands of points may exceed what the viewer can draw smoothly |
+
+The first of these is the one that would hurt. Patient mode is coherent only because geometry and
+points are assumed to travel together in the same file. That assumption is recorded and unverified,
+and inspecting a real export is what settles it.
 
 ## Notes
 

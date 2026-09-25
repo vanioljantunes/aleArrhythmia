@@ -1,4 +1,4 @@
-# Feature Specification: The first 3D anatomy viewer
+# Feature Specification: The first 3D viewer
 
 **Feature Branch**: `main`
 
@@ -6,7 +6,7 @@
 
 **Status**: Draft
 
-**Input**: User description: build the first 3D anatomy viewer as a page inside the project's web section. Anatomy only, no statistics. The anatomy is the Rodero average four-chamber mesh adopted in ADR-0008.
+**Input**: User description: build the first 3D viewer as a page inside the project's web section. Opens on the reference anatomy adopted in ADR-0008. A second mode shows one study's own geometry with its own points, at patient level only, read entirely in the browser. No statistics, no pooling, no registration between the two.
 
 ## Context
 
@@ -15,17 +15,35 @@ reference space, and until now it had no anatomy it was allowed to ship either. 
 last of those: the Rodero average four-chamber mesh is licensed CC-BY-4.0 and may be bundled with
 attribution.
 
-This feature draws that heart and nothing else.
+This feature draws that heart, and adds a second mode for looking at a single study on its own
+terms. It computes nothing.
 
 | In | Out |
 |---|---|
 | A reference heart a reader can rotate, zoom and inspect | Any likelihood map |
-| Provenance, licence and attribution visible to the reader | Any focus, coordinate or study data |
-| A reproducible route from the published source file to web geometry | Any ALE computation |
-| Honest statements about what is not yet decided | Any claim about arrhythmia |
+| A patient mode showing one study's own geometry and its own points | Any pooling across studies |
+| Provenance, licence and attribution visible to the reader | Any ALE computation |
+| A reproducible route from the published source file to web geometry | Any claim about arrhythmia |
+| Honest statements about what is not yet decided | Any registration between patient and mean |
 
 The restraint is the point. A viewer that showed a coloured overlay would be read as a result, and
 there is no result. Feature 001 built machinery specifically to stop that happening.
+
+### Two modes, never mixed
+
+A coordinate from a mapping system lives in that patient's own frame, built by the catheter during
+that procedure. The reference mesh is a population mean. The two share no frame, so a patient point
+drawn on the mean heart would be placed wrongly while looking authoritative.
+
+| Mode | Geometry | Points | Frame |
+|---|---|---|---|
+| Population mean | The mesh adopted in ADR-0008 | None from any study | The mesh's own |
+| Patient | That study's own reconstructed shell | That study's own points | That patient's own |
+
+Each mode is internally consistent because geometry and points come from the same source. The modes
+are mutually exclusive, and nothing crosses between them. Registering a patient onto the mean is the
+job of a later feature, and it needs the canonical reference space that Principle II still leaves
+open.
 
 ## Clarifications
 
@@ -44,6 +62,22 @@ there is no result. Feature 001 built machinery specifically to stop that happen
   than mysterious, the geometry counts are recorded alongside the hash, so a mismatch can be told
   apart from a shape change. Rejected: geometric tolerance, which survives version drift but was not
   chosen; and a manifest with no automated check, which is not a check.
+- Q: Should the viewer accept coordinates and vendor exports, given that patient coordinates and the
+  mean mesh share no frame? -> A: Yes, but patient level only for this first release. The viewer
+  shows a study's own geometry together with that study's own points, so no registration is needed
+  and nothing is misplaced. Both patient level and population level are wanted eventually.
+- Q: A vendor export is real patient data. Where is it processed? -> A: Never leaves the browser. No
+  upload, no server, no storage, nothing in logs. The site keeps no data-processing role. Rejected:
+  server-side processing, which would make a personal site a processor of clinical data; and
+  optional local persistence, which leaves clinical data at rest on possibly shared machines.
+- Q: What does the public page show before any file is loaded? -> A: The population mean heart, with
+  patient import as a separate mode. Rejected: a bundled synthetic study, because an invented
+  arrhythmia focus is fiction this project has been careful never to display; and an empty state,
+  which shows nothing to any visitor without proprietary clinical software.
+- Q: Nobody has a CARTO export, so the importer cannot be written or tested. How do we proceed? ->
+  A: Obtain an anonymised real export first. The importer is therefore blocked until one exists, and
+  ships in a second stage. Rejected: building against the open parser's documented format with a
+  synthetic test file, which would start sooner but leave the importer unverified.
 
 ## User Scenarios & Testing *(mandatory)*
 
@@ -136,6 +170,36 @@ present, not operable, and states why and as of when.
 
 ---
 
+### User Story 5 - Someone looks at one study's own map (Priority: P2)
+
+An electrophysiologist opens a study from their own system and sees that patient's chamber geometry
+with that patient's recorded points on it, in the patient's own frame. Nothing is compared to anyone
+else, and nothing leaves their machine.
+
+**Why this priority**: This is what the project is ultimately for, and it is the first step toward
+it. Below the first two because the population mean must render correctly before a second mode is
+worth having, and because the importer is blocked on obtaining a real export.
+
+**Independent Test**: Load a study file, confirm the geometry and its points appear together, and
+confirm by inspecting network activity that nothing was transmitted.
+
+**Acceptance Scenarios**:
+
+1. **Given** the viewer in population mode, **When** the user loads a study file, **Then** the view
+   switches to patient mode and shows that study's geometry, not the mean
+2. **Given** patient mode, **When** the study's points are displayed, **Then** they sit on that
+   study's own geometry, in its own frame, with no registration applied
+3. **Given** a loaded study, **When** network activity is inspected, **Then** no request carrying the
+   file or its contents was made
+4. **Given** a loaded study, **When** the page is reloaded, **Then** the data is gone and the viewer
+   returns to population mode
+5. **Given** patient mode, **When** the user looks at the page, **Then** it states that the view is
+   one patient's own frame and is not comparable to any other study
+6. **Given** any mode, **When** the user inspects the view, **Then** points from one mode are never
+   drawn on the geometry of the other
+
+---
+
 ### Edge Cases
 
 | Case | Expected |
@@ -150,6 +214,11 @@ present, not operable, and states why and as of when.
 | The visitor hides every structure | The viewer says so and offers a way to restore them, rather than showing an empty area that reads as a failure |
 | Decimation to the triangle budget would lose a structure | The conflict is recorded as a finding, not resolved silently by dropping the structure or quietly exceeding the budget |
 | A rebuild produces a different checksum | The recorded geometry counts show whether the shape changed or only a dependency version did |
+| A study file will not parse | A stated error naming what was expected, and the viewer stays in its previous mode |
+| A study contains thousands of points | They render within the performance budget, or the viewer says how many it is showing and why |
+| An entered coordinate falls outside the geometry | Shown as outside, never silently clamped or hidden |
+| A user tries to compare a patient view with the mean | The modes are exclusive, so the comparison cannot be made by accident. The page says why |
+| A file turns out to carry identifiers | It is not used. FR-013n requires the file to be inspected before use, not trusted |
 | Someone assumes the colours mean something | No colour on the model encodes any measurement, and the page says so |
 
 ## Requirements *(mandatory)*
@@ -181,8 +250,57 @@ present, not operable, and states why and as of when.
   the viewer exploratory, as Principle II requires until that choice is recorded.
 - **FR-012**: The page MUST carry the research-use statement: a research tool, not a medical device,
   and nothing here should guide a procedure.
-- **FR-013**: The viewer MUST NOT display any coordinate readout, axis label or grid that would imply
-  a coordinate system has been settled.
+- **FR-013**: Any coordinate the viewer shows or accepts MUST be stated as belonging to the frame of
+  the geometry currently displayed, and MUST NOT be presented as a canonical or cross-study
+  coordinate. No axis label, grid or readout may imply that a reference space has been chosen.
+
+### Functional requirements, the two modes
+
+- **FR-013a**: The viewer MUST have exactly two modes, population mean and patient, and MUST make the
+  active one obvious at all times.
+- **FR-013b**: The viewer MUST open in population mean mode.
+- **FR-013c**: The modes MUST be mutually exclusive. Points belonging to one mode MUST NEVER be drawn
+  on the geometry of the other.
+- **FR-013d**: Patient mode MUST state that the view is one patient's own frame and is not comparable
+  to any other study or to the population mean.
+- **FR-013e**: The viewer MUST NOT offer, imply or perform any registration between a patient frame
+  and the mean, since no canonical reference space has been chosen.
+
+### Functional requirements, coordinates
+
+- **FR-013f**: The user MUST be able to enter coordinates manually and see them marked on the
+  geometry currently displayed.
+- **FR-013g**: An entered coordinate that falls outside the displayed geometry MUST be shown as such
+  rather than silently clamped, hidden or moved.
+- **FR-013h**: Every displayed point MUST be removable, and the user MUST be able to clear all points
+  at once.
+- **FR-013i**: A point MUST carry no meaning beyond its position. Nothing about a marker may encode a
+  probability, a likelihood or any other result.
+
+### Functional requirements, patient data
+
+- **FR-013j**: A study file MUST be read entirely within the browser. The viewer MUST NOT transmit
+  the file, any part of it, or anything derived from it, to any server.
+- **FR-013k**: The viewer MUST NOT persist study data. Reloading the page MUST leave nothing behind.
+- **FR-013l**: The page MUST tell the user, before they choose a file, that it is read locally and
+  never uploaded.
+- **FR-013m**: No patient study file, anonymised or otherwise, may be committed to the repository or
+  served from the site.
+- **FR-013n**: Any export used to develop or test the importer MUST be verified as de-identified
+  before use, by inspecting the file itself rather than accepting an assurance. Mapping exports
+  routinely carry identifiers in metadata, so being told a file is anonymised is a claim to check.
+- **FR-013o**: The check performed under FR-013n, and what it examined, MUST be recorded in the
+  vault.
+
+### Functional requirements, the importer
+
+- **FR-013p**: Until an anonymised real export has been obtained and verified, the file import
+  control MUST appear disabled under ADR-0007, stating that no verified sample exists and the date
+  last checked.
+- **FR-013q**: The importer MUST NOT be described as supporting any system until it has been run
+  against a real export from that system.
+- **FR-013r**: A file that cannot be parsed MUST produce a stated error naming what was expected, and
+  MUST leave the viewer in its previous mode rather than in a broken state.
 
 ### Functional requirements, provenance and licence
 
@@ -276,6 +394,14 @@ present, not operable, and states why and as of when.
 - **SC-010**: A device without 3D support shows a stated message and a still image, never an empty
   area.
 - **SC-011**: The traceability checks pass with this feature complete.
+- **SC-012**: Loading a study file produces zero network requests carrying the file or anything
+  derived from it, confirmed by inspecting network activity.
+- **SC-013**: Reloading the page after a study is loaded leaves no trace of it, confirmed by
+  inspecting browser storage.
+- **SC-014**: Zero points from one mode are ever drawn on the geometry of the other.
+- **SC-015**: A reader in patient mode can state that the view is one patient's own frame and is not
+  comparable to another study.
+- **SC-016**: Zero patient study files exist anywhere in the repository or on the site.
 
 ## Assumptions
 
@@ -290,6 +416,8 @@ present, not operable, and states why and as of when.
 | The reader is on a current browser | Standard for a public personal site |
 | Segment labelling may not ship in this feature | FR-025. Whether the landmarks are derivable is an empirical question, and the honest answer may be no |
 | The mesh is shown in whatever orientation the source uses, described plainly | No reference space is chosen, so the project cannot claim a canonical orientation |
+| A study export contains both the chamber geometry and the recorded points | This is what makes patient mode self-consistent. Unverified until a real export is inspected |
+| The importer ships in a second stage, after the viewer | The author chose to obtain a verified anonymised export before the importer is written, so it cannot ship with the first release |
 
 ## Dependencies
 
@@ -299,13 +427,16 @@ present, not operable, and states why and as of when.
 | Feature 002, the web section | FR-001. The viewer is a page inside it |
 | ADR-0007, the disabled-control pattern | FR-023 and FR-025 apply it |
 | The existing traceability checks | FR-033 |
+| An anonymised, verified study export | FR-013p. The importer is blocked until one exists |
 
 ## Out of scope
 
 | Excluded | Reason |
 |---|---|
 | Any likelihood map, heatmap or overlay | No statistical core exists. This is the whole point of the restraint |
-| Any focus, coordinate or study data | Nothing to place until a reference space is chosen |
+| Pooling anything across studies | That needs one shared space, which Principle II leaves open |
+| Registering a patient frame onto the mean | Same reason. Attempting it now would misplace points while looking authoritative |
+| Any server-side handling of study data | FR-013j. The site keeps no data-processing role |
 | Importing vendor export files | No importer exists. ADR-0007 says show the gap instead |
 | The separate atrial shape model | The four-chamber mesh already includes atrial geometry. The atrial model waits for a feature that needs it |
 | Cutting, slicing or measuring the model | A measurement tool on an unvalidated mesh invites exactly the misuse Principle VI forbids |
