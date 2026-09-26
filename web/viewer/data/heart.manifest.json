@@ -148,6 +148,18 @@
         "vertices": 198
       }
     },
+    "view": {
+      "up": [
+        -0.5908,
+        0.5363,
+        0.6028
+      ],
+      "anterior": [
+        -0.681,
+        -0.7321,
+        -0.0161
+      ]
+    },
     "segments": {
       "shipped": false,
       "origin_phi_deg": 70.79,

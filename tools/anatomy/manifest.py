@@ -43,7 +43,7 @@ def per_structure(d: Decimated) -> dict[str, dict[str, int]]:
 
 
 def build(source_sha256: str, d: Decimated, report: SegmentReport, glb: bytes,
-          built: date | None = None) -> dict:
+          view: dict[str, list[float]], built: date | None = None) -> dict:
     return {
         "source": {**SOURCE, "sha256": source_sha256},
         "pipeline": {
@@ -60,6 +60,7 @@ def build(source_sha256: str, d: Decimated, report: SegmentReport, glb: bytes,
             "triangles": int(len(d.triangles)),
             "vertices": int(len(d.positions)),
             "per_structure": per_structure(d),
+            "view": view,
             "segments": {
                 "shipped": report.check == "pass",
                 "origin_phi_deg": report.origin_deg,

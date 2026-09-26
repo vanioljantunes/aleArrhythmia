@@ -28,6 +28,7 @@ New here: read [[README]] first.
 | [[ADR-0006-viewer-versions]] | CARTO and Affera viewer versions, switchable, adapter plus display mode | accepted |
 | [[ADR-0007-unavailable-capability]] | A committed but blocked capability shows as a disabled control naming the gap | accepted |
 | [[ADR-0008-reference-anatomy]] | The viewer draws the Rodero average four-chamber mesh, CC-BY-4.0 | accepted |
+| [[ADR-0009-study-data-in-the-browser]] | Study exports are read in the browser, never sent, never stored; the two modes never mix | accepted |
 
 ## Open questions
 

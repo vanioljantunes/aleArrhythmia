@@ -1,0 +1,364 @@
+// The anatomy viewer. Scene, camera, controls, the population mean document, structure toggles,
+// the segment overlay and manual coordinates. Nothing here computes a result.
+import * as THREE from 'three';
+import { OrbitControls } from '../vendor/OrbitControls.js';
+import { GLTFLoader } from '../vendor/GLTFLoader.js';
+import { Document, Modes } from './modes.js';
+
+const $ = (id) => document.getElementById(id);
+
+const AHA = [
+  'Basal anterior', 'Basal anteroseptal', 'Basal inferoseptal', 'Basal inferior', 'Basal inferolateral',
+  'Basal anterolateral', 'Mid anterior', 'Mid anteroseptal', 'Mid inferoseptal', 'Mid inferior',
+  'Mid inferolateral', 'Mid anterolateral', 'Apical anterior', 'Apical septal', 'Apical inferior',
+  'Apical lateral', 'Apex',
+];
+const SEGMENT_COLOURS = [
+  0xe6194b, 0x3cb44b, 0xffe119, 0x4363d8, 0xf58231, 0x911eb4, 0x46f0f0, 0xf032e6, 0xbcf60c, 0xfabebe,
+  0x008080, 0xe6beff, 0x9a6324, 0xfffac8, 0x800000, 0xaaffc3, 0x808000,
+];
+const UNSEGMENTED = new THREE.Color(0xd9d6cf);
+
+// Structure families, for telling parts apart. Ids from structures.json.
+function family(id) {
+  if (id <= 2) return 'ventricle';
+  if (id <= 4) return 'atrium';
+  if (id <= 6) return 'vessel';
+  if (id <= 10) return 'valve';
+  if (id <= 17) return 'inlet';
+  return 'border';
+}
+const FAMILY_COLOUR = {
+  ventricle: 0xc48f7c, atrium: 0xd4b09c, vessel: 0xb4bfcf, valve: 0xa6b8a0, inlet: 0xb3b0cc, border: 0xcdbfa9,
+};
+const POINT_COLOUR = 0x1d6fe0;
+const LOAD_TIMEOUT_MS = 10000;
+
+// Exposed for the browser tests. Not an API.
+const state = { ready: false, frameTimes: [], manifest: null, names: null, initial: null };
+window.aleViewer = state;
+
+function webglAvailable() {
+  try {
+    const c = document.createElement('canvas');
+    return !!(window.WebGLRenderingContext && (c.getContext('webgl2') || c.getContext('webgl')));
+  } catch (e) {
+    return false;
+  }
+}
+
+function showFallback(reason) {
+  $('stage').hidden = true;
+  $('loading').hidden = true;
+  $('fallback-reason').textContent = reason;
+  $('fallback').hidden = false;
+}
+
+function showError(text) {
+  $('loading').hidden = true;
+  const e = $('error');
+  e.hidden = false;
+  e.textContent = text + ' ';
+  const a = document.createElement('a');
+  a.href = '/projects/ale/';
+  a.textContent = 'Back to the section.';
+  e.append(a);
+}
+
+async function fetchJson(url) {
+  const r = await fetch(url);
+  if (!r.ok) throw new Error(`${url} answered ${r.status}`);
+  return r.json();
+}
+
+function loadGlb(url, ms) {
+  return new Promise((resolve, reject) => {
+    const timer = setTimeout(() => reject(new Error(`the heart did not load within ${ms / 1000} seconds`)), ms);
+    new GLTFLoader().load(
+      url,
+      (gltf) => { clearTimeout(timer); resolve(gltf); },
+      undefined,
+      () => { clearTimeout(timer); reject(new Error('the heart could not be loaded')); },
+    );
+  });
+}
+
+if (new URLSearchParams(location.search).has('still')) document.body.classList.add('still');
+
+if (!webglAvailable()) {
+  showFallback('WebGL is not available in this browser, so this is a still image of the same heart at its starting view.');
+} else {
+  main().catch((err) => showError(`The viewer stopped: ${err.message}.`));
+}
+
+async function main() {
+  const canvas = $('stage');
+  const box = $('stage-box');
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+  const scene = new THREE.Scene();
+  scene.background = new THREE.Color(matchMedia('(prefers-color-scheme: dark)').matches ? 0x1f2124 : 0xf3f2ee);
+  const camera = new THREE.PerspectiveCamera(40, 4 / 3, 1, 5000);
+  scene.add(new THREE.HemisphereLight(0xffffff, 0x8a8a8a, 1.1));
+  const key = new THREE.DirectionalLight(0xffffff, 1.4);
+  key.position.set(60, 80, 120);
+  camera.add(key);
+  scene.add(camera);
+  const controls = new OrbitControls(camera, canvas);
+  controls.enableDamping = true;
+  controls.dampingFactor = 0.12;
+  controls.enablePan = false;
+  const modes = new Modes(scene);
+  Object.assign(state, { renderer, scene, camera, controls, modes });
+
+  function resize() {
+    const w = box.clientWidth || 800;
+    const h = box.clientHeight || 600;
+    renderer.setSize(w, h, false);
+    camera.aspect = w / h;
+    camera.updateProjectionMatrix();
+  }
+  new ResizeObserver(resize).observe(box);
+  resize();
+
+  let last = performance.now();
+  renderer.setAnimationLoop(() => {
+    const now = performance.now();
+    state.frameTimes.push(now - last);
+    if (state.frameTimes.length > 240) state.frameTimes.shift();
+    last = now;
+    controls.update();
+    renderer.render(scene, camera);
+  });
+
+  const [manifest, names] = await Promise.all([fetchJson('data/heart.manifest.json'), fetchJson('structures.json')]);
+  state.manifest = manifest;
+  state.names = names.names || names;
+
+  modes.onChange((doc) => {
+    const m = $('mode');
+    m.textContent = doc.label;
+    m.dataset.mode = doc.kind;
+    $('frame-label').textContent = doc.frame;
+    $('close-study').hidden = doc.kind !== 'patient';
+    renderPoints();
+  });
+
+  await openMean();
+  wireControls();
+}
+
+async function openMean() {
+  const { modes, manifest } = state;
+  const doc = new Document('mean', 'Population mean', 'the population mean, millimetres');
+  const gltf = await loadGlb('data/heart.glb', LOAD_TIMEOUT_MS);
+  const ids = Object.keys(manifest.output.per_structure).map(Number).sort((a, b) => a - b);
+  const meshes = [];
+  gltf.scene.traverse((o) => { if (o.isMesh) meshes.push(o); });
+  if (meshes.length !== ids.length) throw new Error(`expected ${ids.length} structures, found ${meshes.length}`);
+  const model = new THREE.Group();
+  meshes.forEach((m, i) => {
+    const id = ids[i];
+    const expected = manifest.output.per_structure[String(id)].triangles;
+    const got = m.geometry.index.count / 3;
+    if (got !== expected) throw new Error(`structure ${id} has ${got} triangles, the manifest says ${expected}`);
+    m.name = `structure-${id}`;
+    m.userData.structure = id;
+    m.userData.plain = new THREE.MeshLambertMaterial({ color: FAMILY_COLOUR[family(id)], side: THREE.DoubleSide });
+    m.userData.segmented = new THREE.MeshLambertMaterial({ vertexColors: true, side: THREE.DoubleSide });
+    m.material = m.userData.plain;
+    model.add(m);
+  });
+  doc.model = model;
+  doc.group.add(model);
+  doc.bounds = new THREE.Box3().setFromObject(model);
+  modes.activate(doc);
+  frameCamera(doc.bounds);
+  buildStructureList(meshes);
+  buildSegments(meshes);
+  $('loading').hidden = true;
+  state.ready = true;
+}
+
+function frameCamera(bounds) {
+  const { camera, controls } = state;
+  const sphere = bounds.getBoundingSphere(new THREE.Sphere());
+  const r = sphere.radius;
+  const dist = (r / Math.sin(THREE.MathUtils.degToRad(camera.fov / 2))) * 1.1;
+  camera.near = r * 0.05;
+  camera.far = dist * 10;
+  camera.updateProjectionMatrix();
+  // The starting view is anterior with the base up, from two vectors the build measured on the
+  // source coordinates and recorded in the manifest. Without them, look along -z.
+  const view = state.manifest.output.view || { up: [0, 1, 0], anterior: [0, 0, 1] };
+  camera.up.fromArray(view.up).normalize();
+  camera.position.copy(sphere.center).addScaledVector(new THREE.Vector3().fromArray(view.anterior).normalize(), dist);
+  controls.target.copy(sphere.center);
+  controls.minDistance = r * 1.1;
+  controls.maxDistance = dist * 3;
+  controls.update();
+  controls.saveState();
+  state.radius = r;
+  state.initial = { position: camera.position.clone(), target: controls.target.clone() };
+}
+
+function buildStructureList(meshes) {
+  const list = $('structures');
+  list.textContent = '';
+  for (const m of meshes) {
+    const id = m.userData.structure;
+    const label = document.createElement('label');
+    const cb = document.createElement('input');
+    cb.type = 'checkbox';
+    cb.checked = true;
+    cb.dataset.structure = id;
+    cb.addEventListener('change', () => { m.visible = cb.checked; });
+    label.append(cb, ` ${state.names[String(id)] || `structure ${id}`}`);
+    list.append(label);
+  }
+  $('all-on').onclick = () => list.querySelectorAll('input').forEach((cb) => { cb.checked = true; cb.dispatchEvent(new Event('change')); });
+  $('all-off').onclick = () => list.querySelectorAll('input').forEach((cb) => { cb.checked = false; cb.dispatchEvent(new Event('change')); });
+}
+
+function buildSegments(meshes) {
+  const seg = state.manifest.output.segments;
+  const cb = $('segments');
+  const reason = $('segments-reason');
+  const legend = $('legend');
+  legend.textContent = '';
+  AHA.forEach((name, i) => {
+    const li = document.createElement('li');
+    li.style.setProperty('--c', `#${SEGMENT_COLOURS[i].toString(16).padStart(6, '0')}`);
+    li.textContent = `${i + 1} ${name}`;
+    legend.append(li);
+  });
+
+  // One colour attribute shared by every structure: segment colour on the left ventricle,
+  // one neutral tone everywhere else.
+  const segAttr = meshes[0].geometry.getAttribute('_segment');
+  const n = segAttr.count;
+  const colours = new Float32Array(n * 3);
+  const c = new THREE.Color();
+  for (let i = 0; i < n; i++) {
+    const s = segAttr.getX(i);
+    if (s > 0) c.setHex(SEGMENT_COLOURS[s - 1]); else c.copy(UNSEGMENTED);
+    colours[3 * i] = c.r; colours[3 * i + 1] = c.g; colours[3 * i + 2] = c.b;
+  }
+  const attr = new THREE.BufferAttribute(colours, 3);
+  meshes.forEach((m) => m.geometry.setAttribute('color', attr));
+
+  state.segmentCounts = () => {
+    const out = {};
+    for (const m of meshes) {
+      const idx = m.geometry.index.array;
+      const seen = new Set();
+      let coloured = 0;
+      for (let k = 0; k < idx.length; k++) {
+        const v = idx[k];
+        if (seen.has(v)) continue;
+        seen.add(v);
+        if (segAttr.getX(v) > 0) coloured++;
+      }
+      out[m.userData.structure] = coloured;
+    }
+    return out;
+  };
+
+  const apply = () => {
+    const on = cb.checked;
+    meshes.forEach((m) => { m.material = on ? m.userData.segmented : m.userData.plain; });
+    legend.hidden = !on;
+  };
+  cb.addEventListener('change', apply);
+
+  if (seg.shipped) {
+    cb.disabled = false;
+    cb.removeAttribute('aria-disabled');
+    reason.textContent = `Derived from the coordinates the mesh carries; origin at PHI ${seg.origin_phi_deg} degrees. Off by default.`;
+  } else {
+    cb.checked = false;
+    cb.disabled = true;
+    cb.setAttribute('aria-disabled', 'true');
+    reason.textContent = `Not available: the insertion check failed, ${seg.reason}; checked ${state.manifest.built}. `;
+    const a = document.createElement('a');
+    a.href = '/projects/ale/derived-heart-geometry';
+    a.textContent = 'Evidence';
+    reason.append(a);
+  }
+  apply();
+}
+
+const sphereGeometry = new THREE.SphereGeometry(1, 20, 14);
+
+function addPoint(x, y, z) {
+  const doc = state.modes.active;
+  if (!doc || !doc.bounds) return;
+  const r = state.radius * 0.012;
+  const mesh = new THREE.Mesh(sphereGeometry, new THREE.MeshLambertMaterial({ color: POINT_COLOUR }));
+  mesh.scale.setScalar(r);
+  mesh.position.set(x, y, z);
+  doc.group.add(mesh);
+  doc.points.push({ x, y, z, mesh, outside: !doc.bounds.containsPoint(mesh.position) });
+  renderPoints();
+}
+
+function removePoint(i) {
+  const doc = state.modes.active;
+  const p = doc.points.splice(i, 1)[0];
+  if (p) { doc.group.remove(p.mesh); p.mesh.material.dispose(); }
+  renderPoints();
+}
+
+function renderPoints() {
+  const doc = state.modes.active;
+  const list = $('points');
+  list.textContent = '';
+  if (!doc) return;
+  doc.points.forEach((p, i) => {
+    const li = document.createElement('li');
+    li.textContent = `${p.x}, ${p.y}, ${p.z} in ${doc.frame}`;
+    if (p.outside) {
+      const f = document.createElement('span');
+      f.className = 'flag';
+      f.textContent = ' outside the geometry';
+      li.append(f);
+    }
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.textContent = 'Remove';
+    b.addEventListener('click', () => removePoint(i));
+    li.append(b);
+    list.append(li);
+  });
+}
+
+function wireControls() {
+  $('reset').addEventListener('click', () => {
+    // With damping on, a drag leaves a decaying delta that would move the camera after reset.
+    // One undamped update applies and clears it first.
+    const c = state.controls;
+    c.enableDamping = false;
+    c.update();
+    c.reset();
+    c.enableDamping = true;
+  });
+  const read = (id) => {
+    const el = $(id);
+    const v = parseFloat(el.value);
+    el.setCustomValidity(Number.isFinite(v) ? '' : 'a number is needed');
+    return v;
+  };
+  const add = () => {
+    const x = read('cx'), y = read('cy'), z = read('cz');
+    if ([x, y, z].every(Number.isFinite)) addPoint(x, y, z);
+    else $('cx').reportValidity();
+  };
+  $('add-point').addEventListener('click', add);
+  for (const id of ['cx', 'cy', 'cz']) {
+    $(id).addEventListener('keydown', (e) => { if (e.key === 'Enter') add(); });
+  }
+  $('clear-points').addEventListener('click', () => {
+    const doc = state.modes.active;
+    while (doc.points.length) removePoint(0);
+  });
+}

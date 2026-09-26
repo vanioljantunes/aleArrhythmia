@@ -42,7 +42,8 @@ def build(source: Path, out: Path, quiet: bool = False) -> dict:
     log(f"segments: {report.check}: {report.reason}")
     prims = {int(s): d.triangles[d.owner == s] for s in np.unique(d.owner)}
     glb = write_glb(d.positions, d.normals, seg_out, prims, GENERATOR)
-    man = mf.build(mf.sha256_file(source), d, report, glb)
+    view = segments.view_frame(mesh.points, mesh.scalars)
+    man = mf.build(mf.sha256_file(source), d, report, glb, view)
     out.mkdir(parents=True, exist_ok=True)
     (out / "heart.glb").write_bytes(glb)
     (out / "heart.manifest.json").write_text(mf.dumps(man), encoding="utf-8")

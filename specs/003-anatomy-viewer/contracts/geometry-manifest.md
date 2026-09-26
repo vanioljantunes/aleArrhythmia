@@ -37,6 +37,7 @@ rebuilding them.
     "triangles": 59000,
     "vertices": 31000,
     "per_structure": {"1": {"triangles": 15000, "vertices": 7800}},
+    "view": {"up": [0.0, 0.0, 1.0], "anterior": [0.0, -1.0, 0.0]},
     "segments": {"shipped": true, "origin_phi_deg": -45.0, "check": "pass"}
   },
   "built": "2026-09-25"
@@ -49,6 +50,7 @@ rebuilding them.
 | `python` and `numpy` are exact versions | FR-020a |
 | Counts are present even when the hash matches | FR-020b, so a future mismatch is diagnosable |
 | `segments.shipped` false means the page shows the segment control disabled with `segments.check` as the reason | FR-025, ADR-0007 |
+| `view.up` and `view.anterior` are unit vectors in the file's own frame, measured from the source coordinates: apex to base, and left ventricle towards right ventricle made perpendicular to up. The page starts its camera from them | FR-013, so the starting view is derived, not hand-tuned |
 | No field names a person, a machine, or a path outside the repository | FR-035 |
 
 ## Commands

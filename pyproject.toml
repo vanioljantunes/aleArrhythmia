@@ -19,7 +19,7 @@ dev = ["pytest>=8.0"]
 vaultcheck = "tools.vaultcheck.__main__:main"
 
 [tool.setuptools]
-packages = ["tools", "tools.vaultcheck"]
+packages = ["tools", "tools.vaultcheck", "tools.anatomy"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

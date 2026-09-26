@@ -176,6 +176,21 @@ def derive(points: np.ndarray, scalars: dict[str, np.ndarray]) -> tuple[np.ndarr
     return seg, report
 
 
+def view_frame(points: np.ndarray, scalars: dict[str, np.ndarray]) -> dict[str, list[float]]:
+    """Two unit vectors for the viewer's starting camera: up along the long axis from apex to base,
+    and anterior from the left ventricle towards the right ventricle, made perpendicular to up."""
+    z, v = scalars["Z"], scalars["V"]
+    lv = (v == LV) & (z != UNDEFINED)
+    rv = (v == RV) & (z != UNDEFINED)
+    q = points[lv] - points[lv].mean(axis=0)
+    coef, *_ = np.linalg.lstsq(np.column_stack([q, np.ones(len(q))]), z[lv], rcond=None)
+    up = coef[:3] / np.linalg.norm(coef[:3])
+    d = points[rv].mean(axis=0) - points[lv].mean(axis=0)
+    d = d - up * (d @ up)
+    anterior = d / np.linalg.norm(d)
+    return {"up": [round(float(x), 4) for x in up], "anterior": [round(float(x), 4) for x in anterior]}
+
+
 def propagate(seg_in: np.ndarray, cluster_of_input: np.ndarray, n_out: int) -> np.ndarray:
     """Output vertex segment = the most common segment among the input points in its cluster."""
     counts = np.zeros((n_out, 18), dtype=np.int64)

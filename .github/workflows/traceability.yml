@@ -27,3 +27,34 @@ jobs:
 
       - name: Tests
         run: python -m pytest -q
+
+  # Feature 003: the committed heart geometry must rebuild byte for byte from the published source,
+  # and the viewer must pass its browser tests. Fixtures are fetched, never committed (FR-013m).
+  anatomy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Cache fixtures
+        uses: actions/cache@v4
+        with:
+          path: tests/fixtures/external
+          key: fixtures-${{ hashFiles('tests/fixtures/fetch.py') }}
+
+      - name: Install
+        run: |
+          python -m pip install -e ".[dev]" -r requirements-anatomy.txt playwright
+          python -m playwright install --with-deps chromium
+
+      - name: Fetch fixtures
+        run: python tests/fixtures/fetch.py
+
+      - name: Rebuild and compare
+        run: python -m tools.anatomy verify
+
+      - name: Tests
+        run: python -m pytest tests/anatomy tests/browser tests/readers tests/test_no_study_files.py -q

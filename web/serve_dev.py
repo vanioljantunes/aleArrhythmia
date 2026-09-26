@@ -1,6 +1,11 @@
-"""Serve web/ on the loopback interface, with the rewrite the production site applies.
+"""Serve web/ on the loopback interface, with the rewrites the production site applies.
 
-/projects/ale/viewer/<anything> falls back to web/viewer/index.html. Nothing is written.
+  /projects/ale/viewer/<file>   web/viewer/<file>, falling back to web/viewer/index.html
+  /projects/ale/vendor/<file>   web/vendor/<file>
+  /projects/ale/<slug>          the vault note source docs/vault/*/<slug>.md, standing in for the
+                                section page feature 002 renders, so links can be checked for 200
+
+Loopback only. Nothing is written.
 """
 from __future__ import annotations
 
@@ -10,21 +15,41 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
-VIEWER = "/projects/ale/viewer"
+VAULT = ROOT.parent / "docs" / "vault"
+SECTION = "/projects/ale"
+MISSING = str(ROOT / "nonexistent")
 
 
 class Handler(http.server.SimpleHTTPRequestHandler):
+    # Windows may map .js to text/plain through the registry, which blocks module scripts.
+    extensions_map = {
+        **http.server.SimpleHTTPRequestHandler.extensions_map,
+        ".js": "text/javascript; charset=utf-8",
+        ".mjs": "text/javascript; charset=utf-8",
+        ".json": "application/json",
+        ".glb": "model/gltf-binary",
+        ".md": "text/markdown; charset=utf-8",
+    }
+
     def translate_path(self, path: str) -> str:
         clean = path.split("?", 1)[0].split("#", 1)[0]
-        if clean.startswith(VIEWER):
-            rest = clean[len(VIEWER):].lstrip("/")
-            candidate = (ROOT / "viewer" / rest).resolve()
-            if rest and candidate.is_file() and str(candidate).startswith(str(ROOT)):
-                return str(candidate)
-            return str(ROOT / "viewer" / "index.html")
+        if clean == SECTION or clean == SECTION + "/":
+            return MISSING
+        if clean.startswith(SECTION + "/"):
+            head, _, tail = clean[len(SECTION) + 1:].partition("/")
+            if head in ("viewer", "vendor"):
+                if tail:
+                    candidate = (ROOT / head / tail).resolve()
+                    if candidate.is_file() and str(candidate).startswith(str(ROOT)):
+                        return str(candidate)
+                return str(ROOT / "viewer" / "index.html") if head == "viewer" else MISSING
+            if head and not tail and "." not in head:
+                for note in VAULT.rglob(f"{head}.md"):
+                    return str(note)
+            return MISSING
         candidate = (ROOT / clean.lstrip("/")).resolve()
         if not str(candidate).startswith(str(ROOT)):
-            return str(ROOT / "nonexistent")
+            return MISSING
         return str(candidate)
 
     def end_headers(self) -> None:
@@ -39,7 +64,7 @@ def main() -> None:
     port = int(sys.argv[1]) if len(sys.argv) > 1 else 8788
     socketserver.TCPServer.allow_reuse_address = True
     with socketserver.TCPServer(("127.0.0.1", port), Handler) as httpd:
-        print(f"viewer on http://127.0.0.1:{port}{VIEWER}/", flush=True)
+        print(f"viewer on http://127.0.0.1:{port}{SECTION}/viewer/", flush=True)
         httpd.serve_forever()
 
 

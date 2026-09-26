@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Anatomy viewer, aleArrhythmia</title>
+  <meta name="description" content="A four-chamber population mean heart that rotates, with each of its 24 structures switchable. Research use only.">
+  <link rel="icon" href="/favicon.ico?v=2" sizes="48x48">
+  <link rel="stylesheet" href="/site-bar.css">
+  <link rel="stylesheet" href="/site.css">
+  <style>
+    html, body { overflow-x: hidden; }
+    .vw-crumb { font-size: .9rem; margin: 0 0 .4rem; }
+    .vw-warn { border-left: 4px solid #b3541e; padding: .4rem .8rem; background: rgba(179,84,30,.07); }
+    .vw { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 1rem; margin: 1rem 0 1.4rem; }
+    .vw__stage { position: relative; aspect-ratio: 4 / 3; min-width: 0; background: #f3f2ee;
+      border: 1px solid rgba(0,0,0,.12); border-radius: 10px; overflow: hidden; }
+    .vw__stage canvas { display: block; width: 100%; height: 100%; touch-action: none; cursor: grab; }
+    .vw__stage canvas:active { cursor: grabbing; }
+    .vw__overlay { position: absolute; inset: 0; display: grid; place-items: center; text-align: center;
+      padding: 1rem; background: rgba(243,242,238,.92); }
+    .vw__overlay[hidden] { display: none; }
+    .vw__fallback img { max-width: 100%; height: auto; border-radius: 6px; }
+    .vw__controls { min-width: 0; font-size: .95rem; }
+    .vw__controls fieldset { border: 1px solid rgba(0,0,0,.12); border-radius: 8px; padding: .5rem .8rem .7rem; margin: 0 0 .9rem; }
+    .vw__controls legend { font-weight: 600; padding: 0 .3rem; }
+    .vw-mode { margin: 0 0 .6rem; }
+    .structures { max-height: 15rem; overflow: auto; }
+    .structures label { display: block; line-height: 1.5; }
+    .small { font-size: .85rem; }
+    .muted { color: #666; }
+    .disabled-reason { font-size: .85rem; color: #555; margin: .2rem 0 .6rem; }
+    .ctl-disabled button { cursor: not-allowed; opacity: .6; }
+    .legend { columns: 2; font-size: .82rem; padding-left: 1.4rem; margin: .4rem 0 0; }
+    .legend[hidden] { display: none; }
+    .legend li::before { content: ""; display: inline-block; width: .8em; height: .8em; margin-right: .35em;
+      border-radius: 2px; background: var(--c); vertical-align: -.05em; }
+    .coord-row { display: flex; flex-wrap: wrap; gap: .4rem; align-items: end; }
+    .coord-row label { display: inline-flex; flex-direction: column; font-size: .8rem; }
+    .coord-row input { width: 4.6rem; }
+    .points { padding-left: 1.2rem; margin: .5rem 0; font-size: .85rem; }
+    .points .flag { color: #b3541e; }
+    .points button { font-size: .8rem; margin-left: .3rem; }
+    #provenance table { border-collapse: collapse; }
+    #provenance td, #provenance th { text-align: left; vertical-align: top; padding: .25rem .6rem .25rem 0; }
+    @media (max-width: 640px) {
+      .vw { grid-template-columns: 1fr; }
+      .legend { columns: 1; }
+    }
+    @media (prefers-color-scheme: dark) {
+      .vw__stage { background: #1f2124; border-color: rgba(255,255,255,.14); }
+      .vw__overlay { background: rgba(31,33,36,.92); }
+      .vw__controls fieldset { border-color: rgba(255,255,255,.14); }
+      .disabled-reason, .muted { color: #aaa; }
+    }
+    body.still .vw { grid-template-columns: 1fr; }
+    body.still .vw__controls, body.still .site-bar, body.still h1, body.still p, body.still section { display: none; }
+    body.still .vw__stage { width: 1200px; height: 900px; aspect-ratio: auto; border: 0; border-radius: 0; }
+  </style>
+  <script type="importmap">{"imports": {"three": "../vendor/three.module.min.js"}}</script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-bar">
+    <div class="site-bar__inner">
+      <div class="site-bar__id">
+        <a class="site-bar__brand" href="/"><img src="/img/vanio-antunes.jpg" width="32" height="32" alt=""><span class="site-bar__name">Vanio Antunes</span></a>
+      </div>
+      <nav class="site-bar__nav" aria-label="Main">
+        <ul class="site-bar__links">
+          <li><a href="/about/">Who am I</a></li>
+          <li><a href="/tools/">Tools</a></li>
+          <li><a href="/packages/">R packages</a></li>
+          <li><a href="/projects/ale/" aria-current="page">3D reconstruction</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main" class="page-main wrap">
+    <p class="vw-crumb"><a href="/projects/ale/">aleArrhythmia</a> / Anatomy viewer</p>
+    <h1>Anatomy viewer</h1>
+
+    <p id="research-use" class="vw-warn"><strong>Research use only.</strong> This is a research tool, not a
+    medical device, and nothing here should guide a procedure.</p>
+    <p id="exploratory">No canonical reference space has been chosen. Every coordinate shown belongs to the
+    frame of the geometry on screen and transfers to nothing else.</p>
+    <p id="mean-statement">The default heart is a population mean, the average shape of a cohort of twenty
+    adults, and is not any individual's anatomy.</p>
+    <p id="no-result">Nothing shown encodes a measurement or a statistical result. Colours tell structures
+    apart and nothing more.</p>
+
+    <div class="vw">
+      <div class="vw__stage" id="stage-box">
+        <canvas id="stage" aria-label="Three-dimensional heart. Drag to rotate, scroll or pinch to zoom."></canvas>
+        <div class="vw__overlay" id="loading" role="status">Loading the heart, 1.1 MB.</div>
+        <div class="vw__overlay vw__fallback" id="fallback" hidden>
+          <div>
+            <img src="data/heart-still.png" width="1200" height="900" alt="The population mean heart as a still image, seen from the front">
+            <p id="fallback-reason"></p>
+          </div>
+        </div>
+        <noscript>
+          <div class="vw__overlay vw__fallback">
+            <div>
+              <img src="data/heart-still.png" width="1200" height="900" alt="The population mean heart as a still image, seen from the front">
+              <p>Scripting is off, so this is a still image of the same heart at its starting view. Nothing
+              stated on this page depends on the script.</p>
+            </div>
+          </div>
+        </noscript>
+      </div>
+
+      <aside class="vw__controls" aria-label="Viewer controls">
+        <p class="vw-mode">Showing: <strong id="mode" data-mode="mean">Population mean</strong></p>
+        <p><button type="button" id="reset">Reset view</button></p>
+
+        <fieldset id="structures-box">
+          <legend>Structures</legend>
+          <div id="structures" class="structures"><p class="muted small">Listed once the heart has loaded.</p></div>
+          <p class="small"><button type="button" id="all-on">All on</button> <button type="button" id="all-off">All off</button></p>
+        </fieldset>
+
+        <fieldset id="segments-box">
+          <legend>AHA 17 segments</legend>
+          <label><input type="checkbox" id="segments" disabled aria-disabled="true"> Colour the left ventricle by segment</label>
+          <p id="segments-reason" class="disabled-reason">Waiting for the manifest.</p>
+          <ol id="legend" class="legend" hidden></ol>
+        </fieldset>
+
+        <fieldset id="coords-box">
+          <legend>Place a coordinate</legend>
+          <p class="small">In the frame of <span id="frame-label">the population mean, millimetres</span>.</p>
+          <div class="coord-row">
+            <label>x <input id="cx" type="number" step="0.1" inputmode="decimal"></label>
+            <label>y <input id="cy" type="number" step="0.1" inputmode="decimal"></label>
+            <label>z <input id="cz" type="number" step="0.1" inputmode="decimal"></label>
+            <button type="button" id="add-point">Add</button>
+          </div>
+          <ol id="points" class="points"></ol>
+          <p class="small"><button type="button" id="clear-points">Clear all</button></p>
+        </fieldset>
+
+        <fieldset id="imports">
+          <legend>Load a study</legend>
+          <p id="local-only" class="small">Study files are read in this browser and never uploaded or stored.</p>
+          <div class="ctl-disabled" data-control="carto">
+            <button type="button" disabled aria-disabled="true">Load CARTO export</button>
+            <p class="disabled-reason">Not available: importer not yet verified against a real export, checked 2026-09-25.
+            <a href="/projects/ale/openep-testingdata-carto-export">Evidence</a></p>
+          </div>
+          <div class="ctl-disabled" data-control="argo">
+            <button type="button" disabled aria-disabled="true">Load ARGO study</button>
+            <p class="disabled-reason">Not available: importer not yet verified against a real export, checked 2026-09-25.
+            <a href="/projects/ale/argo-ventricular-tachycardia-dataset">Evidence</a></p>
+          </div>
+          <div class="ctl-disabled" data-control="affera">
+            <button type="button" disabled aria-disabled="true">Load Affera export</button>
+            <p class="disabled-reason">Not available: no public export format found, checked 2026-09-24.
+            <a href="/projects/ale/affera-export">Evidence</a></p>
+          </div>
+          <p id="close-study" hidden><button type="button">Close study</button></p>
+        </fieldset>
+      </aside>
+    </div>
+
+    <p id="error" class="vw-warn" hidden></p>
+
+    <section id="provenance">
+      <h2>Where the heart comes from</h2>
+      <table>
+        <tr><th>Dataset</th><td>Virtual cohort of extreme and average four-chamber heart meshes from statistical shape model. The file shown is the cohort mean.</td></tr>
+        <tr><th>Authors</th><td>Rodero C, Strocchi M, Marciniak M, Longobardi S, Whitaker J, O'Neill MD, Gillette K, Augustin C, Plank G, Vigmond EJ, Lamata P, Niederer SA</td></tr>
+        <tr><th>DOI</th><td><a href="https://doi.org/10.5281/zenodo.4593739">10.5281/zenodo.4593739</a></td></tr>
+        <tr><th>Licence</th><td>CC BY 4.0. The derived file below carries the same licence; the viewer code is Apache-2.0.</td></tr>
+        <tr><th>Changes made</th><td>The outer surface was extracted from the volume mesh, reduced to 57,204 triangles, and written as one glTF file with 24 named parts. How, and with what result, is in <a href="/projects/ale/derived-heart-geometry">the derived geometry note</a>.</td></tr>
+        <tr><th>Built</th><td>2026-09-25, byte-identical on rebuild. Adopted by <a href="/projects/ale/ADR-0008-reference-anatomy">ADR-0008</a>.</td></tr>
+      </table>
+      <p class="small">Attribution: Rodero C, Strocchi M, Marciniak M, Longobardi S, Whitaker J, O'Neill MD, Gillette K,
+      Augustin C, Plank G, Vigmond EJ, Lamata P, Niederer SA. Virtual cohort of extreme and average four-chamber
+      heart meshes from statistical shape model. Zenodo, 2021. 10.5281/zenodo.4593739. CC BY 4.0.</p>
+    </section>
+  </main>
+
+  <script type="module" src="viewer.js"></script>
+</body>
+</html>
