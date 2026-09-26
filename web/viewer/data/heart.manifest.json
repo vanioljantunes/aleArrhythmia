@@ -1,0 +1,177 @@
+{
+  "source": {
+    "title": "Virtual cohort of extreme and average four-chamber heart meshes from statistical shape model",
+    "doi": "10.5281/zenodo.4593739",
+    "file": "average.tar.gz",
+    "licence": "CC-BY-4.0",
+    "attribution": "Rodero C, Strocchi M, Marciniak M, Longobardi S, Whitaker J, O'Neill MD, Gillette K, Augustin C, Plank G, Vigmond EJ, Lamata P, Niederer SA, 2021",
+    "sha256": "d787d6470c8a4a6c7bfb808c55e44e35a7bc18f5888847e2b24380beae2703ee"
+  },
+  "pipeline": {
+    "tool": "tools.anatomy",
+    "python": "3.14.3",
+    "numpy": "2.4.4",
+    "steps": [
+      "surface",
+      "decimate",
+      "segments",
+      "gltf"
+    ],
+    "cell_size_mm": {
+      "1": 2.5194,
+      "2": 2.5194,
+      "3": 2.5194,
+      "4": 2.5194,
+      "5": 2.5194,
+      "6": 2.5194,
+      "7": 2.5194,
+      "8": 2.5194,
+      "9": 2.5194,
+      "10": 2.5194,
+      "11": 2.5194,
+      "12": 1.2597,
+      "13": 0.6299,
+      "14": 0.6299,
+      "15": 1.2597,
+      "16": 2.5194,
+      "17": 2.5194,
+      "18": 2.5194,
+      "19": 2.5194,
+      "20": 1.2597,
+      "21": 1.2597,
+      "22": 2.5194,
+      "23": 1.2597,
+      "24": 1.2597
+    }
+  },
+  "output": {
+    "file": "heart.glb",
+    "sha256": "34d54a5e359a6bc18f14746aca1e6602cdce60cada4e79367d23b99ac733a5e4",
+    "bytes": 1137600,
+    "triangles": 57204,
+    "vertices": 28142,
+    "per_structure": {
+      "1": {
+        "triangles": 15089,
+        "vertices": 7794
+      },
+      "2": {
+        "triangles": 12491,
+        "vertices": 6595
+      },
+      "3": {
+        "triangles": 8124,
+        "vertices": 4363
+      },
+      "4": {
+        "triangles": 9253,
+        "vertices": 4834
+      },
+      "5": {
+        "triangles": 4445,
+        "vertices": 2322
+      },
+      "6": {
+        "triangles": 1318,
+        "vertices": 729
+      },
+      "7": {
+        "triangles": 674,
+        "vertices": 387
+      },
+      "8": {
+        "triangles": 1220,
+        "vertices": 678
+      },
+      "9": {
+        "triangles": 536,
+        "vertices": 324
+      },
+      "10": {
+        "triangles": 528,
+        "vertices": 332
+      },
+      "11": {
+        "triangles": 182,
+        "vertices": 123
+      },
+      "12": {
+        "triangles": 174,
+        "vertices": 121
+      },
+      "13": {
+        "triangles": 298,
+        "vertices": 194
+      },
+      "14": {
+        "triangles": 338,
+        "vertices": 216
+      },
+      "15": {
+        "triangles": 326,
+        "vertices": 207
+      },
+      "16": {
+        "triangles": 189,
+        "vertices": 134
+      },
+      "17": {
+        "triangles": 216,
+        "vertices": 136
+      },
+      "18": {
+        "triangles": 231,
+        "vertices": 146
+      },
+      "19": {
+        "triangles": 207,
+        "vertices": 126
+      },
+      "20": {
+        "triangles": 235,
+        "vertices": 159
+      },
+      "21": {
+        "triangles": 324,
+        "vertices": 202
+      },
+      "22": {
+        "triangles": 180,
+        "vertices": 121
+      },
+      "23": {
+        "triangles": 317,
+        "vertices": 204
+      },
+      "24": {
+        "triangles": 309,
+        "vertices": 198
+      }
+    },
+    "segments": {
+      "shipped": false,
+      "origin_phi_deg": 70.79,
+      "check": "fail",
+      "reason": "the inferior insertion sits 18.7 degrees from the 3/4 boundary, beyond the 15 degree tolerance; this anatomy's septal arc is 101.3 degrees where the AHA model assumes 120",
+      "report": {
+        "contact_points": 6020,
+        "band_sizes": [
+          4243,
+          1777
+        ],
+        "insertion_anterior_deg": 70.79,
+        "insertion_inferior_deg": -30.47,
+        "septal_arc_deg": 101.26,
+        "phi_increases_ccw_from_apex": false,
+        "origin_deg": 70.79,
+        "boundary_1_2_deg": 70.79,
+        "boundary_3_4_deg": -49.21,
+        "boundary_3_4_offset_deg": 18.74,
+        "tolerance_deg": 15.0,
+        "check": "fail",
+        "reason": "the inferior insertion sits 18.7 degrees from the 3/4 boundary, beyond the 15 degree tolerance; this anatomy's septal arc is 101.3 degrees where the AHA model assumes 120"
+      }
+    }
+  },
+  "built": "2026-09-25"
+}

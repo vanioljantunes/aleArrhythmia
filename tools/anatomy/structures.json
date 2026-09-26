@@ -1,0 +1,30 @@
+{
+  "source": "Zenodo record 10.5281/zenodo.4593739, description, section Cardiac meshes; confirmed by Rodero 2021 S1 Text Fig B (10.1371/journal.pcbi.1008851.s001)",
+  "note": "Ids 1 to 24 as the record lists them. Inlet is the closing plane at a vessel or appendage ostium; border is the short ring of vessel wall kept beyond it. The Strocchi 2020 cohort numbers ids 7 to 24 differently and must not be used for these meshes.",
+  "names": {
+    "1": "Left ventricle myocardium",
+    "2": "Right ventricle myocardium",
+    "3": "Left atrium myocardium",
+    "4": "Right atrium myocardium",
+    "5": "Aorta wall",
+    "6": "Pulmonary artery wall",
+    "7": "Mitral valve plane",
+    "8": "Tricuspid valve plane",
+    "9": "Aortic valve plane",
+    "10": "Pulmonary valve plane",
+    "11": "Left atrial appendage inlet",
+    "12": "Left superior pulmonary vein inlet",
+    "13": "Left inferior pulmonary vein inlet",
+    "14": "Right inferior pulmonary vein inlet",
+    "15": "Right superior pulmonary vein inlet",
+    "16": "Superior vena cava inlet",
+    "17": "Inferior vena cava inlet",
+    "18": "Left atrial appendage border",
+    "19": "Right inferior pulmonary vein border",
+    "20": "Left inferior pulmonary vein border",
+    "21": "Left superior pulmonary vein border",
+    "22": "Right superior pulmonary vein border",
+    "23": "Superior vena cava border",
+    "24": "Inferior vena cava border"
+  }
+}

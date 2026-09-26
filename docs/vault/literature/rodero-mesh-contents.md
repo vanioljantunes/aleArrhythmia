@@ -66,9 +66,51 @@ construction that makes an idealised ventricle segment exactly.
 
 | Unknown | What was tried |
 |---|---|
-| Whether uniform decimation preserves the smallest structures | Not tested. The smallest surface structures carry around 1,000 triangles each, so at 17.9 percent they would keep under 200. Per-structure budgets may be needed, and SC-003a requires the conflict to be recorded if it bites |
+| Whether uniform decimation preserves the smallest structures | Answered 2026-09-25. It does not: eight structures needed a finer cell than the rest. No conflict arose. The sizes chosen are in [[derived-heart-geometry]] |
 | Whether these fields match the published universal ventricular coordinates definition exactly | The ranges and the sentinel are consistent with it, but the record page does not state it and no definition was compared field by field |
-| What the 24 structure identifiers mean | Only their sizes were measured. The labels are numeric in the file and no legend was found on the record page |
+| What the 24 structure identifiers mean | Answered 2026-09-25. The legend is in the Zenodo record description, missed on the first reading. See the section below |
+
+## The 24 structure identifiers, resolved
+
+Found 2026-09-25. The Zenodo record description, section "Cardiac meshes", lists the labels in
+order. Rodero 2021 S1 Text, Fig B, shows the same 24 among 31 segmentation labels, the other seven
+being blood pools, trabeculae and vessel cavities that are not meshed. The two sources agree.
+
+| Id | Structure |
+|---|---|
+| 1 | Left ventricle myocardium |
+| 2 | Right ventricle myocardium |
+| 3 | Left atrium myocardium |
+| 4 | Right atrium myocardium |
+| 5 | Aorta wall |
+| 6 | Pulmonary artery wall |
+| 7 | Mitral valve plane |
+| 8 | Tricuspid valve plane |
+| 9 | Aortic valve plane |
+| 10 | Pulmonary valve plane |
+| 11 | Left atrial appendage inlet |
+| 12 | Left superior pulmonary vein inlet |
+| 13 | Left inferior pulmonary vein inlet |
+| 14 | Right inferior pulmonary vein inlet |
+| 15 | Right superior pulmonary vein inlet |
+| 16 | Superior vena cava inlet |
+| 17 | Inferior vena cava inlet |
+| 18 | Left atrial appendage border |
+| 19 | Right inferior pulmonary vein border |
+| 20 | Left inferior pulmonary vein border |
+| 21 | Left superior pulmonary vein border |
+| 22 | Right superior pulmonary vein border |
+| 23 | Superior vena cava border |
+| 24 | Inferior vena cava border |
+
+| Term | Meaning |
+|---|---|
+| Inlet | The closing plane at a vessel or appendage ostium |
+| Border | The short ring of vessel wall kept beyond the inlet, for mechanics boundary conditions |
+
+One trap. The earlier Strocchi 2020 cohort (Zenodo 3890034) uses the same first six ids and then a
+different order for 7 to 24: valves at 14 to 17, vein rings at 7 to 13. Its lookup must not be used
+for these meshes. The table above is committed as `tools/anatomy/structures.json`.
 
 ## References
 

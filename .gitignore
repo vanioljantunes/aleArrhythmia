@@ -20,3 +20,7 @@ node_modules/
 .pytest_cache/
 dist/
 build/
+
+# Study exports and the source mesh are fetched at test time and never committed (FR-013m).
+tests/fixtures/external/*
+!tests/fixtures/external/.gitkeep

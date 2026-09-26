@@ -1,0 +1,15 @@
+The geometry in this directory (heart.glb, heart.manifest.json, heart-still.png) is derived from:
+
+  Rodero C, Strocchi M, Marciniak M, Longobardi S, Whitaker J, O'Neill MD, Gillette K,
+  Augustin C, Plank G, Vigmond EJ, Lamata P, Niederer SA.
+  Virtual cohort of extreme and average four-chamber heart meshes from statistical shape model.
+  Zenodo, 2021. https://doi.org/10.5281/zenodo.4593739
+
+which is published under the Creative Commons Attribution 4.0 International licence
+(https://creativecommons.org/licenses/by/4.0/). The derived files are distributed under the same
+licence. Changes made: the outer surface was extracted from the volume mesh, decimated, and written
+as glTF; AHA segment labels were derived from the coordinates the source carries. The manifest
+records exactly how. The mesh is a population mean and represents no individual.
+
+This licence applies to the data files in this directory only. The software in this repository is
+licensed separately under Apache-2.0; see the LICENSE file at the repository root.

@@ -3,7 +3,7 @@ title: AHA 17-segment model
 type: literature
 status: active
 created: 2026-09-24
-updated: 2026-09-24
+updated: 2026-09-25
 ---
 
 
@@ -49,6 +49,15 @@ region name.
 | Unknown | What was tried |
 |---|---|
 | Whether an agreed atrial segmentation of similar standing exists | Not searched yet |
+
+## Open question, 2026-09-25
+
+The reference mesh's septum subtends about 101 degrees between the insertion band means, not the
+120 the equal-sector model assumes, so the insertion check in research R-004 of feature 003 fails
+and segments ship disabled. Measurements in [[derived-heart-geometry]]. Whether to adopt the
+insertion-anchored convention, two septal sectors between the insertions and four across the free
+wall, is open. It would need a specification change, since FR-026 forbids approximate segments and
+the current definition is the equal-sector one.
 
 ## References
 

@@ -61,6 +61,7 @@ Reference anatomy and tooling:
 | [[cardiac-atlas-project-biventricular-modes]] | Ventricular shape model with no stated licence, superseded |
 | [[rodero-four-chamber-meshes]] | Four-chamber mesh under CC-BY-4.0, the project's reference anatomy |
 | [[rodero-mesh-contents]] | What the file actually contains, measured by reading it |
+| [[derived-heart-geometry]] | The committed viewer geometry, its counts, hash and the failed segment check |
 | [[nagel-biatrial-shape-model]] | Bi-atrial shape model under CC-BY-4.0, closes the atrial gap |
 | [[other-open-cardiac-meshes]] | Everything else surveyed, and what is confirmed unusable |
 | [[openep-testingdata-carto-export]] | A real porcine CARTO 3 export, CC BY 4.0, inspected, the parser fixture |
