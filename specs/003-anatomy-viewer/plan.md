@@ -165,6 +165,11 @@ The feature ships in two stages so the viewer is public before the importer is p
 Stage A depends on feature 002's publication route to reach the public site. Until that route
 exists, the viewer is proven on the local preview server the same way the section was.
 
+Recorded 2026-09-25 at the end of implementation: both stages are built and tested locally, and the
+public route still depends on feature 002's publication job, which has not been started. The link
+from the section page and the home tile (T054) lands with that job; the local preview builder
+already carries it.
+
 ## Complexity Tracking
 
 | Violation | Why Needed | Simpler Alternative Rejected Because |

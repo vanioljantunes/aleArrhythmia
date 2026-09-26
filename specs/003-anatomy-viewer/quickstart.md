@@ -7,7 +7,7 @@ How to prove the feature works, end to end, on a clean machine.
 | Need | Why |
 |---|---|
 | Python 3.11 or newer, numpy at the version in `requirements-anatomy.txt` | Preprocessing and tests |
-| Playwright with Chromium | Browser tests. `npx playwright install chromium` |
+| Playwright for Python with Chromium | Browser tests. `pip install playwright` then `python -m playwright install chromium` |
 | Network access, once | To fetch the source mesh and the two fixtures. Nothing else needs it |
 
 ## Setup
@@ -16,13 +16,17 @@ How to prove the feature works, end to end, on a clean machine.
 git clone https://github.com/vanioljantunes/aleArrhythmia.git
 cd aleArrhythmia
 git config core.hooksPath .githooks
-pip install -e ".[dev]" -r requirements-anatomy.txt
+pip install -e ".[dev]" -r requirements-anatomy.txt playwright
+python -m playwright install chromium
 python tests/fixtures/fetch.py
+python tests/fixtures/fetch.py --argo
 ```
 
-The last line downloads `average.tar.gz` (58 MB), the porcine CARTO export (10.5 MB) and ARGO
-(183 MB) into `tests/fixtures/external/`, which git ignores. It prints each file's SHA-256 and refuses
-to continue if one does not match the recorded value.
+The first fetch downloads `average.tar.gz` (58 MB) and the porcine CARTO export (10.5 MB) into
+`tests/fixtures/external/`, which git ignores, and extracts both. The second fetches ARGO (183 MB)
+and is refused unless the inspection result and hash are recorded in `fetch.py`. Each file's
+SHA-256 is checked and a mismatch stops the run. Corrected 2026-09-25 on walking this guide: the
+earlier text said one command fetched all three, and named the Node install of Playwright.
 
 ---
 

@@ -23,6 +23,39 @@ reaches the remote and fails in CI instead.
 
 Python 3.11 or newer. No dependencies for the checker itself.
 
+For the anatomy viewer and its tests, two more steps:
+
+```
+pip install -e ".[dev]" -r requirements-anatomy.txt playwright
+python -m playwright install chromium
+python tests/fixtures/fetch.py
+```
+
+The last line downloads the source mesh and the porcine CARTO export into `tests/fixtures/external/`,
+checking each against the SHA-256 recorded in the script. The ARGO archive needs `--argo` and is
+refused until its inspection result and hash are recorded.
+
+## Fixtures and study files
+
+Nothing under `tests/fixtures/external/` is ever committed, and `tests/test_no_study_files.py` fails
+if git tracks anything there or anything unexpected under `web/viewer/data/`. Two reasons. A mapping
+export is clinical data, even an anonymised one, and a public repository is the wrong place for it.
+And the source mesh is 58 MB that Zenodo already serves under a hash; the repository ships only the
+1.1 MB derived file with the manifest that says how it was made.
+
+`python -m tools.anatomy verify` rebuilds that derived file from the source and compares bytes.
+Run it after touching anything under `tools/anatomy/`. Exit 1 prints a per-structure count table;
+`tools/anatomy/README.md` says what a mismatch means.
+
+## The two viewer modes
+
+The page draws either the population mean or one study's own export, never both. Each is a
+document that owns its geometry and its points, and exactly one is attached to the scene. Do not
+add a point list, a mesh reference or a coordinate outside a document, and do not add any code
+that maps a study coordinate onto the mean or the reverse: there is no registration between the
+frames, by decision (ADR-0009). `tests/browser/test_modes.py` and `test_privacy.py` hold the page
+to this.
+
 ## The one thing that surprises people
 
 **Stage a new note before running the checker.** Discovery uses `git ls-files`, so an unstaged file

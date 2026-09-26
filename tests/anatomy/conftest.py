@@ -2,6 +2,9 @@ from pathlib import Path
 
 import pytest
 
+# The vaultcheck environment has no numpy; these tests belong to the anatomy CI job.
+pytest.importorskip("numpy")
+
 EXTERNAL = Path(__file__).resolve().parents[1] / "fixtures" / "external"
 ARCHIVE = EXTERNAL / "average.tar.gz"
 
