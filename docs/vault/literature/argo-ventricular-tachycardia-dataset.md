@@ -3,7 +3,7 @@ title: ARGO, an anonymised human ventricular tachycardia mapping dataset
 type: literature
 status: active
 created: 2026-09-25
-updated: 2026-09-25
+updated: 2026-09-26
 ---
 
 
@@ -59,9 +59,33 @@ Documented by the publisher, quoted from the record:
 Ethics: Independent Ethical Committee of the Azienda Tutela Salute, Sardegna, Prot. n. 351/2021/CE,
 approved 2021-07-13, with informed consent.
 
-FR-013n still requires the files themselves to be inspected before use, because a publisher's
-statement is a claim. That inspection has not been run yet: the archive is 183 MB and has not been
-downloaded. It is a task in feature 003, and its result will be recorded here.
+FR-013n requires the files themselves to be inspected before use, because a publisher's statement
+is a claim. The inspection was run on 2026-09-26 on the archive as downloaded from PhysioNet,
+SHA-256 `2f25614704d62ebf30d80adec25f8b09e962ddf68fcd094c770704f0fa7f132e`, 191,810,852 bytes, 11,827 entries.
+
+| Check | Method | Finding |
+|---|---|---|
+| Layout | Listed every entry | One root folder; `ARGODataset_Folder/Pt1` to `Pt9`; a MATLAB folder; `README.txt`, `LICENSE.txt`, `RECORDS`, `ANNOTATORS`, `SHA256SUMS.txt`, `Additional_subject_data.csv` |
+| Dates | Regular expressions for day/month/year and year-month-day over every text file | None |
+| Names, birth, record numbers, institutions | Word list in English and Italian over every text file | Hits only in `README.txt` and the MATLAB read-me, where "patient" is used generically |
+| File paths | Drive letters, home directories, backslashes | None |
+| Email addresses | Pattern over every text file | One, the dataset author's contact in the MATLAB read-me. Binary `.dat` files produced noise, not addresses |
+| WFDB headers | Read `.hea` files | Record name, sampling rate, signal descriptors and lead names only. No age, sex or comment lines |
+| Subject-level CSV | Read in full | Nine rows: sex, age in years, ejection fraction, point count. No date of birth, no names |
+| Geometry files | Letter search in the five named files per patient | Header rows only (`X,Y,Z`, `node1,node2,node3`, `Point,X,Y,Z`, `Voltage,LAT`) and `NaN` |
+
+Inspection result: clear. Nothing in the archive identifies a person. The reader opens only the
+four geometry and point files; the subject CSV, the read-mes and the electrograms are never read.
+
+## Formats, as found
+
+| File | Format | Per patient |
+|---|---|---|
+| `XYZmesh.txt` | CSV, header `X,Y,Z`, millimetres | 3,795 to 7,193 vertices |
+| `ConnectivityList.txt` | CSV, header `node1,node2,node3`, 1-based | 7,586 to 14,382 triangles |
+| `POS_POINTS.txt` | CSV, header `Point,X,Y,Z` | 46 to 839 points, 1,962 in total |
+| `AblationPoints.txt` | CSV, header `X,Y,Z` | 32 to 233 points |
+| `MESHcoloring.txt` | CSV, header `Voltage,LAT`, one row per vertex, `NaN` where unmapped | Never read |
 
 ## Limits
 

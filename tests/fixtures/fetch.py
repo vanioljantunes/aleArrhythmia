@@ -34,9 +34,9 @@ FILES = {
 
 ARGO = {
     "url": "https://physionet.org/static/published-projects/argo/argo-1.0.0.zip",
-    # Recorded by the FR-013n inspection task. None means the inspection has not been run and
-    # the archive must not be fetched by a test.
-    "sha256": None,
+    # Recorded 2026-09-26 by the FR-013n inspection; see the vault note. None would mean the
+    # inspection has not been run and the archive must not be fetched by a test.
+    "sha256": "2f25614704d62ebf30d80adec25f8b09e962ddf68fcd094c770704f0fa7f132e",
     "source": "ARGO, PhysioNet 10.13026/8gh2-e660, CC BY-NC-SA 4.0, anonymised human",
 }
 

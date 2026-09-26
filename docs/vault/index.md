@@ -97,6 +97,7 @@ Gaps:
 | [[log-2026-09-24-quickstart-walk]] | Fresh-clone walk of the quickstart; six guide defects fixed |
 | [[log-2026-09-25-anatomy-licensing]] | An anatomy the project may ship, and the atrial gap closed |
 | [[log-2026-09-25-eam-datasets]] | Two mapping exports found, one inspected; the importer is unblocked |
+| [[log-2026-09-25-viewer-build]] | Building the viewer: what the geometry, the exports and the fresh-clone walk found |
 
 ## Templates
 

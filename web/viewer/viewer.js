@@ -5,6 +5,7 @@ import { OrbitControls } from '../vendor/OrbitControls.js';
 import { GLTFLoader } from '../vendor/GLTFLoader.js';
 import { Document, Modes } from './modes.js';
 import { ReadError, listMaps, readCarto } from './readers/carto.js';
+import { readArgo } from './readers/argo.js';
 
 const $ = (id) => document.getElementById(id);
 
@@ -446,6 +447,12 @@ function wireImports() {
   input.addEventListener('change', () => { if (input.files && input.files.length) onCartoFolder(input.files); });
   $('map-open').addEventListener('click', () => { if (pendingFiles) openCartoMap(pendingFiles, $('map-choice').value); });
   $('close-study').querySelector('button').addEventListener('click', closeStudy);
+  const argo = $('pick-argo');
+  $('load-argo').addEventListener('click', () => { argo.value = ''; argo.click(); });
+  argo.addEventListener('change', async () => {
+    if (!argo.files || !argo.files.length) return;
+    try { openStudy(await readArgo(argo.files)); } catch (err) { showReadError(err); }
+  });
 }
 
 function wireControls() {

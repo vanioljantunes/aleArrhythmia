@@ -6,8 +6,8 @@ import re
 from .support import VIEWER, wait_ready
 
 DATE = re.compile(r"\d{4}-\d{2}-\d{2}")
-# Stage B, CARTO verified 2026-09-25. ARGO waits for its FR-013n inspection; Affera has no format.
-EXPECTED_DISABLED = {"argo", "affera"}
+# Stage B complete: CARTO verified 2026-09-25, ARGO 2026-09-26. Affera has no public format.
+EXPECTED_DISABLED = {"affera"}
 
 
 def test_disabled_import_controls(server, page):
@@ -40,6 +40,18 @@ def test_live_carto_control_states_what_it_reads(server, page):
     assert control.locator("button#load-carto").is_enabled()
     text = control.inner_text()
     assert "Only the map shell" in text
+    assert DATE.search(text)
+    href = control.locator("a").get_attribute("href")
+    assert page.request.get(server + href).status == 200
+
+
+def test_live_argo_control_states_what_it_reads(server, page):
+    page.goto(server + VIEWER)
+    wait_ready(page)
+    control = page.locator("#imports [data-control=argo]")
+    assert control.locator("button#load-argo").is_enabled()
+    text = control.inner_text()
+    assert "never opened" in text
     assert DATE.search(text)
     href = control.locator("a").get_attribute("href")
     assert page.request.get(server + href).status == 200

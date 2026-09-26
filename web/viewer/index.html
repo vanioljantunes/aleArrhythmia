@@ -157,10 +157,12 @@
               <button type="button" id="map-open">Open</button>
             </div>
           </div>
-          <div class="ctl-disabled" data-control="argo">
-            <button type="button" disabled aria-disabled="true">Load ARGO study</button>
-            <p class="disabled-reason">Not available: importer not yet verified against a real export, checked 2026-09-25.
-            <a href="/projects/ale/argo-ventricular-tachycardia-dataset">Evidence</a></p>
+          <div data-control="argo">
+            <button type="button" id="load-argo">Load ARGO study</button>
+            <input type="file" id="pick-argo" webkitdirectory multiple hidden>
+            <p class="small">Pick one patient folder. Only the mesh, its connectivity, the mapped points and the ablation
+            points are read; the voltage and activation file is never opened.
+            <a href="/projects/ale/argo-ventricular-tachycardia-dataset">Verified against the dataset</a>, 2026-09-26.</p>
           </div>
           <div class="ctl-disabled" data-control="affera">
             <button type="button" disabled aria-disabled="true">Load Affera export</button>

@@ -9,6 +9,7 @@ How to prove the feature works, end to end, on a clean machine.
 | Python 3.11 or newer, numpy at the version in `requirements-anatomy.txt` | Preprocessing and tests |
 | Playwright for Python with Chromium | Browser tests. `pip install playwright` then `python -m playwright install chromium` |
 | Network access, once | To fetch the source mesh and the two fixtures. Nothing else needs it |
+| On Windows, a short clone path | Found 2026-09-26 on walking this guide: under a deep directory the numpy install and the CARTO extraction fail at the 260 character path limit. Clone near a drive root, or enable long paths |
 
 ## Setup
 
