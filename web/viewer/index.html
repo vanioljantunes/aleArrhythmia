@@ -84,7 +84,10 @@
     .vw__controls fieldset { min-width: 0; }
     .vw__controls select, .vw__controls p { overflow-wrap: anywhere; }
     #value-bar[hidden] { display: none; }
-    .maplook-switch { display: flex; align-items: center; gap: .4rem; margin: 0 0 .6rem; font-weight: 600; }
+    .maplook-switch { position: absolute; top: .6rem; left: .8rem; display: flex; align-items: center; gap: .5rem;
+      padding: .3rem .7rem; border-radius: 4px; background: rgba(255,255,255,.75); font-weight: 600; cursor: pointer; }
+    .maplook-switch .small { font-weight: 400; }
+    body.maplook .maplook-switch { background: rgba(40,44,52,.85); color: #e6e9ee; }
     body.maplook .vw__stage { background: #15181c; border-color: rgba(255,255,255,.12); }
     body.maplook .vw__controls { background: #1c2026; color: #d7dbe0; }
     body.maplook .vw__controls fieldset { border-color: rgba(255,255,255,.16); }
@@ -122,6 +125,10 @@
     <div class="vw">
       <div class="vw__stage" id="stage-box">
         <canvas id="stage" aria-label="Three-dimensional heart. Drag to rotate, scroll or pinch to zoom."></canvas>
+        <label class="maplook-switch" title="Dark stage, lesion tags, standard views, and the study's own values once a study is loaded">
+          <input type="checkbox" id="maplook" checked> Mapping-system look
+          <span class="small muted">load a study for lesions and voltage</span>
+        </label>
         <div id="lesions" class="lesions" hidden></div>
         <div id="orient" class="orient" aria-label="Standard views" hidden>
           <button type="button" data-view="AP">AP</button><button type="button" data-view="PA">PA</button>
@@ -150,7 +157,6 @@
       </div>
 
       <aside class="vw__controls" aria-label="Viewer controls">
-        <label class="maplook-switch"><input type="checkbox" id="maplook"> Mapping-system look</label>
         <p class="vw-mode">Showing: <strong id="mode" data-mode="mean">Population mean</strong></p>
         <p><button type="button" id="reset">Reset view</button></p>
 

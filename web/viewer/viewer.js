@@ -225,7 +225,7 @@ function frameCamera(bounds, view) {
   const sphere = bounds.getBoundingSphere(new THREE.Sphere());
   const r = sphere.radius;
   // The bounding sphere overstates the heart, so a factor under one still keeps it inside the view.
-  const dist = (r / Math.sin(THREE.MathUtils.degToRad(camera.fov / 2))) * 0.9;
+  const dist = (r / Math.sin(THREE.MathUtils.degToRad(camera.fov / 2))) * 0.84;
   camera.near = r * 0.05;
   camera.far = dist * 10;
   camera.updateProjectionMatrix();
