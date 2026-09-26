@@ -116,7 +116,9 @@ page reproducible: the exact bytes ship with the site.
 
 **Decision**: One scene. Two document objects, `mean` and `patient`, each owning its own geometry
 and its own point list. Exactly one is `active`. The renderer draws only the active document's group.
-Switching disposes the outgoing document's objects and creates the incoming one. There is no shared
+Switching detaches the outgoing document. A patient document is disposed on the way out, so nothing
+of the study remains; the mean document keeps its objects detached, so typed coordinates survive a
+study visit, which the tests require. There is no shared
 point list anywhere in the code.
 
 **Rationale**: FR-013c is enforced structurally, not by discipline. A point cannot be drawn on the

@@ -138,17 +138,24 @@
             <label>z <input id="cz" type="number" step="0.1" inputmode="decimal"></label>
             <button type="button" id="add-point">Add</button>
           </div>
+          <p id="study-summary" class="small"></p>
           <ol id="points" class="points"></ol>
           <p class="small"><button type="button" id="clear-points">Clear all</button></p>
+          <p class="small muted">Typed coordinates blue, a study's mapped points teal, its ablation sites red.</p>
         </fieldset>
 
         <fieldset id="imports">
           <legend>Load a study</legend>
           <p id="local-only" class="small">Study files are read in this browser and never uploaded or stored.</p>
-          <div class="ctl-disabled" data-control="carto">
-            <button type="button" disabled aria-disabled="true">Load CARTO export</button>
-            <p class="disabled-reason">Not available: importer not yet verified against a real export, checked 2026-09-25.
-            <a href="/projects/ale/openep-testingdata-carto-export">Evidence</a></p>
+          <div data-control="carto">
+            <button type="button" id="load-carto">Load CARTO export</button>
+            <input type="file" id="pick-carto" webkitdirectory multiple hidden>
+            <p class="small">Pick the export folder. Only the map shell, its point list and the VisiTag sites are read.
+            <a href="/projects/ale/openep-testingdata-carto-export">Verified against a real export</a>, 2026-09-25.</p>
+            <div id="map-chooser" hidden>
+              <label>Map <select id="map-choice"></select></label>
+              <button type="button" id="map-open">Open</button>
+            </div>
           </div>
           <div class="ctl-disabled" data-control="argo">
             <button type="button" disabled aria-disabled="true">Load ARGO study</button>

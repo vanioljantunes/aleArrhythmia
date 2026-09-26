@@ -38,3 +38,16 @@ def gpu_name(page) -> str:
       const ext = gl.getExtension('WEBGL_debug_renderer_info');
       return ext ? gl.getParameter(ext.UNMASKED_RENDERER_WEBGL) : gl.getParameter(gl.RENDERER);
     }""")
+
+
+EXPORT = "tests/fixtures/external/carto/Carto/Export_Study-1-11_25_2021-15-01-32"
+
+
+def load_carto(page, export_dir, map_name=None) -> None:
+    """Feed a CARTO export folder to the live control and wait for patient mode."""
+    page.set_input_files("#pick-carto", str(export_dir))
+    if map_name is not None:
+        page.wait_for_selector("#map-chooser:not([hidden])")
+        page.select_option("#map-choice", map_name)
+        page.click("#map-open")
+    page.wait_for_function("document.getElementById('mode').dataset.mode === 'patient'", timeout=20000)

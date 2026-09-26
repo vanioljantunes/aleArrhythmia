@@ -4,6 +4,7 @@ import * as THREE from 'three';
 import { OrbitControls } from '../vendor/OrbitControls.js';
 import { GLTFLoader } from '../vendor/GLTFLoader.js';
 import { Document, Modes } from './modes.js';
+import { ReadError, listMaps, readCarto } from './readers/carto.js';
 
 const $ = (id) => document.getElementById(id);
 
@@ -31,7 +32,10 @@ function family(id) {
 const FAMILY_COLOUR = {
   ventricle: 0xc48f7c, atrium: 0xd4b09c, vessel: 0xb4bfcf, valve: 0xa6b8a0, inlet: 0xb3b0cc, border: 0xcdbfa9,
 };
-const POINT_COLOUR = 0x1d6fe0;
+const POINT_COLOUR = 0x1d6fe0;          // typed coordinates
+const MAPPED_COLOUR = 0x2a9d8f;         // a study's mapped points
+const ABLATION_COLOUR = 0xd1495b;       // a study's ablation sites
+const STUDY_VIEW = { up: [0, 1, 0], anterior: [0, 0, 1] };
 const LOAD_TIMEOUT_MS = 10000;
 
 // Exposed for the browser tests. Not an API.
@@ -141,15 +145,26 @@ async function main() {
     m.dataset.mode = doc.kind;
     $('frame-label').textContent = doc.frame;
     $('close-study').hidden = doc.kind !== 'patient';
+    $('study-summary').textContent = doc.study
+      ? `${doc.study.mapped} mapped points and ${doc.study.ablation} ablation sites from ${doc.study.label}, drawn where the export puts them.`
+      : '';
     renderPoints();
   });
 
   await openMean();
   wireControls();
+  wireImports();
 }
 
 async function openMean() {
   const { modes, manifest } = state;
+  if (modes.mean && modes.mean.model) {
+    modes.activate(modes.mean);
+    frameCamera(modes.mean.bounds, manifest.output.view || STUDY_VIEW);
+    buildStructureList(modes.mean.model.children);
+    buildSegments(modes.mean.model.children);
+    return;
+  }
   const doc = new Document('mean', 'Population mean', 'the population mean, millimetres');
   const gltf = await loadGlb('data/heart.glb', LOAD_TIMEOUT_MS);
   const ids = Object.keys(manifest.output.per_structure).map(Number).sort((a, b) => a - b);
@@ -173,14 +188,14 @@ async function openMean() {
   doc.group.add(model);
   doc.bounds = new THREE.Box3().setFromObject(model);
   modes.activate(doc);
-  frameCamera(doc.bounds);
+  frameCamera(doc.bounds, manifest.output.view || STUDY_VIEW);
   buildStructureList(meshes);
   buildSegments(meshes);
   $('loading').hidden = true;
   state.ready = true;
 }
 
-function frameCamera(bounds) {
+function frameCamera(bounds, view) {
   const { camera, controls } = state;
   const sphere = bounds.getBoundingSphere(new THREE.Sphere());
   const r = sphere.radius;
@@ -188,9 +203,8 @@ function frameCamera(bounds) {
   camera.near = r * 0.05;
   camera.far = dist * 10;
   camera.updateProjectionMatrix();
-  // The starting view is anterior with the base up, from two vectors the build measured on the
-  // source coordinates and recorded in the manifest. Without them, look along -z.
-  const view = state.manifest.output.view || { up: [0, 1, 0], anterior: [0, 0, 1] };
+  // For the mean, the starting view is anterior with the base up, from two vectors the build
+  // measured on the source coordinates. A study frame has no such vectors: look along -z.
   camera.up.fromArray(view.up).normalize();
   camera.position.copy(sphere.center).addScaledVector(new THREE.Vector3().fromArray(view.anterior).normalize(), dist);
   controls.target.copy(sphere.center);
@@ -213,7 +227,7 @@ function buildStructureList(meshes) {
     cb.checked = true;
     cb.dataset.structure = id;
     cb.addEventListener('change', () => { m.visible = cb.checked; });
-    label.append(cb, ` ${state.names[String(id)] || `structure ${id}`}`);
+    label.append(cb, ` ${m.userData.label || state.names[String(id)] || `structure ${id}`}`);
     list.append(label);
   }
   $('all-on').onclick = () => list.querySelectorAll('input').forEach((cb) => { cb.checked = true; cb.dispatchEvent(new Event('change')); });
@@ -269,7 +283,7 @@ function buildSegments(meshes) {
     meshes.forEach((m) => { m.material = on ? m.userData.segmented : m.userData.plain; });
     legend.hidden = !on;
   };
-  cb.addEventListener('change', apply);
+  cb.onchange = apply;
 
   if (seg.shipped) {
     cb.disabled = false;
@@ -330,6 +344,108 @@ function renderPoints() {
     li.append(b);
     list.append(li);
   });
+}
+
+let pendingFiles = null;
+
+function showReadError(err) {
+  const e = $('error');
+  e.hidden = false;
+  e.textContent = `The export could not be read: ${err.message}. The view is unchanged.`;
+}
+
+function segmentsUnavailableForStudy() {
+  const cb = $('segments');
+  cb.checked = false;
+  cb.disabled = true;
+  cb.setAttribute('aria-disabled', 'true');
+  $('segments-reason').textContent = 'Not available in patient mode: a study shell carries no ventricular coordinates to derive segments from.';
+  $('legend').hidden = true;
+}
+
+function openStudy(study) {
+  const doc = new Document('patient', `Patient: ${study.label}, this study's own frame`,
+    `this study's own frame (${study.source}), millimetres`);
+  const geometry = new THREE.BufferGeometry();
+  geometry.setAttribute('position', new THREE.BufferAttribute(study.geometry.positions, 3));
+  geometry.setIndex(new THREE.BufferAttribute(study.geometry.indices, 1));
+  geometry.computeVertexNormals();
+  const shell = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial({ color: 0xc9b8a8, side: THREE.DoubleSide }));
+  shell.name = 'shell';
+  shell.userData.structure = 0;
+  shell.userData.label = `${study.label} shell`;
+  const model = new THREE.Group();
+  model.add(shell);
+  doc.model = model;
+  doc.group.add(model);
+  doc.bounds = new THREE.Box3().setFromObject(model);
+  const r = doc.bounds.getBoundingSphere(new THREE.Sphere()).radius;
+  let mapped = 0, ablation = 0;
+  for (const pt of study.points) {
+    const colour = pt.origin === 'ablation' ? ABLATION_COLOUR : MAPPED_COLOUR;
+    if (pt.origin === 'ablation') ablation++; else mapped++;
+    const s = new THREE.Mesh(sphereGeometry, new THREE.MeshLambertMaterial({ color: colour }));
+    s.scale.setScalar(r * 0.015);
+    s.position.fromArray(pt.position);
+    s.name = pt.label;
+    doc.studyPoints.push(s);
+    doc.group.add(s);
+  }
+  doc.study = { source: study.source, label: study.label, mapped, ablation };
+  state.modes.activate(doc);
+  state.radius = r;
+  frameCamera(doc.bounds, STUDY_VIEW);
+  buildStructureList([shell]);
+  segmentsUnavailableForStudy();
+  $('error').hidden = true;
+}
+
+async function onCartoFolder(files) {
+  try {
+    const maps = listMaps(files);
+    if (maps.length === 0) throw new ReadError('expected at least one .mesh file in the folder, found none');
+    if (maps.length === 1) {
+      await openCartoMap(files, maps[0]);
+      return;
+    }
+    pendingFiles = files;
+    const select = $('map-choice');
+    select.textContent = '';
+    for (const name of maps) {
+      const o = document.createElement('option');
+      o.value = name;
+      o.textContent = name;
+      select.append(o);
+    }
+    $('map-chooser').hidden = false;
+  } catch (err) {
+    showReadError(err);
+  }
+}
+
+async function openCartoMap(files, map) {
+  try {
+    const study = await readCarto(files, map);
+    $('map-chooser').hidden = true;
+    pendingFiles = null;
+    openStudy(study);
+  } catch (err) {
+    showReadError(err);
+  }
+}
+
+async function closeStudy() {
+  await openMean();
+  $('error').hidden = true;
+}
+
+function wireImports() {
+  const input = $('pick-carto');
+  if (!input) return;
+  $('load-carto').addEventListener('click', () => { input.value = ''; input.click(); });
+  input.addEventListener('change', () => { if (input.files && input.files.length) onCartoFolder(input.files); });
+  $('map-open').addEventListener('click', () => { if (pendingFiles) openCartoMap(pendingFiles, $('map-choice').value); });
+  $('close-study').querySelector('button').addEventListener('click', closeStudy);
 }
 
 function wireControls() {

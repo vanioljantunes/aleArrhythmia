@@ -33,9 +33,14 @@ know which reader ran.
 
 | Reads | For |
 |---|---|
-| `<map>.mesh` | `[VerticesSection]` X Y Z, `[TrianglesSection]` vertex indices |
-| `<map>_Points_Export.xml` | `<Point>` elements, `Position3D` attribute, point id |
-| Nothing else | ECG, electrode positions, contact force and VisiTag files are never opened |
+| `<map>.mesh` | `[VerticesSection]` X Y Z, `[TrianglesSection]` vertex indices; rows with a negative group id are dropped |
+| `<map>_car.txt` | One line per mapped point, starting with `P`: id in the third field, X Y Z in the fifth to seventh |
+| `VisiTagExport/Sites.txt` | Ablation sites, columns X Y Z and SiteIndex, `origin: ablation`; absent in a study without ablation |
+| Nothing else | `<map>_Points_Export.xml`, per-point XML, ECG, electrode positions and contact force files are never opened |
+
+Corrected 2026-09-25 on reading the porcine export: `<map>_Points_Export.xml` in this export
+carries no positions, only the names of per-point files. The positions are in `<map>_car.txt`, and
+the sensor position in the per-point files matches them exactly.
 
 When a folder holds several maps, the reader lists them by name and the user picks one. A map with
 zero points is valid and shows its shell alone.
