@@ -79,6 +79,11 @@
     .lesions { position: absolute; top: .6rem; right: .8rem; font-size: .9rem; padding: .2rem .6rem;
       border-radius: 4px; background: rgba(255,255,255,.7); }
     .lesions[hidden] { display: none; }
+    .value-scale { height: .8rem; border-radius: 3px; margin: .4rem 0 .2rem; }
+    #value-field { width: 100%; max-width: 100%; margin: .3rem 0; }
+    .vw__controls fieldset { min-width: 0; }
+    .vw__controls select, .vw__controls p { overflow-wrap: anywhere; }
+    #value-bar[hidden] { display: none; }
     .maplook-switch { display: flex; align-items: center; gap: .4rem; margin: 0 0 .6rem; font-weight: 600; }
     body.maplook .vw__stage { background: #15181c; border-color: rgba(255,255,255,.12); }
     body.maplook .vw__controls { background: #1c2026; color: #d7dbe0; }
@@ -162,6 +167,21 @@
           <ol id="legend" class="legend" hidden></ol>
         </fieldset>
 
+        <fieldset id="values-box" hidden>
+          <legend>This study's own values</legend>
+          <label><input type="checkbox" id="value-on"> Colour by</label>
+          <select id="value-field"></select>
+          <div class="coord-row">
+            <label>low <input id="value-low" type="number" step="0.01" inputmode="decimal"></label>
+            <label>high <input id="value-high" type="number" step="0.01" inputmode="decimal"></label>
+          </div>
+          <p id="value-note" class="small muted"></p>
+          <div id="value-bar" hidden>
+            <div id="value-bar-scale" class="value-scale"></div>
+            <p id="value-bar-label" class="small"></p>
+          </div>
+        </fieldset>
+
         <fieldset id="coords-box">
           <legend>Place a coordinate</legend>
           <p class="small">In the frame of <span id="frame-label">the population mean, millimetres</span>.</p>
@@ -215,7 +235,9 @@
     <p id="mean-statement">The default heart is a population mean, the average shape of a cohort of twenty
     adults, and is not any individual's anatomy.</p>
     <p id="no-result">Nothing shown encodes a measurement or a statistical result. Colours tell structures
-    apart and nothing more. The mapping-system look changes colours and background only.</p>
+    apart and nothing more. The mapping-system look changes colours and background only. In patient mode, a
+    control may colour that study's geometry by a value the study's own export carries, unchanged and
+    labelled; that value is the study's, not this project's.</p>
 
     <p id="error" class="vw-warn" hidden></p>
 

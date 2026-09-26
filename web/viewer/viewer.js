@@ -5,7 +5,7 @@ import { OrbitControls } from '../vendor/OrbitControls.js';
 import { GLTFLoader } from '../vendor/GLTFLoader.js';
 import { Document, Modes } from './modes.js';
 import { ReadError, listMaps, readCarto } from './readers/carto.js';
-import { readArgo } from './readers/argo.js';
+import { readArgo, readArgoValues } from './readers/argo.js';
 
 const $ = (id) => document.getElementById(id);
 
@@ -39,8 +39,14 @@ const ABLATION_COLOUR = 0xd1495b;       // a study's ablation sites
 const STUDY_VIEW = { up: [0, 1, 0], anterior: [0, 0, 1] };
 // Patient axes of each study frame, as unit vectors in the export's own coordinates. null means the
 // convention has not been verified against evidence, and the standard views stay disabled (ADR-0007).
-const STUDY_AXES = { carto: null, argo: null };
+// CARTO: +X left, +Y superior, +Z anterior, as SlicerEAMapReader and OpenEP both encode it; recorded
+// in the vault note carto3-export. ARGO: its publisher states no frame, so null.
+const STUDY_AXES = { carto: { anterior: [0, 0, 1], up: [0, 1, 0] }, argo: null };
 const OBLIQUE_DEG = 45;
+// Value colour scale, low to high, in the order clinicians expect on a mapping system: red for
+// low voltage, purple for high. The same scale serves activation time.
+const VALUE_SCALE = [0xd7191c, 0xf4a141, 0xffff8c, 0x74c476, 0x2c7bb6, 0x8e44ad];
+const NO_VALUE = 0x9aa0a6;
 const LOOK = {
   plain: { background: 0xf3f2ee, shell: 0xc9b8a8, ablation: 0xd1495b, ablationScale: 0.015 },
   map: { background: 0x15181c, shell: 0x8f959c, ablation: 0x3bbf4a, ablationScale: 0.022 },
@@ -156,6 +162,7 @@ async function main() {
 
   modes.onChange((doc) => {
     applyLook();
+    if (doc.kind !== 'patient') { $('values-box').hidden = true; $('value-on').checked = false; }
     const m = $('mode');
     m.textContent = doc.label;
     m.dataset.mode = doc.kind;
@@ -171,6 +178,7 @@ async function main() {
   wireControls();
   wireImports();
   wireLook();
+  wireValues();
 }
 
 async function openMean() {
@@ -411,6 +419,12 @@ function openStudy(study) {
     doc.group.add(s);
   }
   doc.study = { source: study.source, label: study.label, mapped, ablation };
+  doc.studyPoints.forEach((s, i) => { s.userData.values = study.points[i].values || null; });
+  doc.files = state.lastFiles || null;
+  doc.vertexCount = study.geometry.positions.length / 3;
+  doc.valueFields = null;
+  $('values-box').hidden = false;
+  buildValueControl(doc);
   state.modes.activate(doc);
   state.radius = r;
   frameCamera(doc.bounds, STUDY_VIEW);
@@ -444,6 +458,7 @@ async function onCartoFolder(files) {
 
 async function openCartoMap(files, map) {
   try {
+    state.lastFiles = files;
     const study = await readCarto(files, map);
     $('map-chooser').hidden = true;
     pendingFiles = null;
@@ -469,7 +484,7 @@ function wireImports() {
   $('load-argo').addEventListener('click', () => { argo.value = ''; argo.click(); });
   argo.addEventListener('change', async () => {
     if (!argo.files || !argo.files.length) return;
-    try { openStudy(await readArgo(argo.files)); } catch (err) { showReadError(err); }
+    try { state.lastFiles = argo.files; openStudy(await readArgo(argo.files)); } catch (err) { showReadError(err); }
   });
 }
 
@@ -528,7 +543,7 @@ function applyLook() {
   const doc = state.modes.active;
   if (state.scene) state.scene.background.setHex(look.background);
   if (doc && doc.kind === 'patient' && doc.model) {
-    doc.model.traverse((o) => { if (o.isMesh) o.material.color.setHex(look.shell); });
+    if (!doc.valuesOn) doc.model.traverse((o) => { if (o.isMesh) o.material.color.setHex(look.shell); });
     for (const s of doc.studyPoints) {
       if (s.userData.origin === 'ablation') {
         s.material.color.setHex(look.ablation);
@@ -554,7 +569,7 @@ function applyLook() {
     if (ax) b.removeAttribute('aria-disabled'); else b.setAttribute('aria-disabled', 'true');
   }
   if (on && !ax && doc && doc.study) {
-    reason.textContent = `Not available: the patient axes of a ${doc.study.source.toUpperCase()} export are not yet verified against evidence, checked 2026-09-26.`;
+    reason.textContent = `Not available: the publisher of this ${doc.study.source.toUpperCase()} data states no patient frame for its coordinates, checked 2026-09-26.`;
     reason.hidden = false;
   } else {
     reason.hidden = true;
@@ -567,6 +582,144 @@ function wireLook() {
     b.addEventListener('click', () => goToView(b.dataset.view));
   }
   applyLook();
+}
+
+// ---- A study's own values on the study's own geometry (FR-006a, ADR-0010) ------------------
+
+function scaleColour(x, lo, hi, out) {
+  if (!Number.isFinite(x)) return out.setHex(NO_VALUE);
+  const u = Math.min(1, Math.max(0, (x - lo) / (hi - lo || 1)));
+  const k = u * (VALUE_SCALE.length - 1);
+  const i = Math.min(VALUE_SCALE.length - 2, Math.floor(k));
+  const a = new THREE.Color(VALUE_SCALE[i]), b = new THREE.Color(VALUE_SCALE[i + 1]);
+  return out.copy(a).lerp(b, k - i);
+}
+
+function finiteRange(arr) {
+  let lo = Infinity, hi = -Infinity;
+  for (const x of arr) if (Number.isFinite(x)) { if (x < lo) lo = x; if (x > hi) hi = x; }
+  return Number.isFinite(lo) ? [lo, hi] : [0, 1];
+}
+
+// Default display range: the 2nd and 98th percentiles, so a few extreme values do not wash out
+// the map. The reader can type any other range; the full range is always stated on the bar.
+function percentileRange(arr) {
+  const v = Array.from(arr).filter(Number.isFinite).sort((a, b) => a - b);
+  if (!v.length) return [0, 1];
+  const at = (q) => v[Math.min(v.length - 1, Math.floor(q * (v.length - 1)))];
+  const lo = at(0.02), hi = at(0.98);
+  return hi > lo ? [lo, hi] : finiteRange(v);
+}
+
+// The clip range from the inputs, or the percentile default when they are blank or out of order.
+function clipRange(data, reset) {
+  const lowEl = $('value-low'), highEl = $('value-high');
+  let lo = parseFloat(lowEl.value), hi = parseFloat(highEl.value);
+  if (reset || !Number.isFinite(lo) || !Number.isFinite(hi) || hi <= lo) {
+    [lo, hi] = percentileRange(data);
+    lowEl.value = lo.toFixed(2);
+    highEl.value = hi.toFixed(2);
+  }
+  return [lo, hi];
+}
+
+// What this document can colour by: per-vertex fields (ARGO) or per-point fields (CARTO).
+function valueOptions(doc) {
+  if (doc.study.source === 'argo') {
+    return [
+      { key: 'voltage', label: 'Bipolar voltage', unit: 'mV', file: 'MESHcoloring.txt', where: 'shell' },
+      { key: 'lat', label: 'Local activation time', unit: 'ms', file: 'MESHcoloring.txt', where: 'shell' },
+    ];
+  }
+  return [
+    { key: 'bipolar_mV', label: 'Bipolar voltage', unit: 'mV', file: `${doc.study.label}_car.txt`, where: 'points' },
+    { key: 'unipolar_mV', label: 'Unipolar voltage', unit: 'mV', file: `${doc.study.label}_car.txt`, where: 'points' },
+  ];
+}
+
+function buildValueControl(doc) {
+  const select = $('value-field');
+  select.textContent = '';
+  for (const o of valueOptions(doc)) {
+    const opt = document.createElement('option');
+    opt.value = o.key;
+    opt.textContent = `${o.label}, ${o.unit}, from ${o.file}`;
+    select.append(opt);
+  }
+  $('value-on').checked = false;
+  $('value-bar').hidden = true;
+  $('value-low').value = '';
+  $('value-high').value = '';
+  state.valueKey = null;
+  $('value-note').textContent = valueOptions(doc)[0].where === 'shell'
+    ? 'Colours the shell by a value this export carries per vertex. Unmapped vertices stay grey.'
+    : 'This export carries voltages per mapped point, not per vertex, so the points are coloured and the shell is not.';
+}
+
+function clearValues(doc) {
+  doc.valuesOn = false;
+  if (doc.model) doc.model.traverse((o) => { if (o.isMesh) { o.material.vertexColors = false; o.material.needsUpdate = true; } });
+  for (const s of doc.studyPoints) if (s.userData.origin === 'mapped') s.material.color.setHex(MAPPED_COLOUR);
+  $('value-bar').hidden = true;
+  applyLook();
+}
+
+async function applyValues() {
+  const doc = state.modes.active;
+  if (!doc || doc.kind !== 'patient') return;
+  const on = $('value-on').checked;
+  if (!on) { clearValues(doc); return; }
+  const key = $('value-field').value;
+  const opt = valueOptions(doc).find((o) => o.key === key);
+  try {
+    let data, lo, hi;
+    if (opt.where === 'shell') {
+      if (!doc.valueFields) {
+        if (!doc.files) throw new ReadError('the folder is no longer available; load the study again');
+        doc.valueFields = (await readArgoValues(doc.files, doc.vertexCount)).fields;
+      }
+      data = doc.valueFields[key].data;
+      [lo, hi] = clipRange(data, state.valueKey !== key);
+      const colours = new Float32Array(data.length * 3);
+      const c = new THREE.Color();
+      for (let i = 0; i < data.length; i++) {
+        scaleColour(data[i], lo, hi, c);
+        colours[3 * i] = c.r; colours[3 * i + 1] = c.g; colours[3 * i + 2] = c.b;
+      }
+      doc.model.traverse((o) => {
+        if (!o.isMesh) return;
+        o.geometry.setAttribute('color', new THREE.BufferAttribute(colours, 3));
+        o.material.color.setHex(0xffffff);
+        o.material.vertexColors = true;
+        o.material.needsUpdate = true;
+      });
+    } else {
+      const pts = doc.studyPoints.filter((s) => s.userData.origin === 'mapped');
+      data = pts.map((s) => (s.userData.values && s.userData.values[key] !== undefined) ? s.userData.values[key] : NaN);
+      [lo, hi] = clipRange(data, state.valueKey !== key);
+      const c = new THREE.Color();
+      pts.forEach((s, i) => { s.material.color.copy(scaleColour(data[i], lo, hi, c)); });
+    }
+    doc.valuesOn = true;
+    state.valueKey = key;
+    const [fullLo, fullHi] = finiteRange(data);
+    const bar = $('value-bar');
+    bar.hidden = false;
+    $('value-bar-label').textContent = `${opt.label}, ${opt.unit}, shown from ${lo.toFixed(2)} to ${hi.toFixed(2)}; the data run ${fullLo.toFixed(2)} to ${fullHi.toFixed(2)}. ${doc.study.label}'s own values from ${opt.file}, unchanged. Not a result of this project.`;
+    $('value-bar-scale').style.background = `linear-gradient(to right, ${VALUE_SCALE.map((h) => '#' + h.toString(16).padStart(6, '0')).join(', ')})`;
+  } catch (err) {
+    $('value-on').checked = false;
+    clearValues(doc);
+    showReadError(err);
+  }
+}
+
+function wireValues() {
+  $('value-on').addEventListener('change', applyValues);
+  $('value-field').addEventListener('change', () => { if ($('value-on').checked) applyValues(); });
+  for (const id of ['value-low', 'value-high']) {
+    $(id).addEventListener('change', () => { if ($('value-on').checked) applyValues(); });
+  }
 }
 
 function wireControls() {

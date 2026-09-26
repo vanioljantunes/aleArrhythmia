@@ -85,7 +85,14 @@ four geometry and point files; the subject CSV, the read-mes and the electrogram
 | `ConnectivityList.txt` | CSV, header `node1,node2,node3`, 1-based | 7,586 to 14,382 triangles |
 | `POS_POINTS.txt` | CSV, header `Point,X,Y,Z` | 46 to 839 points, 1,962 in total |
 | `AblationPoints.txt` | CSV, header `X,Y,Z` | 32 to 233 points |
-| `MESHcoloring.txt` | CSV, header `Voltage,LAT`, one row per vertex, `NaN` where unmapped | Never read |
+| `MESHcoloring.txt` | CSV, header `Voltage,LAT`, one row per vertex, `NaN` where unmapped | Read only when the value control is on, since [[ADR-0010-study-values-on-the-study-shell]] |
+
+## Coordinate frame
+
+Searched 2026-09-26: the PhysioNet page, the paper and its S1 file describe the files as X, Y, Z
+coordinates and say nothing about which patient direction each axis points to. The geometry came
+out of CARTO 3, so the CARTO frame recorded in [[carto3-export]] is the likely one, but that is an
+inference. The viewer therefore keeps the standard views disabled on an ARGO study, with that reason.
 
 ## Limits
 

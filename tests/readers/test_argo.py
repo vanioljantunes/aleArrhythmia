@@ -78,6 +78,26 @@ def test_reads_all_nine_patients(server, page, patients):
     assert total == TOTAL_MAPPED
 
 
+def test_values_read_only_on_demand(server, page, patients):
+    page.goto(server + VIEWER)
+    wait_ready(page)
+    attach_picker(page, patients[0])
+    r = page.evaluate("""async () => {
+      const m = await import('./readers/argo.js');
+      const files = document.getElementById('test-pick').files;
+      const s = await m.readArgo(files);
+      const v = await m.readArgoValues(files, s.geometry.positions.length / 3);
+      const volt = Array.from(v.fields.voltage.data), lat = Array.from(v.fields.lat.data);
+      return { file: v.file, n: volt.length, finite: volt.filter(Number.isFinite).length,
+        first: [volt[0], lat[0]], secondNaN: Number.isNaN(volt[1]) && Number.isNaN(lat[1]) };
+    }""")
+    assert r["file"] == "MESHcoloring.txt"
+    assert r["n"] == csv_rows(patients[0] / "XYZmesh.txt")
+    assert 0 < r["finite"] < r["n"]
+    assert abs(r["first"][0] - 2.23967) < 1e-5 and abs(r["first"][1] + 21.06366) < 1e-5
+    assert r["secondNaN"]
+
+
 def test_loads_through_the_page_control(server, page, patients):
     page.goto(server + VIEWER)
     wait_ready(page)

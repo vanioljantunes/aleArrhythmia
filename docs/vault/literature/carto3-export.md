@@ -3,7 +3,7 @@ title: CARTO 3 export (Biosense Webster)
 type: literature
 status: active
 created: 2026-09-24
-updated: 2026-09-24
+updated: 2026-09-26
 ---
 
 
@@ -46,6 +46,25 @@ One of the two systems that get a viewer version in [[ADR-0006-viewer-versions]]
 | Field level structure of an export | Partly read 2026-09-25 from a real export: [[openep-testingdata-carto-export]]. Mesh files hold vertices, normals and triangles; point lists are XML; per-point positions, ECG and contact force are text. Full field semantics still to be documented while the importer is written |
 | Default colour scales, standard views and orientation labels | Not searched yet |
 | Whether reading exports carries any vendor licence restriction | Not established |
+
+## Coordinate frame, found 2026-09-26
+
+No vendor document or the OpenEP paper states the patient direction of each axis. Two independent
+open-source readers encode the same convention, found empirically by their authors:
+
+| Source | What it says |
+|---|---|
+| SlicerEAMapReader, `EAMapReader.py`, `transformCarto` | Comment: "CARTO mesh is in LPS and seems to be additionally rotated 90 deg around the LR axis", with the matrix to Slicer's RAS: R = -X, A = Z, S = Y. Applied alike to the mesh, the car points and the VisiTag sites |
+| OpenEP core, `drawMap.m` | The AP view puts the camera on +Z with +Y up, so +Z anterior, +Y superior, and in a right-handed frame +X is the patient's left |
+
+So: +X left, +Y superior, +Z anterior. The viewer uses this for the standard views on a CARTO study.
+It is a finding of other people's code, not a vendor statement, and the two sources agree.
+Standard views follow the fluoroscopic convention: AP and PA along the anterior axis, LAO and RAO
+swung 45 degrees towards the patient's left or right, LL and RL from the sides, SUP and INF along the
+long axis of the body, RPO and LPO posterior obliques. CARTO's own default angles were not found.
+
+- https://github.com/stephan1312/SlicerEAMapReader
+- https://github.com/openep/openep-core/blob/master/drawMap.m
 
 ## References
 

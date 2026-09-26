@@ -1,7 +1,7 @@
 ---
 title: A study's own values may colour the study's own shell
 type: adr
-status: proposed
+status: accepted
 id: ADR-0010
 created: 2026-09-26
 updated: 2026-09-26
@@ -33,13 +33,14 @@ that rule should bend for a study's own values in patient mode, and how far.
 
 ## Chosen
 
-Proposed: A, under these rules. Not yet accepted; the author decides.
+A, accepted by the author on 2026-09-26, under these rules.
 
 | Rule | Reason |
 |---|---|
 | Only in patient mode, only on that study's shell | FR-013c. A value from one frame is never drawn in another |
 | Only values the export carries, passed through unchanged, with the export's own units and range | FR-013e and Principle IV. The viewer computes nothing |
-| Off by default; the control names the file and the field it reads | Least surprise, and the reader knows one more file is opened |
+| Off by default; the control names the file and the field it reads. The value file is opened only when the control is turned on | Least surprise, and the reader knows one more file is opened |
+| Where an export carries a value per point but not per vertex, the points are coloured and the shell stays plain | The viewer draws what the export holds and interpolates nothing |
 | The colour bar states the value, its unit, its source file and the study label | So the map cannot be read as this project's output |
 | Never on the population mean, never across studies | Principle II and Principle III. The mean has no values; pooling is the statistical core |
 | The no-result statement gains one clause: in patient mode, colour may show a value that the study's own export carries, and that value is the study's, not this project's | FR-006 and SC-007 are amended by FR-006a, not silently broken |

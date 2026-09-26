@@ -25,6 +25,18 @@ earlier note holds, per FR-036. Numbers live in [[derived-heart-geometry]]; this
 | The rebuild is byte-identical on Ubuntu in CI as well as on the Windows machine that built it | `.github/workflows/traceability.yml`, run for commit baac91d |
 | On Windows a clone under a deep directory breaks at the 260 character path limit; a short path walks the quickstart cleanly, 92 tests passing | `specs/003-anatomy-viewer/quickstart.md` |
 
+## The mapping-system look, 2026-09-26
+
+The author asked for the viewer to look like CARTO 3, from a screenshot of a voltage map. The look
+(dark stage, green lesion tags, counter, standard views) needed no decision. The voltage colouring
+contradicted FR-006, so [[ADR-0010-study-values-on-the-study-shell]] was drafted and the author
+accepted it the same day: a study's own values may colour that study's shell, labelled as the
+study's, never on the mean. ARGO carries voltage and activation time per vertex; the CARTO export
+carries bipolar and unipolar voltage per mapped point only, on the same line as the position, so
+there the points are coloured and the shell is not. The CARTO axis convention was found in two
+open-source readers and recorded in [[carto3-export]]; ARGO's publisher states none, so the
+standard views stay disabled on an ARGO study.
+
 ## The starting view
 
 The first still image looked down the long axis from the base. Rather than hand-tune a camera,

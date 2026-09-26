@@ -245,11 +245,13 @@ confirm by inspecting network activity that nothing was transmitted.
   them, rather than presenting an empty area that reads as a failure.
 - **FR-006**: No colour, shade or marking on the model may encode a measurement, a probability or any
   other result. Colour MAY distinguish anatomical structures only.
-- **FR-006a** (proposed 2026-09-26, pending ADR-0010): In patient mode only, the viewer MAY colour that
+- **FR-006a** (added 2026-09-26, ADR-0010): In patient mode only, the viewer MAY colour that
   study's own shell by a value the study's export itself carries, passed through unchanged with the
   export's units and range, off by default, with a colour bar naming the value, the unit, the source
   file and the study. Such colour MUST NOT appear on the population mean and MUST NOT combine values
-  from more than one study. The no-result statement MUST say that the value is the study's own.
+  from more than one study. The no-result statement MUST say that the value is the study's own. The
+  value file MUST be opened only when the control is turned on. Where the export carries a value per
+  point and not per vertex, the points are coloured and the shell is not.
 - **FR-007**: The viewer MUST work with touch input as well as pointer input.
 - **FR-008**: The page MUST remain readable at phone width and MUST NOT scroll sideways.
 

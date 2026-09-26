@@ -38,6 +38,26 @@ async function required(files, name) {
   return f.text();
 }
 
+// The study's own values per vertex (ADR-0010). Opened only when asked: never from readArgo.
+export async function readArgoValues(files, vertexCount) {
+  const f = byName(files, 'MESHcoloring.txt');
+  if (!f) throw new ReadError('expected MESHcoloring.txt in the folder, found no such file');
+  const lines = (await f.text()).split(/\r?\n/).filter((l) => l.trim());
+  const head = lines[0].replace(/^\ufeff/, '').trim().split(',').map((s) => s.trim());
+  if (head.length !== 2) throw new ReadError(`expected two columns in MESHcoloring.txt, found ${head.join(',')}`);
+  if (lines.length - 1 !== vertexCount) throw new ReadError(`expected ${vertexCount} value rows, one per vertex, found ${lines.length - 1}`);
+  const voltage = new Float32Array(vertexCount), lat = new Float32Array(vertexCount);
+  for (let i = 1; i < lines.length; i++) {
+    const [a, b] = lines[i].split(',');
+    voltage[i - 1] = Number(a);   // NaN stays NaN
+    lat[i - 1] = Number(b);
+  }
+  return {
+    file: 'MESHcoloring.txt',
+    fields: { voltage: { label: head[0], unit: 'mV', data: voltage }, lat: { label: head[1], unit: 'ms', data: lat } },
+  };
+}
+
 // The Study for one patient folder.
 export async function readArgo(files) {
   const xyz = csv(await required(files, 'XYZmesh.txt'), 'XYZmesh.txt', 3);

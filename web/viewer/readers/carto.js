@@ -96,7 +96,11 @@ export function parseCar(text) {
     if (f.length < 7) throw new ReadError(`expected at least seven fields on a point line, found ${f.length}`);
     const position = [+f[4], +f[5], +f[6]];
     if (position.some((x) => !Number.isFinite(x))) throw new ReadError(`expected x y z for point ${f[2]}, found ${f.slice(4, 7).join(' ')}`);
-    points.push({ label: `P${f[2]}`, position, origin: 'mapped' });
+    // Fields 11 and 12 are unipolar and bipolar voltage in mV, matching the per-point XML.
+    const values = {};
+    if (f.length > 11 && Number.isFinite(+f[10])) values.unipolar_mV = +f[10];
+    if (f.length > 11 && Number.isFinite(+f[11])) values.bipolar_mV = +f[11];
+    points.push({ label: `P${f[2]}`, position, origin: 'mapped', values });
   }
   return points;
 }

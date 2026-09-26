@@ -4,7 +4,7 @@ type: adr
 status: accepted
 id: ADR-0009
 created: 2026-09-25
-updated: 2026-09-25
+updated: 2026-09-26
 ---
 
 # ADR-0009: Study data stays in the browser
@@ -42,7 +42,7 @@ time, and each owns its own point list, so a point from one cannot be drawn on t
 |---|---|
 | The page makes no request after load except for its own assets | FR-013j. A test records every request and fails on any other |
 | Nothing is written to local storage, session storage or IndexedDB | FR-013k. A test inspects all three before and after a load |
-| A reader opens only the files it names, never the rest of the folder | Least exposure. Electrograms, ECGs and settings are never read into memory |
+| A reader opens only the files it names, never the rest of the folder | Least exposure. Electrograms, ECGs and settings are never read into memory. Since [[ADR-0010-study-values-on-the-study-shell]], the value file is one more named file, opened only when the reader turns the value control on |
 | Mode exclusivity is structural, not a flag | Research R-006. The inactive document has zero children, and there is no shared point list to get wrong |
 | No registration between the study frame and the mean | FR-013e and Principle II. Every coordinate is labelled with the frame it belongs to |
 | Study files are never committed to the repository | FR-013m. A test fails if one is tracked |

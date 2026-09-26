@@ -22,6 +22,7 @@ READ_ALL = """async () => {
       vertices: s.geometry.positions.length / 3, triangles: s.geometry.indices.length / 3,
       first: Array.from(s.geometry.positions.slice(0, 9)),
       mapped: s.points.filter(p => p.origin === 'mapped').map(p => [p.label, p.position]),
+      values: s.points.filter(p => p.origin === 'mapped').map(p => p.values),
       ablation: s.points.filter(p => p.origin === 'ablation').length,
     };
   }
@@ -87,6 +88,8 @@ def test_reads_every_map_of_the_porcine_export(server, page, export):
     got = [(lbl, [round(v, 4) for v in pos]) for lbl, pos in result["studies"]["2-Map"]["mapped"]]
     want = [(lbl, [round(v, 4) for v in pos]) for lbl, pos in car_points(export / "2-Map_car.txt")]
     assert got == want
+    # Voltages on the same line as the position, matching the per-point XML for P1.
+    assert result["studies"]["2-Map"]["values"][0] == {"unipolar_mV": 1.902, "bipolar_mV": 0.024}
 
 
 def test_names_what_is_missing(server, page, tmp_path):
