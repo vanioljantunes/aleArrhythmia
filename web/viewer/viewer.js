@@ -37,6 +37,14 @@ const POINT_COLOUR = 0x1d6fe0;          // typed coordinates
 const MAPPED_COLOUR = 0x2a9d8f;         // a study's mapped points
 const ABLATION_COLOUR = 0xd1495b;       // a study's ablation sites
 const STUDY_VIEW = { up: [0, 1, 0], anterior: [0, 0, 1] };
+// Patient axes of each study frame, as unit vectors in the export's own coordinates. null means the
+// convention has not been verified against evidence, and the standard views stay disabled (ADR-0007).
+const STUDY_AXES = { carto: null, argo: null };
+const OBLIQUE_DEG = 45;
+const LOOK = {
+  plain: { background: 0xf3f2ee, shell: 0xc9b8a8, ablation: 0xd1495b, ablationScale: 0.015 },
+  map: { background: 0x15181c, shell: 0x8f959c, ablation: 0x3bbf4a, ablationScale: 0.022 },
+};
 const LOAD_TIMEOUT_MS = 10000;
 
 // Exposed for the browser tests. Not an API.
@@ -147,6 +155,7 @@ async function main() {
   state.names = names.names || names;
 
   modes.onChange((doc) => {
+    applyLook();
     const m = $('mode');
     m.textContent = doc.label;
     m.dataset.mode = doc.kind;
@@ -161,6 +170,7 @@ async function main() {
   await openMean();
   wireControls();
   wireImports();
+  wireLook();
 }
 
 async function openMean() {
@@ -396,6 +406,7 @@ function openStudy(study) {
     s.scale.setScalar(r * 0.015);
     s.position.fromArray(pt.position);
     s.name = pt.label;
+    s.userData.origin = pt.origin;
     doc.studyPoints.push(s);
     doc.group.add(s);
   }
@@ -460,6 +471,102 @@ function wireImports() {
     if (!argo.files || !argo.files.length) return;
     try { openStudy(await readArgo(argo.files)); } catch (err) { showReadError(err); }
   });
+}
+
+// Which way is which, for the standard views. Returns {anterior, up, left} unit vectors in the
+// frame of the active document, or null when that frame's convention is unverified.
+function axesOf(doc) {
+  let v = null;
+  if (doc.kind === 'mean') v = state.manifest.output.view || null;
+  else if (doc.study) v = STUDY_AXES[doc.study.source] || null;
+  if (!v) return null;
+  const anterior = new THREE.Vector3().fromArray(v.anterior).normalize();
+  const up = new THREE.Vector3().fromArray(v.up).normalize();
+  const left = new THREE.Vector3().crossVectors(up, anterior).normalize();   // S x A = L in a right-handed frame
+  return { anterior, up, left };
+}
+
+// Camera direction (from the centre towards the camera) and camera up for each standard view.
+function standardView(name, ax) {
+  const rad = THREE.MathUtils.degToRad(OBLIQUE_DEG);
+  const c = Math.cos(rad), s = Math.sin(rad);
+  const A = ax.anterior, P = A.clone().negate(), L = ax.left, R = L.clone().negate(), S = ax.up, I = S.clone().negate();
+  const mix = (a, b) => a.clone().multiplyScalar(c).addScaledVector(b, s).normalize();
+  switch (name) {
+    case 'AP': return { dir: A, up: S };
+    case 'PA': return { dir: P, up: S };
+    case 'LL': return { dir: L, up: S };
+    case 'RL': return { dir: R, up: S };
+    case 'SUP': return { dir: S, up: A };
+    case 'INF': return { dir: I, up: A };
+    case 'RAO': return { dir: mix(A, R), up: S };
+    case 'LAO': return { dir: mix(A, L), up: S };
+    case 'RPO': return { dir: mix(P, R), up: S };
+    case 'LPO': return { dir: mix(P, L), up: S };
+    default: return null;
+  }
+}
+
+function goToView(name) {
+  const doc = state.modes.active;
+  const ax = doc && axesOf(doc);
+  if (!ax) return;
+  const v = standardView(name, ax);
+  const { camera, controls } = state;
+  const dist = controls.getDistance();
+  camera.up.copy(v.up);
+  camera.position.copy(controls.target).addScaledVector(v.dir, dist);
+  controls.enableDamping = false;
+  controls.update();
+  controls.enableDamping = true;
+}
+
+function applyLook() {
+  const on = $('maplook').checked;
+  document.body.classList.toggle('maplook', on);
+  const look = on ? LOOK.map : LOOK.plain;
+  const doc = state.modes.active;
+  if (state.scene) state.scene.background.setHex(look.background);
+  if (doc && doc.kind === 'patient' && doc.model) {
+    doc.model.traverse((o) => { if (o.isMesh) o.material.color.setHex(look.shell); });
+    for (const s of doc.studyPoints) {
+      if (s.userData.origin === 'ablation') {
+        s.material.color.setHex(look.ablation);
+        s.scale.setScalar(state.radius * look.ablationScale);
+      }
+    }
+  }
+  // Lesion counter, as the mapping system shows it, in patient mode with the look on.
+  const lesions = $('lesions');
+  if (on && doc && doc.study) {
+    lesions.textContent = `Lesions: ${doc.study.ablation}`;
+    lesions.hidden = false;
+  } else {
+    lesions.hidden = true;
+  }
+  // Standard views: shown with the look, live only when the frame's axes are known.
+  const strip = $('orient');
+  const reason = $('orient-reason');
+  strip.hidden = !on;
+  const ax = doc ? axesOf(doc) : null;
+  for (const b of strip.querySelectorAll('button')) {
+    b.disabled = !ax;
+    if (ax) b.removeAttribute('aria-disabled'); else b.setAttribute('aria-disabled', 'true');
+  }
+  if (on && !ax && doc && doc.study) {
+    reason.textContent = `Not available: the patient axes of a ${doc.study.source.toUpperCase()} export are not yet verified against evidence, checked 2026-09-26.`;
+    reason.hidden = false;
+  } else {
+    reason.hidden = true;
+  }
+}
+
+function wireLook() {
+  $('maplook').addEventListener('change', applyLook);
+  for (const b of $('orient').querySelectorAll('button')) {
+    b.addEventListener('click', () => goToView(b.dataset.view));
+  }
+  applyLook();
 }
 
 function wireControls() {

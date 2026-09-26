@@ -66,6 +66,28 @@
     body.still .vw__controls, body.still .site-bar, body.still h1, body.still p, body.still section { display: none; }
     body.still .vw__stage { width: 1200px; height: 900px; border: 0; }
     body.still .vw { height: auto; }
+    /* Mapping-system look: dark stage and panel, as a clinician sees their map. */
+    .orient { position: absolute; left: 0; right: 0; bottom: 0; display: flex; flex-wrap: wrap; gap: .3rem;
+      padding: .4rem .6rem; justify-content: center; background: linear-gradient(transparent, rgba(0,0,0,.08)); }
+    .orient[hidden] { display: none; }
+    .orient button { font: inherit; font-size: .8rem; padding: .15rem .55rem; border: 1px solid rgba(0,0,0,.25);
+      border-radius: 4px; background: rgba(255,255,255,.7); cursor: pointer; }
+    .orient button[aria-disabled=true] { opacity: .5; cursor: not-allowed; }
+    .orient-reason { position: absolute; right: .6rem; bottom: 2.4rem; font-size: .75rem; max-width: 22rem;
+      text-align: right; color: #555; margin: 0; }
+    .orient-reason[hidden] { display: none; }
+    .lesions { position: absolute; top: .6rem; right: .8rem; font-size: .9rem; padding: .2rem .6rem;
+      border-radius: 4px; background: rgba(255,255,255,.7); }
+    .lesions[hidden] { display: none; }
+    .maplook-switch { display: flex; align-items: center; gap: .4rem; margin: 0 0 .6rem; font-weight: 600; }
+    body.maplook .vw__stage { background: #15181c; border-color: rgba(255,255,255,.12); }
+    body.maplook .vw__controls { background: #1c2026; color: #d7dbe0; }
+    body.maplook .vw__controls fieldset { border-color: rgba(255,255,255,.16); }
+    body.maplook .vw__controls a { color: #9cc4ff; }
+    body.maplook .disabled-reason, body.maplook .muted, body.maplook .orient-reason { color: #aab0b8; }
+    body.maplook .orient button, body.maplook .lesions { background: rgba(40,44,52,.85); color: #e6e9ee; border-color: rgba(255,255,255,.25); }
+    body.maplook .orient { background: linear-gradient(transparent, rgba(0,0,0,.35)); }
+    body.maplook .vw__overlay { background: rgba(21,24,28,.92); color: #d7dbe0; }
   </style>
   <script type="importmap">{"imports": {"three": "../vendor/three.module.min.js"}}</script>
 </head>
@@ -95,6 +117,15 @@
     <div class="vw">
       <div class="vw__stage" id="stage-box">
         <canvas id="stage" aria-label="Three-dimensional heart. Drag to rotate, scroll or pinch to zoom."></canvas>
+        <div id="lesions" class="lesions" hidden></div>
+        <div id="orient" class="orient" aria-label="Standard views" hidden>
+          <button type="button" data-view="AP">AP</button><button type="button" data-view="PA">PA</button>
+          <button type="button" data-view="RAO">RAO</button><button type="button" data-view="LAO">LAO</button>
+          <button type="button" data-view="LL">LL</button><button type="button" data-view="RL">RL</button>
+          <button type="button" data-view="SUP">SUP</button><button type="button" data-view="INF">INF</button>
+          <button type="button" data-view="RPO">RPO</button><button type="button" data-view="LPO">LPO</button>
+        </div>
+        <p id="orient-reason" class="orient-reason" hidden></p>
         <div class="vw__overlay" id="loading" role="status">Loading the heart, 1.1 MB.</div>
         <div class="vw__overlay vw__fallback" id="fallback" hidden>
           <div>
@@ -114,6 +145,7 @@
       </div>
 
       <aside class="vw__controls" aria-label="Viewer controls">
+        <label class="maplook-switch"><input type="checkbox" id="maplook"> Mapping-system look</label>
         <p class="vw-mode">Showing: <strong id="mode" data-mode="mean">Population mean</strong></p>
         <p><button type="button" id="reset">Reset view</button></p>
 
@@ -142,7 +174,7 @@
           <p id="study-summary" class="small"></p>
           <ol id="points" class="points"></ol>
           <p class="small"><button type="button" id="clear-points">Clear all</button></p>
-          <p class="small muted">Typed coordinates blue, a study's mapped points teal, its ablation sites red.</p>
+          <p class="small muted">Typed coordinates blue, a study's mapped points teal, its ablation sites red, or green with the mapping-system look.</p>
         </fieldset>
 
         <fieldset id="imports">
@@ -183,7 +215,7 @@
     <p id="mean-statement">The default heart is a population mean, the average shape of a cohort of twenty
     adults, and is not any individual's anatomy.</p>
     <p id="no-result">Nothing shown encodes a measurement or a statistical result. Colours tell structures
-    apart and nothing more.</p>
+    apart and nothing more. The mapping-system look changes colours and background only.</p>
 
     <p id="error" class="vw-warn" hidden></p>
 

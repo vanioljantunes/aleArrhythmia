@@ -245,6 +245,11 @@ confirm by inspecting network activity that nothing was transmitted.
   them, rather than presenting an empty area that reads as a failure.
 - **FR-006**: No colour, shade or marking on the model may encode a measurement, a probability or any
   other result. Colour MAY distinguish anatomical structures only.
+- **FR-006a** (proposed 2026-09-26, pending ADR-0010): In patient mode only, the viewer MAY colour that
+  study's own shell by a value the study's export itself carries, passed through unchanged with the
+  export's units and range, off by default, with a colour bar naming the value, the unit, the source
+  file and the study. Such colour MUST NOT appear on the population mean and MUST NOT combine values
+  from more than one study. The no-result statement MUST say that the value is the study's own.
 - **FR-007**: The viewer MUST work with touch input as well as pointer input.
 - **FR-008**: The page MUST remain readable at phone width and MUST NOT scroll sideways.
 
@@ -394,7 +399,8 @@ confirm by inspecting network activity that nothing was transmitted.
   published record, and the named licence matches what that record states.
 - **SC-006**: An independent reader can reproduce the shipped geometry from the published dataset by
   following the documented steps, and confirm the match by the stated criterion.
-- **SC-007**: Zero elements of the rendered model encode any measurement or result.
+- **SC-007**: Zero elements of the rendered model encode any measurement or result, except a study's own
+  value on that study's shell under FR-006a, which is labelled as the study's and never this project's.
 - **SC-008**: Every capability the project has committed to but cannot yet provide is visible as a
   disabled control naming its reason and date.
 - **SC-009**: The page is usable on a phone: the heart can be rotated by touch and the page body does
