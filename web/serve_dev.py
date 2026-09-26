@@ -10,6 +10,7 @@ Loopback only. Nothing is written.
 from __future__ import annotations
 
 import http.server
+import os
 import socketserver
 import sys
 from pathlib import Path
@@ -18,6 +19,10 @@ ROOT = Path(__file__).resolve().parent
 VAULT = ROOT.parent / "docs" / "vault"
 SECTION = "/projects/ale"
 MISSING = str(ROOT / "nonexistent")
+# The page links the site's own stylesheets at the root (/site-bar.css, /site.css). With a checkout
+# of the site named here, root paths that web/ lacks are served from it, so the page looks as it
+# will on the site. Without it, the page is unstyled but works.
+SITE = Path(os.environ["ALE_SITE_ROOT"]).resolve() if os.environ.get("ALE_SITE_ROOT") else None
 
 
 class Handler(http.server.SimpleHTTPRequestHandler):
@@ -50,6 +55,10 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         candidate = (ROOT / clean.lstrip("/")).resolve()
         if not str(candidate).startswith(str(ROOT)):
             return MISSING
+        if not candidate.exists() and SITE is not None:
+            fallback = (SITE / clean.lstrip("/")).resolve()
+            if fallback.is_file() and str(fallback).startswith(str(SITE)):
+                return str(fallback)
         return str(candidate)
 
     def end_headers(self) -> None:
