@@ -117,6 +117,12 @@ async function main() {
   Object.assign(state, { renderer, scene, camera, controls, modes });
 
   function resize() {
+    // The stage height is the viewport minus whatever the site bar and the strip measure here.
+    const bar = document.querySelector('.site-bar');
+    const strip = $('research-use');
+    const root = document.documentElement.style;
+    if (bar) root.setProperty('--ale-bar', `${bar.offsetHeight}px`);
+    if (strip) root.setProperty('--ale-strip', `${strip.offsetHeight}px`);
     const w = box.clientWidth || 800;
     const h = box.clientHeight || 600;
     renderer.setSize(w, h, false);
@@ -200,7 +206,8 @@ function frameCamera(bounds, view) {
   const { camera, controls } = state;
   const sphere = bounds.getBoundingSphere(new THREE.Sphere());
   const r = sphere.radius;
-  const dist = (r / Math.sin(THREE.MathUtils.degToRad(camera.fov / 2))) * 1.1;
+  // The bounding sphere overstates the heart, so a factor under one still keeps it inside the view.
+  const dist = (r / Math.sin(THREE.MathUtils.degToRad(camera.fov / 2))) * 0.9;
   camera.near = r * 0.05;
   camera.far = dist * 10;
   camera.updateProjectionMatrix();
