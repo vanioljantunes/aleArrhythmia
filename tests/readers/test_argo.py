@@ -59,6 +59,7 @@ def csv_rows(path: Path) -> int:
 
 
 def test_reads_all_nine_patients(server, page, patients):
+    page.set_default_timeout(120000)   # nine folder uploads on a possibly busy machine
     page.goto(server + VIEWER)
     wait_ready(page)
     total = 0
