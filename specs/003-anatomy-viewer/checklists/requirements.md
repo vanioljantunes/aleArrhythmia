@@ -125,6 +125,11 @@ The first of these is the one that would hurt. Patient mode is coherent only bec
 points are assumed to travel together in the same file. That assumption is recorded and unverified,
 and inspecting a real export is what settles it.
 
+Settled 2026-09-25. A real CARTO 3 export was downloaded and read: four mesh files sit beside the
+point lists in the same directory. The assumption holds. The second unknown is also answered: two
+exports were found the same day, one inspected and clear of identifiers, the other documented as
+anonymised by its publisher and awaiting inspection. The third stays open until ARGO is opened.
+
 ## Notes
 
 - Items marked incomplete require spec updates before `/speckit-clarify` or `/speckit-plan`

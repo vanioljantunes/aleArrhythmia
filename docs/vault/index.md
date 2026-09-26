@@ -63,6 +63,8 @@ Reference anatomy and tooling:
 | [[rodero-mesh-contents]] | What the file actually contains, measured by reading it |
 | [[nagel-biatrial-shape-model]] | Bi-atrial shape model under CC-BY-4.0, closes the atrial gap |
 | [[other-open-cardiac-meshes]] | Everything else surveyed, and what is confirmed unusable |
+| [[openep-testingdata-carto-export]] | A real porcine CARTO 3 export, CC BY 4.0, inspected, the parser fixture |
+| [[argo-ventricular-tachycardia-dataset]] | Anonymised human VT maps on PhysioNet, CC BY-NC-SA 4.0, the patient-mode fixture |
 | [[openep-and-pulse-ep]] | Open parsers for commercial mapping exports |
 
 Mapping system exports:
@@ -92,6 +94,7 @@ Gaps:
 | [[log-2026-09-24-survey-and-gaps]] | Survey landed; atlas licence read, Affera control settled |
 | [[log-2026-09-24-quickstart-walk]] | Fresh-clone walk of the quickstart; six guide defects fixed |
 | [[log-2026-09-25-anatomy-licensing]] | An anatomy the project may ship, and the atrial gap closed |
+| [[log-2026-09-25-eam-datasets]] | Two mapping exports found, one inspected; the importer is unblocked |
 
 ## Templates
 

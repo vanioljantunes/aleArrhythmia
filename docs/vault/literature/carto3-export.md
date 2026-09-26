@@ -43,7 +43,7 @@ One of the two systems that get a viewer version in [[ADR-0006-viewer-versions]]
 
 | Unknown | What was tried |
 |---|---|
-| Field level structure of an export | Not read. Next step is the OpenEP importer source |
+| Field level structure of an export | Partly read 2026-09-25 from a real export: [[openep-testingdata-carto-export]]. Mesh files hold vertices, normals and triangles; point lists are XML; per-point positions, ECG and contact force are text. Full field semantics still to be documented while the importer is written |
 | Default colour scales, standard views and orientation labels | Not searched yet |
 | Whether reading exports carries any vendor licence restriction | Not established |
 

@@ -30,6 +30,7 @@ visible. Each row also lives in the note it belongs to. Required by FR-027.
 | Licence of pulse-ep | Not read |
 | Where the OpenEP KODEX parser lives | Search found a report, not the code |
 | Contents of a Rhythmia HDx Advanced Study Export | Searched vendor documents. Only its existence established |
+| RESOLVED 2026-09-25. A real CARTO 3 export to build the importer against | Found two. A porcine export under CC BY 4.0, downloaded and inspected, and an anonymised human set under CC BY-NC-SA 4.0. See [[openep-testingdata-carto-export]] and [[argo-ventricular-tachycardia-dataset]] |
 | Default colour scales, standard views and orientation labels for CARTO 3 and Affera | Not searched yet, needed for the display modes in ADR-0006 |
 | Whether an agreed atrial segment model of AHA standing exists | Not searched yet |
 

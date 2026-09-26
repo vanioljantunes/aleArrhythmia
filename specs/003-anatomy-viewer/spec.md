@@ -75,9 +75,16 @@ open.
   arrhythmia focus is fiction this project has been careful never to display; and an empty state,
   which shows nothing to any visitor without proprietary clinical software.
 - Q: Nobody has a CARTO export, so the importer cannot be written or tested. How do we proceed? ->
-  A: Obtain an anonymised real export first. The importer is therefore blocked until one exists, and
-  ships in a second stage. Rejected: building against the open parser's documented format with a
-  synthetic test file, which would start sooner but leave the importer unverified.
+  A: Obtain an anonymised real export first. Rejected: building against the open parser's documented
+  format with a synthetic test file, which would start sooner but leave the importer unverified.
+- Q: Which datasets does the importer get built and verified against? -> A: Two. A porcine CARTO 3
+  export published under CC BY 4.0 (Zenodo 10.5281/zenodo.6651600), downloaded and inspected for
+  identifiers the same day, proves the parser reads a genuine export directory. ARGO, nine
+  anonymised human ventricular tachycardia maps on PhysioNet (10.13026/8gh2-e660, CC BY-NC-SA 4.0)
+  with a documented anonymisation statement and ethics approval, proves patient mode on a real map.
+  Neither is committed; both are fetched at test time. Rejected: the porcine export alone, which
+  has two points and cannot show a map; and the OpenEP example MATLAB files, which carry no data
+  licence and no de-identification statement.
 
 ## User Scenarios & Testing *(mandatory)*
 
@@ -294,9 +301,10 @@ confirm by inspecting network activity that nothing was transmitted.
 
 ### Functional requirements, the importer
 
-- **FR-013p**: Until an anonymised real export has been obtained and verified, the file import
-  control MUST appear disabled under ADR-0007, stating that no verified sample exists and the date
-  last checked.
+- **FR-013p**: The file import control for a given system MUST appear disabled under ADR-0007,
+  stating the reason and the date last checked, until the importer for that system has passed
+  against a verified real export. For CARTO 3 the fixtures exist and are named in the Clarifications;
+  for Affera no export format is public and the control stays disabled.
 - **FR-013q**: The importer MUST NOT be described as supporting any system until it has been run
   against a real export from that system.
 - **FR-013r**: A file that cannot be parsed MUST produce a stated error naming what was expected, and
@@ -416,8 +424,9 @@ confirm by inspecting network activity that nothing was transmitted.
 | The reader is on a current browser | Standard for a public personal site |
 | Segment labelling may not ship in this feature | FR-025. Whether the landmarks are derivable is an empirical question, and the honest answer may be no |
 | The mesh is shown in whatever orientation the source uses, described plainly | No reference space is chosen, so the project cannot claim a canonical orientation |
-| A study export contains both the chamber geometry and the recorded points | This is what makes patient mode self-consistent. Unverified until a real export is inspected |
-| The importer ships in a second stage, after the viewer | The author chose to obtain a verified anonymised export before the importer is written, so it cannot ship with the first release |
+| A study export contains both the chamber geometry and the recorded points | Verified 2026-09-25 on a real CARTO 3 export: four mesh files beside the point lists. Patient mode's frame is self-consistent as assumed |
+| The porcine export needs no patient-data handling, and ARGO's anonymisation is the publisher's claim until inspected | FR-013n. The porcine files were inspected the same day and carry no identifiers. ARGO has not been downloaded yet and must be inspected before use |
+| ARGO's NonCommercial and ShareAlike terms are compatible with test-time use | The project is non-commercial research and derives nothing from the files. They are fetched when tests run and never committed |
 
 ## Dependencies
 
@@ -427,7 +436,7 @@ confirm by inspecting network activity that nothing was transmitted.
 | Feature 002, the web section | FR-001. The viewer is a page inside it |
 | ADR-0007, the disabled-control pattern | FR-023 and FR-025 apply it |
 | The existing traceability checks | FR-033 |
-| An anonymised, verified study export | FR-013p. The importer is blocked until one exists |
+| Two study exports, fetched at test time | FR-013p and FR-013q. The porcine export (Zenodo 6651600) for the parser, ARGO (PhysioNet) for patient mode. Neither committed |
 
 ## Out of scope
 
